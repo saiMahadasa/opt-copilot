@@ -1,8 +1,18 @@
-import { Fragment } from "react";
+"use client";
+
+import { Fragment, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AlertTriangle, Check, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+
+const STAGE_LABELS: Record<string, string> = {
+  "f1-studying": "F-1 (studying)",
+  "applied-opt": "Applied for OPT",
+  "on-opt": "On OPT",
+  "on-stem-opt": "On STEM OPT",
+};
 
 const STEPS = [
   { label: "F-1",      complete: true,  current: false },
@@ -17,7 +27,31 @@ const DOCS = [
   { name: "EAD card",                 status: "pending"  },
 ];
 
+const CHIPS = ["Can I freelance?", "Report address change"];
+
 export default function DashboardPage() {
+  const router = useRouter();
+  const [stageLabel, setStageLabel] = useState<string | null>(null);
+  const [quickInput, setQuickInput] = useState("");
+
+  useEffect(() => {
+    const id = localStorage.getItem("visaStage");
+    if (!id) {
+      router.replace("/onboarding");
+    } else {
+      setStageLabel(STAGE_LABELS[id] ?? id);
+    }
+  }, [router]);
+
+  if (!stageLabel) return null;
+
+  function handleQuickSend(e: React.FormEvent) {
+    e.preventDefault();
+    const text = quickInput.trim();
+    if (!text) return;
+    router.push(`/ask?q=${encodeURIComponent(text)}`);
+  }
+
   return (
     <main className="px-5 pt-10 pb-24 space-y-5">
 
@@ -27,7 +61,7 @@ export default function DashboardPage() {
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-1">
             Current stage
           </p>
-          <h1 className="text-2xl font-semibold tracking-tight">STEM OPT</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{stageLabel}</h1>
         </div>
         <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
           Active
@@ -79,19 +113,22 @@ export default function DashboardPage() {
 
       {/* ── Ask input ── */}
       <div>
-        <Link href="/ask" className="block">
+        <form onSubmit={handleQuickSend}>
           <div className="flex items-center gap-3 rounded-xl border border-border px-4 py-3 hover:bg-muted/50 transition-colors">
-            <span className="flex-1 text-sm text-muted-foreground">
-              Ask about your status…
-            </span>
+            <input
+              value={quickInput}
+              onChange={(e) => setQuickInput(e.target.value)}
+              placeholder="Ask about your status…"
+              className="flex-1 text-sm bg-transparent outline-none placeholder:text-muted-foreground"
+            />
             <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
           </div>
-        </Link>
+        </form>
         <div className="flex gap-2 mt-3">
-          {["Can I freelance?", "Report address change"].map((chip) => (
+          {CHIPS.map((chip) => (
             <Link
               key={chip}
-              href="/ask"
+              href={`/ask?q=${encodeURIComponent(chip)}`}
               className="text-xs px-3 py-1.5 rounded-full border border-border text-foreground hover:bg-muted transition-colors"
             >
               {chip}

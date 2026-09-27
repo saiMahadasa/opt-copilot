@@ -9,6 +9,7 @@ app = FastAPI(title="opt-copilot API")
 
 class AskRequest(BaseModel):
     message: str
+    stage: str | None = None
 
 
 class AskResponse(BaseModel):
@@ -37,11 +38,19 @@ SYSTEM_PROMPT = (
 def ask(body: AskRequest):
     from llm_providers import get_completion
 
-    prompt = f"{SYSTEM_PROMPT}\n\nStudent question: {body.message}"
+    stage_line = (
+        f"\nThe student's current stage is: {body.stage}." if body.stage else ""
+    )
+    prompt = f"{SYSTEM_PROMPT}{stage_line}\n\nStudent question: {body.message}"
 
     try:
         reply = get_completion(prompt, provider="gemini")
     except EnvironmentError as exc:
         raise HTTPException(status_code=500, detail=str(exc))
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="Couldn't reach the AI service, try again in a moment.",
+        )
 
     return AskResponse(reply=reply)

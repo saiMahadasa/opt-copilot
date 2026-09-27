@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, Suspense } from "react";
 import { Send } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -21,30 +22,30 @@ const INITIAL: Message[] = [
 ];
 
 async function fetchReply(message: string): Promise<string> {
+  const stage = localStorage.getItem("visaStage");
   const res = await fetch("http://localhost:8000/ask", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message }),
+    body: JSON.stringify({ message, ...(stage && { stage }) }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   return data.reply;
 }
 
-export default function AskPage() {
+function AskPageContent() {
   const [messages, setMessages] = useState<Message[]>(INITIAL);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const prefillSentRef = useRef(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  async function send() {
-    const text = input.trim();
-    if (!text || sending) return;
-
+  const sendMessage = useCallback(async (text: string) => {
     const userMsg: Message = { id: `u-${Date.now()}`, role: "user", text };
     const placeholderId = `a-${Date.now() + 1}`;
     const placeholder: Message = {
@@ -55,7 +56,6 @@ export default function AskPage() {
     };
 
     setMessages((prev) => [...prev, userMsg, placeholder]);
-    setInput("");
     setSending(true);
 
     try {
@@ -76,6 +76,21 @@ export default function AskPage() {
     } finally {
       setSending(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q && !prefillSentRef.current) {
+      prefillSentRef.current = true;
+      sendMessage(q);
+    }
+  }, [searchParams, sendMessage]);
+
+  async function send() {
+    const text = input.trim();
+    if (!text || sending) return;
+    setInput("");
+    sendMessage(text);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -134,5 +149,13 @@ export default function AskPage() {
       </div>
 
     </div>
+  );
+}
+
+export default function AskPage() {
+  return (
+    <Suspense>
+      <AskPageContent />
+    </Suspense>
   );
 }

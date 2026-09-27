@@ -35,6 +35,7 @@ export default function OnboardingPage() {
 
   function handleSelect(id: StageId) {
     setSelected(id);
+    localStorage.setItem("visaStage", id);
     router.push("/dashboard");
   }
 
