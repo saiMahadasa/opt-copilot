@@ -31,7 +31,7 @@ from supabase import create_client, Client
 load_dotenv()
 
 KNOWLEDGE_DIR = Path(__file__).parent / "knowledge"
-EMBED_MODEL = "text-embedding-004"
+EMBED_MODEL = "gemini-embedding-001"
 MAX_WORDS = 500
 
 
@@ -62,6 +62,7 @@ def embed(client: genai.Client, text: str) -> list[float]:
     response = client.models.embed_content(
         model=EMBED_MODEL,
         contents=text,
+        config={"output_dimensionality": 768},
     )
     return response.embeddings[0].values
 
