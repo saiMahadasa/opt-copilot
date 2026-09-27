@@ -9,6 +9,7 @@ type Message = {
   id: string;
   role: "user" | "assistant";
   text: string;
+  loading?: boolean;
 };
 
 const INITIAL: Message[] = [
@@ -19,24 +20,62 @@ const INITIAL: Message[] = [
   },
 ];
 
+async function fetchReply(message: string): Promise<string> {
+  const res = await fetch("http://localhost:8000/ask", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return data.reply;
+}
+
 export default function AskPage() {
   const [messages, setMessages] = useState<Message[]>(INITIAL);
   const [input, setInput] = useState("");
+  const [sending, setSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  function send() {
+  async function send() {
     const text = input.trim();
-    if (!text) return;
-    setMessages((prev) => [
-      ...prev,
-      { id: `u-${Date.now()}`,     role: "user",      text },
-      { id: `a-${Date.now() + 1}`, role: "assistant", text: "This is where the AI answer will go." },
-    ]);
+    if (!text || sending) return;
+
+    const userMsg: Message = { id: `u-${Date.now()}`, role: "user", text };
+    const placeholderId = `a-${Date.now() + 1}`;
+    const placeholder: Message = {
+      id: placeholderId,
+      role: "assistant",
+      text: "typing…",
+      loading: true,
+    };
+
+    setMessages((prev) => [...prev, userMsg, placeholder]);
     setInput("");
+    setSending(true);
+
+    try {
+      const reply = await fetchReply(text);
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === placeholderId ? { ...m, text: reply, loading: false } : m
+        )
+      );
+    } catch {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === placeholderId
+            ? { ...m, text: "Something went wrong, try again.", loading: false }
+            : m
+        )
+      );
+    } finally {
+      setSending(false);
+    }
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -61,7 +100,8 @@ export default function AskPage() {
                 "max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
                 msg.role === "user"
                   ? "bg-foreground text-background rounded-br-sm"
-                  : "bg-muted text-foreground rounded-bl-sm"
+                  : "bg-muted text-foreground rounded-bl-sm",
+                msg.loading && "italic text-muted-foreground"
               )}
             >
               {msg.text}
@@ -79,12 +119,14 @@ export default function AskPage() {
           onKeyDown={handleKeyDown}
           placeholder="Ask about your status…"
           rows={1}
-          className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          disabled={sending}
+          className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
         />
         <Button
           onClick={send}
           size="icon"
           aria-label="Send"
+          disabled={sending}
           className="shrink-0"
         >
           <Send className="w-4 h-4" />
