@@ -62,7 +62,7 @@ def embed(client: genai.Client, text: str) -> list[float]:
     response = client.models.embed_content(
         model=EMBED_MODEL,
         contents=text,
-        config={"output_dimensionality": 768},
+        config={"output_dimensionality": 768, "task_type": "RETRIEVAL_DOCUMENT"},
     )
     return response.embeddings[0].values
 
