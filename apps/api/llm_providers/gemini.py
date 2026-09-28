@@ -7,8 +7,6 @@ def complete(prompt: str) -> str:
         raise EnvironmentError("GEMINI_API_KEY is not set")
 
     client = genai.Client()
-    interaction = client.interactions.create(
-        model="gemini-2.5-flash",
-        prompt=prompt,
-    )
-    return interaction.output_text
+    chat = client.chats.create(model="gemini-3.5-flash")
+    response = chat.send_message(prompt)
+    return response.text

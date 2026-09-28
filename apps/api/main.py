@@ -98,7 +98,8 @@ def ask(body: AskRequest):
         reply = get_completion(prompt, provider="gemini")
     except EnvironmentError as exc:
         raise HTTPException(status_code=500, detail=str(exc))
-    except Exception:
+    except Exception as exc:
+        logger.error("get_completion failed: %s", exc, exc_info=True)
         raise HTTPException(
             status_code=500,
             detail="Couldn't reach the AI service, try again in a moment.",
