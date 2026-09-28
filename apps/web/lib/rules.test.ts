@@ -247,29 +247,14 @@ describe("getStemReporting — STEM start 2026-01-20", () => {
   it("6-month due date is 2026-07-20", () => {
     expect(items[0].dueDate).toBe("2026-07-20");
   });
-  it("6-month submit-by is 2026-07-30", () => {
-    expect(items[0].submitByDate).toBe("2026-07-30");
-  });
-
   it("12-month due date is 2027-01-20", () => {
     expect(items[1].dueDate).toBe("2027-01-20");
   });
-  it("12-month submit-by is 2027-01-30", () => {
-    expect(items[1].submitByDate).toBe("2027-01-30");
-  });
-
   it("18-month due date is 2027-07-20", () => {
     expect(items[2].dueDate).toBe("2027-07-20");
   });
-  it("18-month submit-by is 2027-07-30", () => {
-    expect(items[2].submitByDate).toBe("2027-07-30");
-  });
-
   it("24-month due date is 2028-01-20", () => {
     expect(items[3].dueDate).toBe("2028-01-20");
-  });
-  it("24-month submit-by is 2028-01-30", () => {
-    expect(items[3].submitByDate).toBe("2028-01-30");
   });
 
   it("6-month does not include self-evaluation", () => {

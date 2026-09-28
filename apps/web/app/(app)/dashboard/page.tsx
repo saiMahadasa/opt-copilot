@@ -477,12 +477,14 @@ export default function DashboardPage() {
                             </span>
                           )}
                         </p>
-                        <p className="text-caption text-muted-foreground mt-0.5">
-                          Due {fmtDate(item.dueDate)} · submit by {fmtDate(item.submitByDate)}
+                        <p className="mt-1 text-caption text-muted-foreground leading-snug">
+                          Submit this to your DSO by {fmtDate(item.dueDate)}. Schools
+                          need time to process it, so start early.
                         </p>
-                        {isDue && (
-                          <p className="mt-1 text-caption text-teal font-medium">
-                            Due now — submit to your DSO within the 10-day window.
+                        {item.includesSelfEvaluation && (
+                          <p className="mt-1 text-caption text-muted-foreground leading-snug">
+                            Your Form I-983 self-evaluation is due with this report.
+                            You and your employer both sign it.
                           </p>
                         )}
                         {isPast && (

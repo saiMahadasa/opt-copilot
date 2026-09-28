@@ -27,8 +27,7 @@ export interface PendingEadResult {
 export interface StemReportItem {
   monthMark: number;
   dueDate: string;
-  submitByDate: string;
-  /** "upcoming" before dueDate, "due" from dueDate through submitByDate, "past" after. */
+  /** "upcoming" before dueDate, "due" from dueDate through dueDate+10 days, "past" after. */
   status: "upcoming" | "due" | "past";
   /** Days from today to dueDate; negative when dueDate is in the past. */
   daysAway: number;
@@ -223,15 +222,14 @@ export function getStemReporting(
 ): StemReportItem[] {
   return [6, 12, 18, 24].map((monthMark) => {
     const dueDate = addMonths(stemStartDate, monthMark);
-    const submitByDate = addDays(dueDate, 10);
+    const windowEnd = addDays(dueDate, 10);
     let status: StemReportItem["status"];
     if (today < dueDate) status = "upcoming";
-    else if (today <= submitByDate) status = "due";
+    else if (today <= windowEnd) status = "due";
     else status = "past";
     return {
       monthMark,
       dueDate,
-      submitByDate,
       status,
       daysAway: diffDays(today, dueDate),
       includesSelfEvaluation: monthMark === 12 || monthMark === 24,
