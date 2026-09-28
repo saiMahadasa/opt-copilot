@@ -92,6 +92,9 @@ def main() -> None:
         chunks = chunk_text(text)
         print(f"\n{source}: {len(chunks)} chunk(s)")
 
+        db.table("document_chunks").delete().eq("source", source).execute()
+        print(f"  [~] cleared existing rows for {source}")
+
         for i, chunk in enumerate(chunks, 1):
             try:
                 vector = embed(gemini, chunk)
