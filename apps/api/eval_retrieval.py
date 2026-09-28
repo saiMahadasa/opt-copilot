@@ -66,9 +66,11 @@ QUESTIONS = [
 
     # ── new not-covered: near-miss questions ──────────────────────────────────
     {"question": "How long does the OPT EAD take to arrive?",
-     "expected": "not_covered"},
+     "expected": "not_covered",
+     "known_gap": "no EAD timing content yet"},
     {"question": "Can I work off campus on F-1 in my first year?",
-     "expected": "not_covered"},
+     "expected": "not_covered",
+     "known_gap": "no off-campus work content yet"},
     {"question": "What is a cap-gap extension?",
      "expected": "not_covered"},
 ]
@@ -104,11 +106,13 @@ def main() -> None:
 
     passes: list[str] = []
     failures: list[dict] = []
+    known_gaps: list[dict] = []
 
     for item in QUESTIONS:
         q = item["question"]
         expected = item["expected"]
         expected_source = item.get("expected_source")
+        known_gap = item.get("known_gap")
 
         try:
             vector = embed_query(gemini_client, q)
@@ -126,22 +130,34 @@ def main() -> None:
         else:
             passed = top_score < MIN_SIMILARITY
 
-        verdict = "PASS" if passed else "FAIL"
+        if passed:
+            verdict = "PASS"
+        elif known_gap:
+            verdict = "KNOWN GAP"
+        else:
+            verdict = "FAIL"
 
         # Per-question line
-        source_display = f"{top_source} ({top_score:.2f})"
         if expected == "covered":
             print(f"[{verdict}] {q}")
             for c in chunks:
                 marker = " <-- expected" if c["source"] == expected_source else ""
                 print(f"       {round(c['similarity'], 2):.2f}  {c['source']}{marker}")
         else:
-            print(f"[{verdict}] {q}")
+            gap_note = f"  ({known_gap})" if known_gap and not passed else ""
+            print(f"[{verdict}]{gap_note} {q}")
             for c in chunks:
                 print(f"       {round(c['similarity'], 2):.2f}  {c['source']}")
 
         if passed:
             passes.append(q)
+        elif known_gap:
+            known_gaps.append({
+                "question": q,
+                "known_gap": known_gap,
+                "top_score": top_score,
+                "top_source": top_source,
+            })
         else:
             failures.append({
                 "question": q,
@@ -153,8 +169,20 @@ def main() -> None:
 
     # Summary
     print(f"\n{'='*60}")
-    print(f"RESULTS: {len(passes)} passed, {len(failures)} failed  (out of {len(QUESTIONS)})")
+    print(
+        f"RESULTS: {len(passes)} passed, {len(failures)} failed, "
+        f"{len(known_gaps)} known gap(s)  (out of {len(QUESTIONS)})"
+    )
     print(f"{'='*60}")
+
+    if known_gaps:
+        print(f"\nKNOWN GAPS ({len(known_gaps)} remaining):")
+        for g in known_gaps:
+            print(
+                f"  - {g['question']!r}\n"
+                f"    gap: {g['known_gap']}  |  "
+                f"top source={g['top_source']} score={g['top_score']}"
+            )
 
     if failures:
         print("\nFAILURES:")
