@@ -23,24 +23,35 @@ MATCH_COUNT = 3
 MIN_SIMILARITY = float(os.environ.get("MIN_SIMILARITY", "0.66"))
 
 # Each dict: question, expected ("covered"|"not_covered"), expected_source (covered only).
-# A covered question passes when:  top_score >= MIN_SIMILARITY AND top_source == expected_source
+# expected_source uses source_id from sources.yml (e.g. "ecfr_8cfr214_2_f"), not filename.
+# Legacy hand-written files use source_id = stem of filename (e.g. "opt", "stem-opt", "cpt").
+#
+# A covered question passes when:  top_score >= MIN_SIMILARITY AND top_source_id == expected_source
 # A not_covered question passes when: top_score < MIN_SIMILARITY
 QUESTIONS = [
-    # ── original covered ──────────────────────────────────────────────────────
+    # ── original covered (legacy hand-written files) ──────────────────────────
     {"question": "What is the 90 day rule?",
-     "expected": "covered", "expected_source": "opt.md"},
+     "expected": "covered", "expected_source": "opt"},
     {"question": "Does my employer need E-Verify for STEM OPT?",
-     "expected": "covered", "expected_source": "stem-opt.md"},
+     "expected": "covered", "expected_source": "stem-opt"},
     {"question": "Can I do CPT before my program ends?",
-     "expected": "covered", "expected_source": "cpt.md"},
+     "expected": "covered", "expected_source": "cpt"},
     {"question": "When can I file for OPT?",
-     "expected": "covered", "expected_source": "opt.md"},
+     "expected": "covered", "expected_source": "opt"},
     {"question": "What is the Form I-983?",
-     "expected": "covered", "expected_source": "stem-opt.md"},
+     "expected": "covered", "expected_source": "stem-opt"},
     {"question": "Does part-time CPT affect OPT eligibility?",
-     "expected": "covered", "expected_source": "cpt.md"},
+     "expected": "covered", "expected_source": "cpt"},
     {"question": "Can I travel while my OPT application is pending?",
-     "expected": "covered", "expected_source": "opt.md"},
+     "expected": "covered", "expected_source": "opt"},
+
+    # ── STEM OPT reporting (official eCFR source) ─────────────────────────────
+    {"question": "How often do I need to report to my DSO while on STEM OPT?",
+     "expected": "covered", "expected_source": "ecfr_8cfr214_2_f"},
+    {"question": "What are the STEM OPT validation report requirements?",
+     "expected": "covered", "expected_source": "ecfr_8cfr214_2_f"},
+    {"question": "Does the 12-month STEM OPT report require a self-evaluation?",
+     "expected": "covered", "expected_source": "ecfr_8cfr214_2_f"},
 
     # ── original not-covered ──────────────────────────────────────────────────
     {"question": "My EAD card is late, who do I contact?",
@@ -52,19 +63,19 @@ QUESTIONS = [
     {"question": "How do I bake a cake?",
      "expected": "not_covered"},
 
-    # ── new covered: short / casual / typo variants ───────────────────────────
+    # ── short / casual / typo variants ───────────────────────────────────────
     {"question": "90 days unemployed on OPT?",
-     "expected": "covered", "expected_source": "opt.md"},
+     "expected": "covered", "expected_source": "opt"},
     {"question": "do i need eveerify for stem opt",           # typo: eveerify
-     "expected": "covered", "expected_source": "stem-opt.md"},
+     "expected": "covered", "expected_source": "stem-opt"},
     {"question": "cpt authorization before graduation",
-     "expected": "covered", "expected_source": "cpt.md"},
+     "expected": "covered", "expected_source": "cpt"},
     {"question": "opt application timing",
-     "expected": "covered", "expected_source": "opt.md"},
+     "expected": "covered", "expected_source": "opt"},
     {"question": "i-983 training plan form",
-     "expected": "covered", "expected_source": "stem-opt.md"},
+     "expected": "covered", "expected_source": "stem-opt"},
 
-    # ── new not-covered: near-miss questions ──────────────────────────────────
+    # ── known gaps ────────────────────────────────────────────────────────────
     {"question": "How long does the OPT EAD take to arrive?",
      "expected": "not_covered",
      "known_gap": "no EAD timing content yet"},
@@ -122,7 +133,10 @@ def main() -> None:
             sys.exit(1)
 
         top_score = round(chunks[0]["similarity"], 2) if chunks else 0.0
-        top_source = chunks[0]["source"] if chunks else "(none)"
+        # Use source_id when available; fall back to source filename for old rows
+        top_source = (
+            chunks[0].get("source_id") or chunks[0].get("source", "(none)")
+        ) if chunks else "(none)"
 
         # Determine pass/fail
         if expected == "covered":
@@ -141,13 +155,15 @@ def main() -> None:
         if expected == "covered":
             print(f"[{verdict}] {q}")
             for c in chunks:
-                marker = " <-- expected" if c["source"] == expected_source else ""
-                print(f"       {round(c['similarity'], 2):.2f}  {c['source']}{marker}")
+                sid = c.get("source_id") or c.get("source", "?")
+                marker = " <-- expected" if sid == expected_source else ""
+                print(f"       {round(c['similarity'], 2):.2f}  {sid}{marker}")
         else:
             gap_note = f"  ({known_gap})" if known_gap and not passed else ""
             print(f"[{verdict}]{gap_note} {q}")
             for c in chunks:
-                print(f"       {round(c['similarity'], 2):.2f}  {c['source']}")
+                sid = c.get("source_id") or c.get("source", "?")
+                print(f"       {round(c['similarity'], 2):.2f}  {sid}")
 
         if passed:
             passes.append(q)
@@ -156,7 +172,7 @@ def main() -> None:
                 "question": q,
                 "known_gap": known_gap,
                 "top_score": top_score,
-                "top_source": top_source,
+                "top_source_id": top_source,
             })
         else:
             failures.append({
@@ -164,7 +180,7 @@ def main() -> None:
                 "expected": expected,
                 "expected_source": expected_source,
                 "top_score": top_score,
-                "top_source": top_source,
+                "top_source_id": top_source,
             })
 
     # Summary
@@ -181,7 +197,7 @@ def main() -> None:
             print(
                 f"  - {g['question']!r}\n"
                 f"    gap: {g['known_gap']}  |  "
-                f"top source={g['top_source']} score={g['top_score']}"
+                f"top source_id={g['top_source_id']} score={g['top_score']}"
             )
 
     if failures:
@@ -190,14 +206,14 @@ def main() -> None:
             if f["expected"] == "covered":
                 print(
                     f"  - {f['question']!r}\n"
-                    f"    expected source={f['expected_source']} score>={MIN_SIMILARITY}, "
-                    f"got source={f['top_source']} score={f['top_score']}"
+                    f"    expected source_id={f['expected_source']} score>={MIN_SIMILARITY}, "
+                    f"got source_id={f['top_source_id']} score={f['top_score']}"
                 )
             else:
                 print(
                     f"  - {f['question']!r}\n"
                     f"    expected score<{MIN_SIMILARITY} (not covered), "
-                    f"got source={f['top_source']} score={f['top_score']}"
+                    f"got source_id={f['top_source_id']} score={f['top_score']}"
                 )
         sys.exit(1)
 

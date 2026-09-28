@@ -83,7 +83,10 @@ class AskRequest(BaseModel):
 
 
 class ChunkSource(BaseModel):
-    source: str
+    title: str
+    url: str
+    section: str
+    retrieved_at: str
     score: float
 
 
@@ -184,7 +187,10 @@ def retrieve_context(message: str) -> list[dict[str, Any]]:
             "retrieval: %d chunk(s) above %.2f — %s",
             len(chunks),
             MIN_SIMILARITY,
-            ", ".join(f"{c['source']} ({round(c['similarity'], 2)})" for c in chunks) or "none",
+            ", ".join(
+                f"{c.get('source_id') or c['source']} ({round(c['similarity'], 2)})"
+                for c in chunks
+            ) or "none",
         )
         return chunks
 
@@ -245,8 +251,11 @@ def ask(request: Request, body: AskRequest):
     if grounded:
         ref_lines = ["Reference material:"]
         for c in chunks:
-            ref_lines.append(f"[source: {c['source']}] {c['content']}")
-        context_section = "\n\n" + "\n".join(ref_lines)
+            title   = c.get("title") or c["source"]
+            section = c.get("section") or ""
+            label   = f"{title} — {section}" if section else title
+            ref_lines.append(f"[{label}]\n{c['content']}")
+        context_section = "\n\n" + "\n\n".join(ref_lines)
         grounding_line = f"\n{GROUNDED_INSTRUCTION}"
     else:
         context_section = ""
@@ -272,7 +281,13 @@ def ask(request: Request, body: AskRequest):
         )
 
     sources = [
-        ChunkSource(source=c["source"], score=round(c["similarity"], 2))
+        ChunkSource(
+            title        = c.get("title") or c["source"],
+            url          = c.get("source_url") or "",
+            section      = c.get("section") or "",
+            retrieved_at = c.get("retrieved_at") or "",
+            score        = round(c["similarity"], 2),
+        )
         for c in chunks
     ]
     result = AskResponse(reply=reply, sources=sources, grounded=grounded)

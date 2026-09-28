@@ -6,7 +6,13 @@ import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-type ChunkSource = { source: string; score: number };
+type ChunkSource = {
+  title: string;
+  url: string;
+  section: string;
+  retrieved_at: string;
+  score: number;
+};
 
 type Message = {
   id: string;
@@ -15,12 +21,6 @@ type Message = {
   loading?: boolean;
   sources?: ChunkSource[];
   grounded?: boolean;
-};
-
-const SOURCE_NAMES: Record<string, string> = {
-  "opt.md": "OPT guide",
-  "stem-opt.md": "STEM OPT guide",
-  "cpt.md": "CPT guide",
 };
 
 const INITIAL: Message[] = [
@@ -127,19 +127,54 @@ function TypingDots() {
 
 // ── Sources ───────────────────────────────────────────────────────────────
 
+function _formatChecked(iso: string): string {
+  if (!iso) return "";
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  } catch {
+    return "";
+  }
+}
+
 function SourcePills({ sources }: { sources: ChunkSource[] }) {
   if (sources.length === 0) return null;
   return (
     <div className="mt-2 flex flex-wrap gap-1.5">
-      {sources.map((s) => (
-        <span
-          key={s.source}
-          className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground"
-        >
-          <BookOpen className="w-3 h-3" />
-          {SOURCE_NAMES[s.source] ?? s.source}
-        </span>
-      ))}
+      {sources.map((s, i) => {
+        const checked = _formatChecked(s.retrieved_at);
+        const inner = (
+          <>
+            <BookOpen className="w-3 h-3 shrink-0" />
+            <span className="truncate max-w-[160px]">{s.title}</span>
+            {checked && (
+              <span className="text-muted-foreground/60 whitespace-nowrap">
+                · checked {checked}
+              </span>
+            )}
+          </>
+        );
+        const pillClass =
+          "inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground";
+        if (s.url) {
+          return (
+            <a
+              key={i}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${pillClass} hover:bg-muted/80 hover:text-foreground transition-colors`}
+            >
+              {inner}
+            </a>
+          );
+        }
+        return (
+          <span key={i} className={pillClass}>
+            {inner}
+          </span>
+        );
+      })}
     </div>
   );
 }

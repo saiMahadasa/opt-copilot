@@ -3,9 +3,24 @@ from unittest.mock import patch
 import pytest
 
 
-CHUNK_HIGH = {"source": "opt.md", "similarity": 0.85, "content": "The 90-day rule limits unemployment."}
-CHUNK_LOW  = {"source": "cpt.md", "similarity": 0.30, "content": "CPT must be authorized by your DSO."}
-CHUNK_MID  = {"source": "stem-opt.md", "similarity": 0.50, "content": "STEM OPT requires E-Verify."}
+CHUNK_HIGH = {
+    "source": "opt.md", "source_id": "uscis_opt", "source_url": "https://uscis.gov/opt",
+    "title": "USCIS OPT", "section": "(f)(10)(ii)", "authority": "guidance",
+    "retrieved_at": "2026-09-28T00:00:00Z", "content_hash": "abc",
+    "similarity": 0.85, "content": "The 90-day rule limits unemployment.",
+}
+CHUNK_LOW = {
+    "source": "cpt.md", "source_id": "uscis_cpt", "source_url": "",
+    "title": "USCIS CPT", "section": "", "authority": "guidance",
+    "retrieved_at": "", "content_hash": "def",
+    "similarity": 0.30, "content": "CPT must be authorized by your DSO.",
+}
+CHUNK_MID = {
+    "source": "stem-opt.md", "source_id": "uscis_stem_opt", "source_url": "",
+    "title": "USCIS STEM OPT", "section": "(f)(10)(ii)(C)", "authority": "guidance",
+    "retrieved_at": "2026-09-28T00:00:00Z", "content_hash": "ghi",
+    "similarity": 0.50, "content": "STEM OPT requires E-Verify.",
+}
 
 
 @pytest.fixture()
@@ -29,7 +44,9 @@ def test_grounded_true_when_chunk_passes(client_base):
     body = r.json()
     assert body["grounded"] is True
     assert len(body["sources"]) == 1
-    assert body["sources"][0]["source"] == "opt.md"
+    assert body["sources"][0]["title"] == "USCIS OPT"
+    assert body["sources"][0]["url"] == "https://uscis.gov/opt"
+    assert body["sources"][0]["section"] == "(f)(10)(ii)"
     assert body["sources"][0]["score"] == 0.85
 
 
@@ -57,9 +74,9 @@ def test_min_similarity_filters_in_retrieve_context():
     from unittest.mock import MagicMock
 
     raw_data = [
-        {"source": "opt.md",      "similarity": 0.80, "content": "text"},
-        {"source": "cpt.md",      "similarity": 0.20, "content": "text"},
-        {"source": "stem-opt.md", "similarity": 0.60, "content": "text"},
+        {"source": "opt.md",      "source_id": "uscis_opt",      "similarity": 0.80, "content": "text"},
+        {"source": "cpt.md",      "source_id": "uscis_cpt",      "similarity": 0.20, "content": "text"},
+        {"source": "stem-opt.md", "source_id": "uscis_stem_opt", "similarity": 0.60, "content": "text"},
     ]
 
     mock_db = MagicMock()
