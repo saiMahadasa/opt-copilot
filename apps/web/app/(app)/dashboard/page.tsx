@@ -478,8 +478,9 @@ export default function DashboardPage() {
                           )}
                         </p>
                         <p className="mt-1 text-caption text-muted-foreground leading-snug">
-                          Submit this to your DSO by {fmtDate(item.dueDate)}. Schools
-                          need time to process it, so start early.
+                          Submit it to your DSO by the due date. Schools need time
+                          to process it, so start early and follow your school&apos;s
+                          instructions.
                         </p>
                         {item.includesSelfEvaluation && (
                           <p className="mt-1 text-caption text-muted-foreground leading-snug">
