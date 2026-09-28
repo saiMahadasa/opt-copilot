@@ -2,63 +2,168 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Keyframes ───────────────────────────────────────────────────────── */
+
+@keyframes stamp-press {
+  0%   { transform: scale(1.06); opacity: 0.65; }
+  60%  { transform: scale(0.97); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+@keyframes accordion-down {
+  from { height: 0; opacity: 0; }
+  to   { height: var(--radix-accordion-content-height); opacity: 1; }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); opacity: 1; }
+  to   { height: 0; opacity: 0; }
+}
+
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: translateY(0);   opacity: 0.45; }
+  40%            { transform: translateY(-4px); opacity: 1;    }
+}
+
+/* ── Design tokens ───────────────────────────────────────────────────── */
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 0% 56%;
-    --radius: 0.625rem;
+    /* brand */
+    --teal:   181 81% 31%;
+    --brand:  211 56% 20%;
+    --gold:    39 75% 56%;
+
+    /* page */
+    --background:          214 42% 97%;
+    --foreground:          211 56% 20%;
+
+    /* surfaces */
+    --card:                  0  0% 100%;
+    --card-foreground:     211 56% 20%;
+    --popover:               0  0% 100%;
+    --popover-foreground:  211 56% 20%;
+
+    /* actions */
+    --primary:             211 56% 20%;
+    --primary-foreground:    0  0% 100%;
+    --secondary:           214 30% 92%;
+    --secondary-foreground: 211 56% 20%;
+
+    /* chrome */
+    --muted:               213 25% 92%;
+    --muted-foreground:    211 18% 44%;
+    --accent:              181 40% 92%;
+    --accent-foreground:   181 81% 31%;
+    --destructive:           3 71% 41%;
+    --destructive-foreground: 0 0% 100%;
+    --border:              213 31% 87%;
+    --input:               213 31% 87%;
+    --ring:                181 81% 31%;
+    --radius:              0.75rem;
+
+    /* status */
+    --ok:                  181 81% 31%;
+    --ok-bg:               181 40% 93%;
+    --watch:                36 100% 35%;
+    --watch-bg:             42 100% 93%;
+    --over:                  3 71% 41%;
+    --over-bg:               4 90% 95%;
   }
 
   .dark {
-    --background: 0 0% 9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 15%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 15%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 90%;
-    --primary-foreground: 0 0% 15%;
-    --secondary: 0 0% 21%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 21%;
-    --muted-foreground: 0 0% 56%;
-    --accent: 0 0% 21%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 21%;
-    --input: 0 0% 21%;
-    --ring: 0 0% 45%;
+    --teal:   181 52% 51%;
+    --brand:  211 56% 20%;
+    --gold:    39 75% 56%;
+
+    --background:          214 57% 13%;
+    --foreground:          212 45% 94%;
+    --card:                213 53% 18%;
+    --card-foreground:     212 45% 94%;
+    --popover:             213 53% 18%;
+    --popover-foreground:  212 45% 94%;
+    --primary:             181 52% 51%;
+    --primary-foreground:  214 57% 13%;
+    --secondary:           213 35% 22%;
+    --secondary-foreground: 212 45% 94%;
+    --muted:               213 35% 22%;
+    --muted-foreground:    212 20% 58%;
+    --accent:              181 30% 22%;
+    --accent-foreground:   181 52% 65%;
+    --destructive:           0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border:              213 40% 27%;
+    --input:               213 40% 27%;
+    --ring:                181 52% 51%;
+
+    --ok:                  181 52% 51%;
+    --ok-bg:               181 30% 20%;
+    --watch:                38 76% 58%;
+    --watch-bg:             38 30% 20%;
+    --over:                  0 72% 58%;
+    --over-bg:               0 30% 20%;
   }
 
   * {
     @apply border-border;
   }
 
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-body, ui-sans-serif, system-ui, sans-serif);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading, ui-sans-serif, system-ui, sans-serif);
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
+
+/* ── Utility classes ─────────────────────────────────────────────────── */
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .font-heading {
+    font-family: var(--font-heading, ui-sans-serif, system-ui, sans-serif);
+  }
+
+  .animate-stamp-press {
+    animation: stamp-press 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .animate-accordion-down {
+    animation: accordion-down 0.2s ease-out;
+  }
+
+  .animate-accordion-up {
+    animation: accordion-up 0.2s ease-out;
+  }
+
+  .animate-dot-bounce {
+    animation: dot-bounce 1.2s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-stamp-press,
+    .animate-accordion-down,
+    .animate-accordion-up,
+    .animate-dot-bounce {
+      animation: none !important;
+      opacity: 1 !important;
+    }
   }
 }

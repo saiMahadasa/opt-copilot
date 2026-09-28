@@ -1,32 +1,52 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Bricolage_Grotesque, Public_Sans } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
+import { APP_NAME } from "@/lib/constants";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-sans",
-  weight: "100 900",
+const heading = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const body = Public_Sans({
+  subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "opt-copilot",
-  description: "OPT/STEM OPT deadline tracker for F-1 students",
+  title: {
+    template: `%s | ${APP_NAME}`,
+    default: APP_NAME,
+  },
+  description:
+    "Track your F-1, OPT, and STEM OPT deadlines with calm and confidence.",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F3F6FA" },
+    { media: "(prefers-color-scheme: dark)",  color: "#0E1E33" },
+  ],
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={geistSans.variable}>
-      <body className={`${geistMono.variable} antialiased`}>{children}</body>
+    <html
+      lang="en"
+      className={`${heading.variable} ${body.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="antialiased">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
