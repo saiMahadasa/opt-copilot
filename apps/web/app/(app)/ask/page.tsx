@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback, Suspense } from "react";
-import { Send } from "lucide-react";
+import { Send, Trash2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -29,11 +29,38 @@ const INITIAL: Message[] = [
     role: "assistant",
     text: "Hi! Ask me anything about your OPT or STEM OPT status.",
     grounded: true,
+    sources: [],
   },
 ];
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const HISTORY_KEY = "chatHistory";
+const HISTORY_MAX = 50;
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
+// ── Persistence helpers ───────────────────────────────────────────────────
+
+function loadHistory(): Message[] {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    const parsed: Message[] = JSON.parse(raw);
+    // Never restore loading placeholders
+    return parsed.filter((m) => !m.loading);
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(messages: Message[]) {
+  // Exclude loading placeholders and keep the last HISTORY_MAX
+  const toSave = messages
+    .filter((m) => !m.loading)
+    .slice(-HISTORY_MAX);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(toSave));
+}
+
+// ── Network ───────────────────────────────────────────────────────────────
 
 async function fetchReply(
   message: string
@@ -50,10 +77,22 @@ async function fetchReply(
     throw new Error(err.detail ?? `HTTP ${res.status}`);
   }
   const data = await res.json();
-  return { reply: data.reply, sources: data.sources ?? [], grounded: data.grounded ?? false };
+  return {
+    reply: data.reply,
+    sources: data.sources ?? [],
+    grounded: data.grounded ?? false,
+  };
 }
 
-function SourcesLine({ sources, grounded }: { sources: ChunkSource[]; grounded: boolean }) {
+// ── Sources line ──────────────────────────────────────────────────────────
+
+function SourcesLine({
+  sources,
+  grounded,
+}: {
+  sources: ChunkSource[];
+  grounded: boolean;
+}) {
   if (!grounded) {
     return (
       <p className="mt-1.5 text-[11px] text-amber-600 leading-snug">
@@ -80,14 +119,25 @@ function SourcesLine({ sources, grounded }: { sources: ChunkSource[]; grounded: 
   );
 }
 
+// ── Main page ─────────────────────────────────────────────────────────────
+
 function AskPageContent() {
-  const [messages, setMessages] = useState<Message[]>(INITIAL);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [confirmClear, setConfirmClear] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  // Tracks whether the ?q= prefill has been sent this session
   const prefillSentRef = useRef(false);
   const searchParams = useSearchParams();
 
+  // Restore history on mount (runs once)
+  useEffect(() => {
+    const history = loadHistory();
+    setMessages(history.length > 0 ? history : INITIAL);
+  }, []);
+
+  // Scroll to bottom whenever messages change
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -102,22 +152,30 @@ function AskPageContent() {
       loading: true,
     };
 
-    setMessages((prev) => [...prev, userMsg, placeholder]);
+    setMessages((prev) => {
+      const next = [...prev, userMsg, placeholder];
+      // Save without the loading placeholder
+      saveHistory([...prev, userMsg]);
+      return next;
+    });
     setSending(true);
 
     try {
       const { reply, sources, grounded } = await fetchReply(text);
-      setMessages((prev) =>
-        prev.map((m) =>
+      setMessages((prev) => {
+        const next = prev.map((m) =>
           m.id === placeholderId
             ? { ...m, text: reply, sources, grounded, loading: false }
             : m
-        )
-      );
+        );
+        saveHistory(next);
+        return next;
+      });
     } catch (err) {
-      const isRateLimited = err instanceof Error && err.message === "rate_limited";
-      setMessages((prev) =>
-        prev.map((m) =>
+      const isRateLimited =
+        err instanceof Error && err.message === "rate_limited";
+      setMessages((prev) => {
+        const next = prev.map((m) =>
           m.id === placeholderId
             ? {
                 ...m,
@@ -125,16 +183,20 @@ function AskPageContent() {
                   ? "You're asking fast, try again in a minute."
                   : "Something went wrong, try again.",
                 grounded: true,
+                sources: [],
                 loading: false,
               }
             : m
-        )
-      );
+        );
+        saveHistory(next);
+        return next;
+      });
     } finally {
       setSending(false);
     }
   }, []);
 
+  // Send ?q= prefill exactly once per page load
   useEffect(() => {
     const q = searchParams.get("q");
     if (q && !prefillSentRef.current) {
@@ -157,17 +219,65 @@ function AskPageContent() {
     }
   }
 
+  function handleClearRequest() {
+    setConfirmClear(true);
+  }
+
+  function handleClearConfirm() {
+    localStorage.removeItem(HISTORY_KEY);
+    setMessages(INITIAL);
+    setConfirmClear(false);
+  }
+
   return (
     <div className="flex flex-col h-[calc(100dvh-4rem)]">
 
+      {/* ── Toolbar ── */}
+      <div className="flex items-center justify-end px-4 pt-3 pb-1 gap-2">
+        {confirmClear ? (
+          <>
+            <span className="text-xs text-muted-foreground">Clear all messages?</span>
+            <button
+              onClick={handleClearConfirm}
+              className="text-xs font-semibold text-red-600 hover:text-red-700 px-2 py-1"
+            >
+              Yes, clear
+            </button>
+            <button
+              onClick={() => setConfirmClear(false)}
+              className="text-xs text-muted-foreground hover:text-foreground px-2 py-1"
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={handleClearRequest}
+            aria-label="Clear chat"
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-lg hover:bg-muted"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            Clear chat
+          </button>
+        )}
+      </div>
+
       {/* ── Message list ── */}
-      <div className="flex-1 overflow-y-auto px-4 pt-6 pb-4 space-y-3">
+      <div className="flex-1 overflow-y-auto px-4 pt-2 pb-4 space-y-3">
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}
+            className={cn(
+              "flex",
+              msg.role === "user" ? "justify-end" : "justify-start"
+            )}
           >
-            <div className={cn("max-w-[80%]", msg.role === "user" ? "items-end" : "items-start")}>
+            <div
+              className={cn(
+                "max-w-[80%]",
+                msg.role === "user" ? "items-end" : "items-start"
+              )}
+            >
               <div
                 className={cn(
                   "rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
@@ -179,9 +289,14 @@ function AskPageContent() {
               >
                 {msg.text}
               </div>
-              {!msg.loading && msg.role === "assistant" && msg.sources !== undefined && (
-                <SourcesLine sources={msg.sources} grounded={msg.grounded ?? true} />
-              )}
+              {!msg.loading &&
+                msg.role === "assistant" &&
+                msg.sources !== undefined && (
+                  <SourcesLine
+                    sources={msg.sources}
+                    grounded={msg.grounded ?? true}
+                  />
+                )}
             </div>
           </div>
         ))}
@@ -214,7 +329,6 @@ function AskPageContent() {
           General information, not legal advice.
         </p>
       </div>
-
     </div>
   );
 }
