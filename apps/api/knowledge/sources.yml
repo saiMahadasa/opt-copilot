@@ -1,0 +1,291 @@
+# Pathwise source manifest
+# status values: approved | proposed | blocked
+# Only approved entries are fetched and ingested.
+# Proposed entries are candidates for future approval.
+# Run fetch_sources.py to download approved entries; it will set
+# blocked: true in the snapshot front matter for any 403/disallowed URL.
+#
+# HTTP status checked 2026-09-28:
+#   ecfr.gov       — robots.txt allows; renderer API returns 200
+#   uscis.gov      — robots.txt Disallow: /; all URLs return 403
+#   studyinthestates.dhs.gov — robots.txt Disallow: /; all URLs return 403
+#   ice.gov        — robots.txt Disallow: /; all URLs return 403
+#   federalregister.gov — robots.txt allows; HTML pages redirect to
+#                         https://unblock.federalregister.gov/ (Cloudflare JS challenge)
+
+sources:
+
+  # ── Approved ──────────────────────────────────────────────────────────────
+
+  - id: ecfr_8cfr214_2_f
+    title: "8 CFR 214.2(f) — F nonimmigrant (F-1 student) regulations"
+    url: "https://www.ecfr.gov/current/title-8/chapter-I/subchapter-B/part-214/section-214.2"
+    # Renderer API is the only endpoint that returns content without a JS challenge.
+    # The canonical HTML URL redirects to https://unblock.federalregister.gov/ (200, Cloudflare).
+    fetch_url: "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-8?chapter=I&subchapter=B&part=214&section=214.2"
+    agency: "DHS / USCIS"
+    type: ecfr
+    authority: regulation
+    topics:
+      - f1-status
+      - opt
+      - stem-opt
+      - cap-gap
+      - unemployment-limit
+      - grace-period
+      - employment-authorization
+      - cpt
+    notes: >
+      Keep only paragraph (f). The renderer API (fetch_url) returns the full
+      section as HTML; extraction filters to id="p-214.2(f)" and descendants.
+      Canonical HTML URL returns HTTP 200 but final URL is
+      https://unblock.federalregister.gov/ (Cloudflare JS challenge, not usable).
+      Renderer API: HTTP 200, final URL unchanged.
+    status: approved
+
+  - id: uscis_policy_vol2_f
+    title: "USCIS Policy Manual — Volume 2, Part F: Nonimmigrant Students"
+    url: "https://www.uscis.gov/policy-manual/volume-2-part-f"
+    agency: "USCIS"
+    type: html
+    authority: policy
+    topics:
+      - f1-status
+      - opt
+      - stem-opt
+      - cpt
+      - employment-authorization
+    notes: >
+      HTTP 403. robots.txt Disallow: / for all bots.
+      Place a manual snapshot at knowledge/manual/uscis_policy_vol2_f.md
+      with a matching uscis_policy_vol2_f.yml sidecar.
+    status: approved
+
+  - id: uscis_stem_opt
+    title: "USCIS — Optional Practical Training Extension for STEM Students (STEM OPT)"
+    url: "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-extension-for-stem-students-stem-opt"
+    agency: "USCIS"
+    type: html
+    authority: guidance
+    topics:
+      - stem-opt
+      - employment-authorization
+      - i-983
+      - e-verify
+    notes: "HTTP 403. robots.txt Disallow: / for all bots. Requires manual snapshot."
+    status: approved
+
+  - id: sits_dso_reporting
+    title: "Study in the States — DSO STEM OPT Reporting Requirements"
+    url: "https://studyinthestates.dhs.gov/stem-opt-hub/for-schools/dsos-stem-opt-reporting-requirements"
+    agency: "DHS / SEVP"
+    type: html
+    authority: guidance
+    topics:
+      - stem-opt
+      - reporting
+      - validation-report
+      - i-983
+    notes: "HTTP 403. robots.txt Disallow: / for all bots. Requires manual snapshot."
+    status: approved
+
+  - id: sits_2019_reminders
+    title: "Study in the States — Students: Read These STEM OPT Reporting Reminders (2019)"
+    url: "https://studyinthestates.dhs.gov/2019/03/students-read-these-stem-opt-reporting-reminders"
+    agency: "DHS / SEVP"
+    type: html
+    authority: guidance
+    topics:
+      - stem-opt
+      - reporting
+      - validation-report
+    notes: "HTTP 403. robots.txt Disallow: / for all bots. Requires manual snapshot."
+    status: approved
+
+  - id: sits_2020_opt_reporting
+    title: "Study in the States — Don't Forget OPT Reporting Requirements (2020)"
+    url: "https://studyinthestates.dhs.gov/2020/11/dont-forget-opt-reporting-requirements-for-students-and-dsos"
+    agency: "DHS / SEVP"
+    type: html
+    authority: guidance
+    topics:
+      - opt
+      - stem-opt
+      - reporting
+      - address-change
+    notes: "HTTP 403. robots.txt Disallow: / for all bots. Requires manual snapshot."
+    status: approved
+
+  - id: sits_i983_students
+    title: "Study in the States — Students and the Form I-983"
+    url: "https://studyinthestates.dhs.gov/stem-opt-hub/for-students/students-and-the-form-i-983"
+    agency: "DHS / SEVP"
+    type: html
+    authority: guidance
+    topics:
+      - stem-opt
+      - i-983
+      - self-evaluation
+      - training-plan
+    notes: "HTTP 403. robots.txt Disallow: / for all bots. Requires manual snapshot."
+    status: approved
+
+  - id: sits_i983_overview
+    title: "Study in the States — Form I-983 Overview"
+    url: "https://studyinthestates.dhs.gov/form-i-983-overview"
+    agency: "DHS / SEVP"
+    type: html
+    authority: guidance
+    topics:
+      - stem-opt
+      - i-983
+      - training-plan
+    notes: "HTTP 403. robots.txt Disallow: / for all bots. Requires manual snapshot."
+    status: approved
+
+  - id: sits_student_reporting
+    title: "Study in the States — STEM OPT Student Reporting Requirements"
+    url: "https://studyinthestates.dhs.gov/stem-opt-hub/for-students/stem-opt-student-reporting-requirements"
+    # Two URL variants checked; both return 403:
+    #   https://studyinthestates.dhs.gov/students/reporting-requirements  → 403
+    #   https://studyinthestates.dhs.gov/stem-opt-hub/for-students/stem-opt-student-reporting-requirements  → 403
+    # The stem-opt-hub URL is used as the canonical form; both are blocked.
+    agency: "DHS / SEVP"
+    type: html
+    authority: guidance
+    topics:
+      - stem-opt
+      - reporting
+      - validation-report
+      - address-change
+      - employment-change
+    notes: >
+      Two URL variants checked (2026-09-28); both return HTTP 403.
+      Variant A: https://studyinthestates.dhs.gov/students/reporting-requirements — 403
+      Variant B (this URL): 403
+      robots.txt Disallow: / for all bots. Requires manual snapshot.
+    status: approved
+
+  - id: ice_i983_pdf
+    title: "ICE / SEVP — Form I-983 (PDF)"
+    url: "https://www.ice.gov/doclib/sevis/pdf/i983.pdf"
+    agency: "DHS / ICE / SEVP"
+    type: pdf
+    authority: regulation
+    topics:
+      - stem-opt
+      - i-983
+      - training-plan
+      - self-evaluation
+    notes: "HTTP 403. robots.txt Disallow: / for all bots. Requires manual snapshot."
+    status: approved
+
+  # ── Proposed ──────────────────────────────────────────────────────────────
+  # These are candidates for approval. fetch_sources.py ignores them.
+  # All uscis.gov, studyinthestates.dhs.gov, and ice.gov URLs return 403
+  # and have robots.txt Disallow: / — they require manual snapshots.
+  # federalregister.gov allows bots but HTML pages redirect to
+  # https://unblock.federalregister.gov/ (Cloudflare JS challenge).
+
+  - id: uscis_cpt
+    title: "USCIS — Curricular Practical Training (CPT)"
+    url: "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/curricular-practical-training-cpt"
+    agency: "USCIS"
+    type: html
+    authority: guidance
+    topics: [cpt, employment-authorization]
+    notes: "HTTP 403. robots.txt Disallow: /."
+    status: proposed
+
+  - id: uscis_opt_overview
+    title: "USCIS — Optional Practical Training (OPT) for F-1 Students"
+    url: "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/optional-practical-training-opt-for-f-1-students"
+    agency: "USCIS"
+    type: html
+    authority: guidance
+    topics: [opt, unemployment-limit, employment-authorization, i-765]
+    notes: "HTTP 403. robots.txt Disallow: /."
+    status: proposed
+
+  - id: uscis_unemployment_limit
+    title: "USCIS Policy Manual — OPT Unemployment Limit"
+    url: "https://www.uscis.gov/policy-manual/volume-2-part-f-chapter-5"
+    agency: "USCIS"
+    type: html
+    authority: policy
+    topics: [opt, unemployment-limit]
+    notes: "HTTP 403. robots.txt Disallow: /. URL is estimated; confirm exact chapter."
+    status: proposed
+
+  - id: uscis_grace_period
+    title: "USCIS — 60-Day Grace Period for F-1 Students"
+    url: "https://www.uscis.gov/policy-manual/volume-2-part-f-chapter-6"
+    agency: "USCIS"
+    type: html
+    authority: policy
+    topics: [f1-status, grace-period, opt, stem-opt]
+    notes: "HTTP 403. robots.txt Disallow: /. URL is estimated; confirm exact chapter."
+    status: proposed
+
+  - id: uscis_offcampus_employment
+    title: "USCIS — Students and Employment (Off-Campus F-1)"
+    url: "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/students-and-employment"
+    agency: "USCIS"
+    type: html
+    authority: guidance
+    topics: [f1-status, off-campus-employment, cpt, opt]
+    notes: "HTTP 403. robots.txt Disallow: /."
+    status: proposed
+
+  - id: uscis_cap_gap
+    title: "USCIS — Cap-Gap Information for F-1 Students"
+    url: "https://www.uscis.gov/working-in-the-united-states/students-and-exchange-visitors/students-and-employment/cap-gap-information-for-f-1-students"
+    agency: "USCIS"
+    type: html
+    authority: guidance
+    topics: [cap-gap, opt, h1b]
+    notes: "HTTP 403. robots.txt Disallow: /."
+    status: proposed
+
+  - id: sits_travel_opt
+    title: "Study in the States — Travel While on OPT"
+    url: "https://studyinthestates.dhs.gov/students/study/f-and-m-students/maintaining-student-status/travel"
+    agency: "DHS / SEVP"
+    type: html
+    authority: guidance
+    topics: [opt, travel, f1-status]
+    notes: "HTTP 403. robots.txt Disallow: /."
+    status: proposed
+
+  - id: uscis_processing_times
+    title: "USCIS — Check Case Processing Times"
+    url: "https://egov.uscis.gov/processing-times/"
+    agency: "USCIS"
+    type: html
+    authority: guidance
+    topics: [i-765, ead, processing-times]
+    notes: "HTTP 403. robots.txt Disallow: /."
+    status: proposed
+
+  - id: uscis_case_inquiry
+    title: "USCIS — Case Assistance (Outside Normal Processing Time)"
+    url: "https://www.uscis.gov/forms/filing-guidance/case-assistance"
+    agency: "USCIS"
+    type: html
+    authority: guidance
+    topics: [ead, case-inquiry, delayed-processing]
+    notes: "HTTP 403. robots.txt Disallow: /."
+    status: proposed
+
+  - id: fr_stem_2016_final_rule
+    title: "Federal Register — STEM OPT Final Rule (2016)"
+    url: "https://www.federalregister.gov/documents/2016/03/11/2016-04828/improving-and-expanding-training-opportunities-for-f-1-nonimmigrant-students-with-stem-degrees-and"
+    agency: "DHS"
+    type: html
+    authority: regulation
+    topics: [stem-opt, employment-authorization, i-983, e-verify]
+    notes: >
+      HTTP 200 but final URL is https://unblock.federalregister.gov/ (Cloudflare
+      JS challenge). robots.txt allows bots but Cloudflare blocks headless access.
+      Requires manual snapshot.
+    status: proposed
