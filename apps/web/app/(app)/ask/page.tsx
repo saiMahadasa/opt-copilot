@@ -63,15 +63,20 @@ function SourcesLine({ sources, grounded }: { sources: ChunkSource[]; grounded: 
   }
   if (sources.length === 0) return null;
   return (
-    <p className="mt-1.5 text-[11px] text-muted-foreground leading-snug">
-      Sources:{" "}
-      {sources.map((s, i) => (
-        <span key={s.source}>
-          {i > 0 && ", "}
-          {SOURCE_NAMES[s.source] ?? s.source}
-        </span>
-      ))}
-    </p>
+    <div className="mt-1.5">
+      <p className="text-[11px] text-muted-foreground leading-snug">
+        Related official guides:{" "}
+        {sources.map((s, i) => (
+          <span key={s.source}>
+            {i > 0 && ", "}
+            {SOURCE_NAMES[s.source] ?? s.source}
+          </span>
+        ))}
+      </p>
+      <p className="text-[11px] text-muted-foreground leading-snug">
+        Matched by topic. Confirm your own case with your DSO.
+      </p>
+    </div>
   );
 }
 
