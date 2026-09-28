@@ -61,6 +61,13 @@ def retrieve_context(message: str) -> str:
         ).execute()
 
         chunks = result.data
+        logger.info(
+            "retrieval: %d chunk(s) — %s",
+            len(chunks),
+            ", ".join(
+                f"{c['source']} ({round(c['similarity'], 2)})" for c in chunks
+            ) or "none",
+        )
         if not chunks:
             return ""
 
@@ -70,7 +77,7 @@ def retrieve_context(message: str) -> str:
         return "\n".join(lines)
 
     except Exception as exc:
-        logger.warning("Retrieval failed, proceeding without context: %s", exc)
+        logger.warning("retrieval skipped: %s", exc)
         return ""
 
 
