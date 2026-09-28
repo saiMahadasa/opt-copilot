@@ -1,9 +1,13 @@
 import logging
 import os
+import threading
+import time
+from collections import defaultdict
+from datetime import datetime, timedelta
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Request
+from pydantic import BaseModel, field_validator
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,7 +15,13 @@ load_dotenv()
 app = FastAPI(title="opt-copilot API")
 logger = logging.getLogger(__name__)
 
+# ── Config ────────────────────────────────────────────────────────────────────
+
 MIN_SIMILARITY = float(os.environ.get("MIN_SIMILARITY", "0.5"))
+
+VALID_STAGES = frozenset({"f1-studying", "applied-opt", "on-opt", "on-stem-opt"})
+
+# ── Prompts ───────────────────────────────────────────────────────────────────
 
 SYSTEM_PROMPT = (
     "You are a helpful assistant for F-1 international students in the US "
@@ -41,10 +51,26 @@ UNGROUNDED_INSTRUCTION = (
     "the student to confirm with their DSO."
 )
 
+# ── Models ────────────────────────────────────────────────────────────────────
+
 
 class AskRequest(BaseModel):
     message: str
     stage: str | None = None
+
+    @field_validator("message")
+    @classmethod
+    def validate_message(cls, v: str) -> str:
+        if not 1 <= len(v) <= 1000:
+            raise ValueError("message must be 1 to 1000 characters")
+        return v
+
+    @field_validator("stage")
+    @classmethod
+    def validate_stage(cls, v: str | None) -> str | None:
+        if v is not None and v not in VALID_STAGES:
+            raise ValueError(f"stage must be one of {sorted(VALID_STAGES)}")
+        return v
 
 
 class ChunkSource(BaseModel):
@@ -58,9 +84,69 @@ class AskResponse(BaseModel):
     grounded: bool
 
 
+# ── Rate limiting ─────────────────────────────────────────────────────────────
+
+_rl_lock = threading.Lock()
+# { ip: {"minute": [datetime, ...], "day": [datetime, ...]} }
+_rl_store: dict[str, dict[str, list[datetime]]] = defaultdict(
+    lambda: {"minute": [], "day": []}
+)
+RATE_LIMIT_MINUTE = 10
+RATE_LIMIT_DAY = 100
+
+
+def _check_rate_limit(ip: str) -> None:
+    now = datetime.utcnow()
+    with _rl_lock:
+        bucket = _rl_store[ip]
+        bucket["minute"] = [t for t in bucket["minute"] if now - t < timedelta(minutes=1)]
+        bucket["day"] = [t for t in bucket["day"] if now - t < timedelta(days=1)]
+        if len(bucket["minute"]) >= RATE_LIMIT_MINUTE or len(bucket["day"]) >= RATE_LIMIT_DAY:
+            raise HTTPException(
+                status_code=429,
+                detail="Too many requests. Please wait a minute and try again.",
+            )
+        bucket["minute"].append(now)
+        bucket["day"].append(now)
+
+
+# ── Cache ─────────────────────────────────────────────────────────────────────
+
+_cache_lock = threading.Lock()
+# { key: (inserted_at, AskResponse) }
+_cache: dict[str, tuple[float, AskResponse]] = {}
+CACHE_TTL = 3600
+CACHE_MAX = 500
+
+
+def _cache_key(message: str, stage: str | None) -> str:
+    return f"{message.lower().strip()}|{stage or ''}"
+
+
+def _cache_get(key: str) -> AskResponse | None:
+    with _cache_lock:
+        entry = _cache.get(key)
+        if entry and time.time() - entry[0] < CACHE_TTL:
+            return entry[1]
+        if entry:
+            del _cache[key]
+        return None
+
+
+def _cache_set(key: str, value: AskResponse) -> None:
+    with _cache_lock:
+        if len(_cache) >= CACHE_MAX:
+            oldest = min(_cache, key=lambda k: _cache[k][0])
+            del _cache[oldest]
+        _cache[key] = (time.time(), value)
+
+
+# ── Retrieval ─────────────────────────────────────────────────────────────────
+
+
 def retrieve_context(message: str) -> list[dict[str, Any]]:
-    """Embed the query and return chunks above MIN_SIMILARITY.
-    Each item has source, score, content. Returns [] on any failure."""
+    """Return chunks above MIN_SIMILARITY. Each item has source, score, content.
+    Returns [] on any failure so retrieval never blocks a response."""
     try:
         from google import genai
         from supabase import create_client
@@ -98,14 +184,47 @@ def retrieve_context(message: str) -> list[dict[str, Any]]:
         return []
 
 
+# ── Gemini call with retry ────────────────────────────────────────────────────
+
+
+def _call_gemini(prompt: str) -> str:
+    from llm_providers import get_completion
+
+    try:
+        return get_completion(prompt, provider="gemini")
+    except Exception as exc:
+        err = str(exc)
+        if "429" in err or "RESOURCE_EXHAUSTED" in err or "quota" in err.lower():
+            logger.warning("Gemini rate limit, retrying after 3s")
+            time.sleep(3)
+            try:
+                return get_completion(prompt, provider="gemini")
+            except Exception:
+                raise HTTPException(
+                    status_code=503,
+                    detail="Busy right now, try again shortly.",
+                )
+        raise
+
+
+# ── Routes ────────────────────────────────────────────────────────────────────
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
 
 @app.post("/ask", response_model=AskResponse)
-def ask(body: AskRequest):
-    from llm_providers import get_completion
+def ask(request: Request, body: AskRequest):
+    ip = request.headers.get("X-Forwarded-For", request.client.host or "unknown").split(",")[0].strip()
+    _check_rate_limit(ip)
+
+    key = _cache_key(body.message, body.stage)
+    cached = _cache_get(key)
+    if cached:
+        logger.info("cache hit for ip=%s", ip)
+        return cached
 
     stage_line = (
         f"\nThe student's current stage is: {body.stage}." if body.stage else ""
@@ -131,7 +250,9 @@ def ask(body: AskRequest):
     )
 
     try:
-        reply = get_completion(prompt, provider="gemini")
+        reply = _call_gemini(prompt)
+    except HTTPException:
+        raise
     except EnvironmentError as exc:
         raise HTTPException(status_code=500, detail=str(exc))
     except Exception as exc:
@@ -145,4 +266,6 @@ def ask(body: AskRequest):
         ChunkSource(source=c["source"], score=round(c["similarity"], 2))
         for c in chunks
     ]
-    return AskResponse(reply=reply, sources=sources, grounded=grounded)
+    result = AskResponse(reply=reply, sources=sources, grounded=grounded)
+    _cache_set(key, result)
+    return result
