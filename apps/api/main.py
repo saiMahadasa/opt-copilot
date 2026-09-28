@@ -3,7 +3,7 @@ import os
 import threading
 import time
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
@@ -105,7 +105,7 @@ RATE_LIMIT_DAY = 100
 
 
 def _check_rate_limit(ip: str) -> None:
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     with _rl_lock:
         bucket = _rl_store[ip]
         bucket["minute"] = [t for t in bucket["minute"] if now - t < timedelta(minutes=1)]
