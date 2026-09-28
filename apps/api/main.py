@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 from dotenv import load_dotenv
 
@@ -14,6 +15,14 @@ load_dotenv()
 
 app = FastAPI(title="opt-copilot API")
 logger = logging.getLogger(__name__)
+
+_origins = [o.strip() for o in os.environ.get("ALLOWED_ORIGINS", "http://localhost:3000").split(",")]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
