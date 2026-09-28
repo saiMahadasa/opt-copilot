@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Public_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { APP_NAME } from "@/lib/constants";
@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   },
   description:
     "Track your F-1, OPT, and STEM OPT deadlines with calm and confidence.",
+};
+
+export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#F3F6FA" },
     { media: "(prefers-color-scheme: dark)",  color: "#0E1E33" },
