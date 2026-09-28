@@ -7,6 +7,7 @@ import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { deriveStemStartDate } from "@/lib/rules";
 
 // ── Stage options ─────────────────────────────────────────────────────────
 
@@ -45,6 +46,7 @@ interface DateForm {
   programEndDate: string;
   optEadEndDate: string;
   stemEadEndDate: string;
+  stemStartDate: string;
   unemploymentDaysUsed: string;
   i765FiledDate: string;
   eadReceived: boolean;
@@ -54,6 +56,7 @@ const EMPTY: DateForm = {
   programEndDate: "",
   optEadEndDate: "",
   stemEadEndDate: "",
+  stemStartDate: "",
   unemploymentDaysUsed: "0",
   i765FiledDate: "",
   eadReceived: false,
@@ -77,6 +80,12 @@ function validateDates(stage: StageId, form: DateForm): string | null {
   if (stage === "on-stem-opt" && form.stemEadEndDate) {
     if (!isValidDate(form.stemEadEndDate))
       return "STEM EAD end date is not a valid date. Check the date printed on your EAD card.";
+  }
+  if (stage === "on-stem-opt" && form.stemStartDate) {
+    if (!isValidDate(form.stemStartDate))
+      return "STEM OPT start date is not a valid date. Check the 'Card valid from' field on your STEM EAD.";
+    if (form.stemEadEndDate && isValidDate(form.stemEadEndDate) && form.stemStartDate >= form.stemEadEndDate)
+      return "STEM OPT start date must be before the end date. Check the dates on your STEM EAD card.";
   }
   if (form.i765FiledDate && !isValidDate(form.i765FiledDate))
     return "I-765 filing date is not a valid date. Check your filing receipt notice.";
@@ -110,11 +119,20 @@ export default function OnboardingPage() {
     const err = validateDates(selected, form);
     if (err) { setError(err); return; }
 
+    // Derive STEM start date if not entered but end date is known.
+    let stemStartDate = form.stemStartDate;
+    let stemStartDateDerived = false;
+    if (selected === "on-stem-opt" && !stemStartDate && form.stemEadEndDate) {
+      stemStartDate = deriveStemStartDate(form.stemEadEndDate);
+      stemStartDateDerived = true;
+    }
+
     const profile = {
       stage: selected,
       ...(form.programEndDate  && { programEndDate:  form.programEndDate }),
       ...(form.optEadEndDate   && { optEadEndDate:   form.optEadEndDate }),
       ...(form.stemEadEndDate  && { stemEadEndDate:  form.stemEadEndDate }),
+      ...(stemStartDate        && { stemStartDate, stemStartDateDerived }),
       unemploymentDaysUsed: form.unemploymentDaysUsed !== "" ? Number(form.unemploymentDaysUsed) : 0,
       ...(form.i765FiledDate   && { i765FiledDate:   form.i765FiledDate }),
       eadReceived: form.eadReceived,
@@ -275,6 +293,23 @@ export default function OnboardingPage() {
                       className={inputClass}
                     />
                     <span className={helperClass}>Printed on the front of your STEM EAD card</span>
+                  </label>
+                )}
+
+                {/* STEM OPT start date */}
+                {selected === "on-stem-opt" && (
+                  <label className={labelClass}>
+                    STEM OPT start date
+                    <span className="text-caption font-normal text-muted-foreground -mt-1">
+                      Optional — we estimate it from your end date if you leave this blank
+                    </span>
+                    <input
+                      type="date"
+                      value={form.stemStartDate}
+                      onChange={(e) => setField("stemStartDate", e.target.value)}
+                      className={inputClass}
+                    />
+                    <span className={helperClass}>"Card valid from" on your STEM EAD card</span>
                   </label>
                 )}
 

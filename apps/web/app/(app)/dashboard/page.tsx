@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   CheckCircle2, AlertTriangle, XCircle, Clock, Check,
-  ChevronRight, Square, CheckSquare,
+  ChevronRight, Square, CheckSquare, FileText, Info,
 } from "lucide-react";
 import { Stamp } from "@/components/stamp";
 import {
@@ -13,8 +13,8 @@ import {
 } from "@/components/accordion";
 import { cn } from "@/lib/utils";
 import {
-  computeRules, getNextSteps,
-  type RulesInput, type RulesOutput, type NextStep,
+  computeRules, getNextSteps, getStemReporting, deriveStemStartDate,
+  type RulesInput, type RulesOutput, type NextStep, type StemReportItem,
 } from "@/lib/rules";
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -24,9 +24,12 @@ interface VisaProfile {
   programEndDate?: string;
   optEadEndDate?: string;
   stemEadEndDate?: string;
+  stemStartDate?: string;
+  stemStartDateDerived?: boolean;
   unemploymentDaysUsed?: number;
   i765FiledDate?: string;
   eadReceived?: boolean;
+  reportingCompleted?: number[];
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -123,9 +126,11 @@ export default function DashboardPage() {
       programEndDate: p.programEndDate,
       optEadEndDate: p.optEadEndDate,
       stemEadEndDate: p.stemEadEndDate,
+      stemStartDate: p.stemStartDate,
       unemploymentDaysUsed: p.unemploymentDaysUsed,
       i765FiledDate: p.i765FiledDate,
       eadReceived: p.eadReceived,
+      reportingCompleted: p.reportingCompleted,
     };
     setRules(computeRules(input, today));
     setNextSteps(getNextSteps(input, today));
@@ -149,6 +154,17 @@ export default function DashboardPage() {
     });
   }
 
+  function toggleReportingMark(monthMark: number) {
+    setProfile((prev) => {
+      if (!prev) return prev;
+      const current = new Set(prev.reportingCompleted ?? []);
+      if (current.has(monthMark)) current.delete(monthMark); else current.add(monthMark);
+      const next = { ...prev, reportingCompleted: Array.from(current) };
+      localStorage.setItem("visaProfile", JSON.stringify(next));
+      return next;
+    });
+  }
+
   // ── Unemployment status ──
   const unemp = rules?.unemployment;
   const unempLevel = unemp?.level ?? "ok";
@@ -162,6 +178,17 @@ export default function DashboardPage() {
   const unempColor =
     unempLevel === "over"  ? "text-over" :
     unempLevel === "watch" ? "text-watch" : "text-ok";
+
+  // ── STEM reporting ──
+  const stemStartDate =
+    profile.stemStartDate ??
+    (profile.stemEadEndDate ? deriveStemStartDate(profile.stemEadEndDate) : undefined);
+  const stemStartDateDerived =
+    profile.stemStartDateDerived ?? (!profile.stemStartDate && !!profile.stemEadEndDate);
+  const stemReporting: StemReportItem[] =
+    profile.stage === "on-stem-opt" && stemStartDate
+      ? getStemReporting(stemStartDate, today, profile.reportingCompleted)
+      : [];
 
   // ── Hero: first upcoming step ──
   const heroStep = nextSteps.find((s) => s.date && (s.daysAway ?? 0) >= 0);
@@ -395,6 +422,123 @@ export default function DashboardPage() {
             })}
           </Accordion>
         </div>
+
+        {/* Reporting to your DSO */}
+        {stemReporting.length > 0 && (
+          <div className="rounded-lg bg-card border border-border p-4 space-y-4">
+            <div>
+              <h2 className="font-heading text-h3 font-semibold text-foreground">
+                Reporting to your DSO
+              </h2>
+              {stemStartDateDerived && (
+                <p className="mt-1 text-caption text-muted-foreground flex items-center gap-1.5">
+                  <Info className="w-3 h-3 shrink-0" />
+                  Start date estimated from your EAD end date.
+                </p>
+              )}
+            </div>
+
+            <ul className="space-y-4">
+              {stemReporting.map((item) => {
+                const done = (profile.reportingCompleted ?? []).includes(item.monthMark);
+                const isPast = item.status === "past" && !done;
+                const isDue  = item.status === "due"  && !done;
+                return (
+                  <li
+                    key={item.monthMark}
+                    className={cn(
+                      "rounded-lg border p-3 space-y-2",
+                      isPast ? "border-border bg-muted/30" : "border-border bg-background"
+                    )}
+                  >
+                    {/* Header row */}
+                    <div className="flex items-start gap-2.5">
+                      <button
+                        onClick={() => toggleReportingMark(item.monthMark)}
+                        aria-label={done
+                          ? `Unmark ${item.monthMark}-month report as submitted`
+                          : `Mark ${item.monthMark}-month report as submitted`}
+                        className="mt-0.5 shrink-0 text-muted-foreground hover:text-teal transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+                      >
+                        {done
+                          ? <CheckSquare className="w-4 h-4 text-teal" />
+                          : <Square className="w-4 h-4" />}
+                      </button>
+                      <div className="flex-1 min-w-0">
+                        <p className={cn(
+                          "text-small font-medium leading-snug",
+                          done && "line-through text-muted-foreground"
+                        )}>
+                          {item.monthMark}-month mark
+                          {item.includesSelfEvaluation && (
+                            <span className="ml-1.5 inline-flex items-center gap-1 text-[11px] font-normal text-muted-foreground">
+                              <FileText className="w-3 h-3" />
+                              includes Form I-983
+                            </span>
+                          )}
+                        </p>
+                        <p className="text-caption text-muted-foreground mt-0.5">
+                          Due {fmtDate(item.dueDate)} · submit by {fmtDate(item.submitByDate)}
+                        </p>
+                        {isDue && (
+                          <p className="mt-1 text-caption text-teal font-medium">
+                            Due now — submit to your DSO within the 10-day window.
+                          </p>
+                        )}
+                        {isPast && (
+                          <p className="mt-1 text-caption text-muted-foreground leading-snug">
+                            This one was due on {fmtDate(item.dueDate)}. If you
+                            haven&apos;t submitted it, contact your DSO now.
+                          </p>
+                        )}
+                      </div>
+                      <Link
+                        href={`/ask?q=${encodeURIComponent("What do I need to submit for the STEM OPT validation report?")}`}
+                        className="shrink-0 text-caption font-semibold text-muted-foreground hover:text-foreground border border-border rounded-md px-2 py-1 hover:bg-muted transition-colors"
+                      >
+                        Ask
+                      </Link>
+                    </div>
+
+                    {/* Checkbox label */}
+                    <label className="flex items-center gap-2 cursor-pointer pl-6">
+                      <input
+                        type="checkbox"
+                        checked={done}
+                        onChange={() => toggleReportingMark(item.monthMark)}
+                        className="w-3.5 h-3.5 rounded border-border accent-teal"
+                        aria-label={`I've submitted the ${item.monthMark}-month report`}
+                      />
+                      <span className="text-caption text-muted-foreground">
+                        I&apos;ve submitted this
+                      </span>
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
+        {/* Report within 10 days */}
+        {profile.stage === "on-stem-opt" && (
+          <div className="rounded-lg bg-card border border-border p-4 space-y-3">
+            <h2 className="font-heading text-h3 font-semibold text-foreground">
+              Report within 10 days
+            </h2>
+            <ul className="space-y-1.5 text-small text-muted-foreground list-disc list-inside leading-snug">
+              <li>Change of legal name, address, or employer</li>
+              <li>Loss of employment</li>
+              <li>Major changes to your training plan (new EIN, pay cut, reduced hours, changed goals on Form I-983)</li>
+            </ul>
+            <Link
+              href={`/ask?q=${encodeURIComponent("What changes do I need to report within 10 days on STEM OPT?")}`}
+              className="inline-flex items-center gap-1.5 text-caption font-semibold text-teal hover:underline"
+            >
+              Ask about this <ChevronRight className="w-3 h-3" />
+            </Link>
+          </div>
+        )}
 
         {/* Disclaimer */}
         <p className="text-caption text-muted-foreground text-center leading-snug">
