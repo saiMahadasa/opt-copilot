@@ -7,6 +7,9 @@ import {
   computeStemFilingWindow,
   computeUnemployment,
   computePendingEad,
+  getStemReporting,
+  deriveStemStartDate,
+  getNextSteps,
 } from "./rules";
 
 // ── Fixture dates ────────────────────────────────────────────────────────
@@ -217,5 +220,162 @@ describe("diffDays", () => {
 
   it("correctly crosses a year boundary", () => {
     expect(diffDays("2026-12-31", "2027-01-01")).toBe(1);
+  });
+});
+
+// ── deriveStemStartDate ───────────────────────────────────────────────────
+
+describe("deriveStemStartDate", () => {
+  it("derives 2026-01-20 from end date 2028-01-19", () => {
+    expect(deriveStemStartDate("2028-01-19")).toBe("2026-01-20");
+  });
+
+  it("derives 2026-06-15 from end date 2028-06-14", () => {
+    expect(deriveStemStartDate("2028-06-14")).toBe("2026-06-15");
+  });
+});
+
+// ── getStemReporting — exact date fixtures ────────────────────────────────
+
+describe("getStemReporting — STEM start 2026-01-20", () => {
+  const items = getStemReporting("2026-01-20", "2026-01-01");
+
+  it("returns exactly four items", () => {
+    expect(items).toHaveLength(4);
+  });
+
+  it("6-month due date is 2026-07-20", () => {
+    expect(items[0].dueDate).toBe("2026-07-20");
+  });
+  it("6-month submit-by is 2026-07-30", () => {
+    expect(items[0].submitByDate).toBe("2026-07-30");
+  });
+
+  it("12-month due date is 2027-01-20", () => {
+    expect(items[1].dueDate).toBe("2027-01-20");
+  });
+  it("12-month submit-by is 2027-01-30", () => {
+    expect(items[1].submitByDate).toBe("2027-01-30");
+  });
+
+  it("18-month due date is 2027-07-20", () => {
+    expect(items[2].dueDate).toBe("2027-07-20");
+  });
+  it("18-month submit-by is 2027-07-30", () => {
+    expect(items[2].submitByDate).toBe("2027-07-30");
+  });
+
+  it("24-month due date is 2028-01-20", () => {
+    expect(items[3].dueDate).toBe("2028-01-20");
+  });
+  it("24-month submit-by is 2028-01-30", () => {
+    expect(items[3].submitByDate).toBe("2028-01-30");
+  });
+
+  it("6-month does not include self-evaluation", () => {
+    expect(items[0].includesSelfEvaluation).toBe(false);
+  });
+  it("12-month includes self-evaluation", () => {
+    expect(items[1].includesSelfEvaluation).toBe(true);
+  });
+  it("18-month does not include self-evaluation", () => {
+    expect(items[2].includesSelfEvaluation).toBe(false);
+  });
+  it("24-month includes self-evaluation", () => {
+    expect(items[3].includesSelfEvaluation).toBe(true);
+  });
+
+  it("month marks are 6, 12, 18, 24", () => {
+    expect(items.map((i) => i.monthMark)).toEqual([6, 12, 18, 24]);
+  });
+});
+
+describe("getStemReporting — STEM start 2026-08-31 (month-end clamping)", () => {
+  const items = getStemReporting("2026-08-31", "2026-01-01");
+
+  it("6-month clamps to Feb 28 (non-leap 2027)", () => {
+    expect(items[0].dueDate).toBe("2027-02-28");
+  });
+  it("12-month stays Aug 31 (2027)", () => {
+    expect(items[1].dueDate).toBe("2027-08-31");
+  });
+  it("18-month clamps to Feb 29 (leap 2028)", () => {
+    expect(items[2].dueDate).toBe("2028-02-29");
+  });
+  it("24-month stays Aug 31 (2028)", () => {
+    expect(items[3].dueDate).toBe("2028-08-31");
+  });
+});
+
+// ── getStemReporting — status transitions ─────────────────────────────────
+
+describe("getStemReporting — status transitions for start 2026-01-20", () => {
+  // First mark: due 2026-07-20, submit-by 2026-07-30.
+
+  it("status is upcoming when today is before dueDate", () => {
+    expect(getStemReporting("2026-01-20", "2026-07-19")[0].status).toBe("upcoming");
+  });
+  it("status is due on dueDate itself", () => {
+    expect(getStemReporting("2026-01-20", "2026-07-20")[0].status).toBe("due");
+  });
+  it("status is due inside the submit-by window", () => {
+    expect(getStemReporting("2026-01-20", "2026-07-25")[0].status).toBe("due");
+  });
+  it("status is due on submit-by date", () => {
+    expect(getStemReporting("2026-01-20", "2026-07-30")[0].status).toBe("due");
+  });
+  it("status is past after submit-by date", () => {
+    expect(getStemReporting("2026-01-20", "2026-07-31")[0].status).toBe("past");
+  });
+});
+
+// ── getNextSteps — STEM OPT reporting ─────────────────────────────────────
+
+describe("getNextSteps — STEM OPT reporting marks", () => {
+  // today before all marks
+  it("shows the 6-month mark when no marks are completed", () => {
+    const steps = getNextSteps(
+      { stage: "on-stem-opt", stemStartDate: "2026-01-20" },
+      "2026-01-21"
+    );
+    const r = steps.find((s) => s.title.includes("STEM OPT report"));
+    expect(r?.title).toMatch(/^6-month/);
+    expect(r?.date).toBe("2026-07-20");
+  });
+
+  it("skips the 6-month mark when it is completed and shows the 12-month mark", () => {
+    const steps = getNextSteps(
+      { stage: "on-stem-opt", stemStartDate: "2026-01-20", reportingCompleted: [6] },
+      "2026-08-01"
+    );
+    const r = steps.find((s) => s.title.includes("STEM OPT report"));
+    expect(r?.title).toMatch(/^12-month/);
+    expect(r?.date).toBe("2027-01-20");
+  });
+
+  it("shows no report step when all marks are completed", () => {
+    const steps = getNextSteps(
+      {
+        stage: "on-stem-opt",
+        stemStartDate: "2026-01-20",
+        reportingCompleted: [6, 12, 18, 24],
+      },
+      "2028-02-01"
+    );
+    expect(steps.every((s) => !s.title.includes("STEM OPT report"))).toBe(true);
+  });
+
+  it("shows no report step when stemStartDate is missing", () => {
+    const steps = getNextSteps({ stage: "on-stem-opt" }, "2026-08-01");
+    expect(steps.every((s) => !s.title.includes("STEM OPT report"))).toBe(true);
+  });
+
+  it("12-month step title mentions self-evaluation", () => {
+    const steps = getNextSteps(
+      { stage: "on-stem-opt", stemStartDate: "2026-01-20", reportingCompleted: [6] },
+      "2026-08-01"
+    );
+    const r = steps.find((s) => s.title.includes("STEM OPT report"));
+    expect(r?.title).toContain("self-evaluation");
   });
 });

@@ -24,14 +24,30 @@ export interface PendingEadResult {
   daysSinceFiling: number;
 }
 
+export interface StemReportItem {
+  monthMark: number;
+  dueDate: string;
+  submitByDate: string;
+  /** "upcoming" before dueDate, "due" from dueDate through submitByDate, "past" after. */
+  status: "upcoming" | "due" | "past";
+  /** Days from today to dueDate; negative when dueDate is in the past. */
+  daysAway: number;
+  /** True for the 12-month and 24-month marks, which also require Form I-983. */
+  includesSelfEvaluation: boolean;
+}
+
 export interface RulesInput {
   stage: string;
   programEndDate?: string;
   optEadEndDate?: string;
   stemEadEndDate?: string;
+  /** Explicit STEM OPT start date (card valid from date). */
+  stemStartDate?: string;
   unemploymentDaysUsed?: number;
   i765FiledDate?: string;
   eadReceived?: boolean;
+  /** Month marks (6 | 12 | 18 | 24) the student has ticked as submitted. */
+  reportingCompleted?: number[];
 }
 
 export interface RulesOutput {
@@ -67,11 +83,34 @@ export function diffDays(from: string, to: string): number {
   );
 }
 
-function classify(
-  today: string,
-  start: string,
-  end: string
-): WindowResult {
+/**
+ * Add N whole months to a YYYY-MM-DD string.
+ * The day is clamped to the last day of the target month, so
+ * Aug 31 + 6 months = Feb 28 (or Feb 29 in a leap year).
+ */
+function addMonths(dateStr: string, n: number): string {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const totalMonths = (m - 1) + n;
+  const newYear = y + Math.floor(totalMonths / 12);
+  // ((x % 12) + 12) % 12 keeps the result in [0, 11] for negative n
+  const newMonth = ((totalMonths % 12) + 12) % 12 + 1;
+  // Date.UTC(year, month, 0) gives the last day of the previous month,
+  // i.e. the last day of newMonth when month is newMonth + 1 - 1 = newMonth.
+  const lastDay = new Date(Date.UTC(newYear, newMonth, 0)).getUTCDate();
+  const newDay = Math.min(d, lastDay);
+  return `${newYear}-${String(newMonth).padStart(2, "0")}-${String(newDay).padStart(2, "0")}`;
+}
+
+/**
+ * Derive STEM OPT start date from the STEM EAD end date.
+ * A 24-month EAD starting on D ends on addMonths(D, 24) − 1 day,
+ * so start = addMonths(end, −24) + 1 day.
+ */
+export function deriveStemStartDate(stemEadEndDate: string): string {
+  return addDays(addMonths(stemEadEndDate, -24), 1);
+}
+
+function classify(today: string, start: string, end: string): WindowResult {
   if (today < start)
     return {
       status: "upcoming",
@@ -132,9 +171,6 @@ export function computeGracePeriod(
 /**
  * STEM OPT filing window for a student currently on OPT.
  * Opens 90 days before optEadEndDate; must be filed no later than optEadEndDate.
- * After the DSO issues the STEM I-20 the student has 60 days to file —
- * that deadline is tracked separately because the I-20 issue date is not
- * stored here.
  */
 export function computeStemFilingWindow(
   optEadEndDate: string | undefined,
@@ -164,7 +200,6 @@ export function computeUnemployment(
 /**
  * Pending EAD tracker.
  * Returns null when no filing date is set or EAD is already received.
- * Does NOT label anything overdue; does NOT embed a processing time.
  */
 export function computePendingEad(
   i765FiledDate: string | undefined,
@@ -173,6 +208,35 @@ export function computePendingEad(
 ): PendingEadResult | null {
   if (!i765FiledDate || eadReceived) return null;
   return { daysSinceFiling: Math.max(0, diffDays(i765FiledDate, today)) };
+}
+
+// ── STEM OPT reporting ────────────────────────────────────────────────────
+
+/**
+ * Compute the four STEM OPT reporting marks (6, 12, 18, 24 months after start).
+ * The `completed` array lists month marks the student has already ticked off.
+ */
+export function getStemReporting(
+  stemStartDate: string,
+  today: string,
+  completed: number[] = []
+): StemReportItem[] {
+  return [6, 12, 18, 24].map((monthMark) => {
+    const dueDate = addMonths(stemStartDate, monthMark);
+    const submitByDate = addDays(dueDate, 10);
+    let status: StemReportItem["status"];
+    if (today < dueDate) status = "upcoming";
+    else if (today <= submitByDate) status = "due";
+    else status = "past";
+    return {
+      monthMark,
+      dueDate,
+      submitByDate,
+      status,
+      daysAway: diffDays(today, dueDate),
+      includesSelfEvaluation: monthMark === 12 || monthMark === 24,
+    };
+  });
 }
 
 // ── Aggregate ─────────────────────────────────────────────────────────────
@@ -194,7 +258,10 @@ export function computeRules(input: RulesInput, today: string): RulesOutput {
 // ── Next steps ────────────────────────────────────────────────────────────
 
 export function getNextSteps(input: RulesInput, today: string): NextStep[] {
-  const { stage, programEndDate, optEadEndDate, stemEadEndDate } = input;
+  const {
+    stage, programEndDate, optEadEndDate, stemEadEndDate,
+    stemStartDate, reportingCompleted,
+  } = input;
   const steps: NextStep[] = [];
 
   if (stage === "f1-studying") {
@@ -255,7 +322,8 @@ export function getNextSteps(input: RulesInput, today: string): NextStep[] {
         title: "OPT EAD expires",
         date: optEadEndDate,
         daysAway: daysToExpiry,
-        askQuestion: "What happens if my STEM OPT is not approved before my OPT EAD expires?",
+        askQuestion:
+          "What happens if my STEM OPT is not approved before my OPT EAD expires?",
       });
     }
   }
@@ -270,10 +338,22 @@ export function getNextSteps(input: RulesInput, today: string): NextStep[] {
         askQuestion: "What are my options when my STEM OPT expires?",
       });
     }
-    steps.push({
-      title: "Annual self-evaluation due",
-      askQuestion: "When is the I-983 annual self-evaluation due for STEM OPT?",
-    });
+    // Replace the old undated self-eval item with the next unfinished reporting mark.
+    if (stemStartDate) {
+      const completedSet = new Set(reportingCompleted ?? []);
+      const next = getStemReporting(stemStartDate, today)
+        .find((r) => !completedSet.has(r.monthMark));
+      if (next) {
+        const selfEvalNote = next.includesSelfEvaluation ? " and self-evaluation" : "";
+        steps.push({
+          title: `${next.monthMark}-month STEM OPT report${selfEvalNote} due`,
+          date: next.dueDate,
+          daysAway: next.daysAway,
+          askQuestion:
+            "What do I need to submit for the STEM OPT validation report?",
+        });
+      }
+    }
   }
 
   // Steps with defined daysAway sort before steps without.
