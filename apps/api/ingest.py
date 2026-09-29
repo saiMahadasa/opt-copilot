@@ -248,9 +248,9 @@ def main() -> None:
             meta, body = {}, path.read_text(encoding="utf-8")
             source_id    = path.stem
             source_url   = ""
-            title        = path.stem.replace("-", " ").title()
+            title        = "Summary guide (not official text)"
             retrieved_at = ""
-            authority    = ""
+            authority    = "summary"
 
         chunks = chunk_snapshot(body, title)
         print(f"\n{path.name}: {len(chunks)} chunk(s)")

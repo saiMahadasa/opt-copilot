@@ -54,11 +54,20 @@ GROUNDED_INSTRUCTION = (
     "names that are not in the reference material."
 )
 
+SUMMARY_INSTRUCTION = (
+    "The reference material below comes from a summary guide, not official "
+    "regulatory text. Answer based on it but make clear that the student "
+    "should verify on the official USCIS or DHS page, or with their DSO, "
+    "before acting on this information."
+)
+
 UNGROUNDED_INSTRUCTION = (
     "No official reference material matched this question. Say clearly that "
     "you are not sure, share only widely known general information, and tell "
     "the student to confirm with their DSO."
 )
+
+OFFICIAL_AUTHORITIES = frozenset({"regulation", "policy", "guidance"})
 
 # ── Models ────────────────────────────────────────────────────────────────────
 
@@ -94,6 +103,7 @@ class AskResponse(BaseModel):
     reply: str
     sources: list[ChunkSource]
     grounded: bool
+    summary_only: bool = False
 
 
 # ── Rate limiting ─────────────────────────────────────────────────────────────
@@ -183,6 +193,11 @@ def retrieve_context(message: str) -> list[dict[str, Any]]:
         ).execute()
 
         chunks = [c for c in result.data if c["similarity"] >= MIN_SIMILARITY]
+        # Official sources (regulation/policy/guidance) rank above summary guides
+        chunks.sort(
+            key=lambda c: (0 if c.get("authority") in OFFICIAL_AUTHORITIES else 1,
+                           -c["similarity"])
+        )
         logger.info(
             "retrieval: %d chunk(s) above %.2f — %s",
             len(chunks),
@@ -246,20 +261,29 @@ def ask(request: Request, body: AskRequest):
     )
 
     chunks = retrieve_context(body.message)
-    grounded = len(chunks) > 0
+    # Official sources rank above summary guides; within tier sort by score
+    chunks = sorted(
+        chunks,
+        key=lambda c: (0 if c.get("authority") in OFFICIAL_AUTHORITIES else 1,
+                       -c["similarity"])
+    )
+    has_official = any(c.get("authority") in OFFICIAL_AUTHORITIES for c in chunks)
+    has_summary  = any(c.get("authority") == "summary" for c in chunks)
+    grounded     = has_official
+    summary_only = not has_official and has_summary
 
-    if grounded:
+    if chunks:
         ref_lines = ["Reference material:"]
         for c in chunks:
             title   = c.get("title") or c["source"]
             section = c.get("section") or ""
-            label   = f"{title} — {section}" if section else title
+            label   = f"{title}, section {section}" if section else title
             ref_lines.append(f"[{label}]\n{c['content']}")
         context_section = "\n\n" + "\n\n".join(ref_lines)
-        grounding_line = f"\n{GROUNDED_INSTRUCTION}"
+        grounding_line  = f"\n{GROUNDED_INSTRUCTION}" if has_official else f"\n{SUMMARY_INSTRUCTION}"
     else:
         context_section = ""
-        grounding_line = f"\n{UNGROUNDED_INSTRUCTION}"
+        grounding_line  = f"\n{UNGROUNDED_INSTRUCTION}"
 
     prompt = (
         f"{SYSTEM_PROMPT}{stage_line}{grounding_line}"
@@ -290,6 +314,6 @@ def ask(request: Request, body: AskRequest):
         )
         for c in chunks
     ]
-    result = AskResponse(reply=reply, sources=sources, grounded=grounded)
+    result = AskResponse(reply=reply, sources=sources, grounded=grounded, summary_only=summary_only)
     _cache_set(key, result)
     return result

@@ -137,6 +137,12 @@ def main() -> None:
         top_source = (
             chunks[0].get("source_id") or chunks[0].get("source", "(none)")
         ) if chunks else "(none)"
+        top_authority = chunks[0].get("authority") or "?" if chunks else "(none)"
+
+        # summary_only: chunks retrieved but none are official
+        OFFICIAL = {"regulation", "policy", "guidance"}
+        has_official = any(c.get("authority") in OFFICIAL for c in chunks)
+        summary_only = bool(chunks) and not has_official
 
         # Determine pass/fail
         if expected == "covered":
@@ -152,18 +158,21 @@ def main() -> None:
             verdict = "FAIL"
 
         # Per-question line
+        summary_tag = "  [summary-only]" if summary_only else ""
         if expected == "covered":
-            print(f"[{verdict}] {q}")
+            print(f"[{verdict}]{summary_tag} {q}")
             for c in chunks:
-                sid = c.get("source_id") or c.get("source", "?")
+                sid  = c.get("source_id") or c.get("source", "?")
+                auth = c.get("authority") or "?"
                 marker = " <-- expected" if sid == expected_source else ""
-                print(f"       {round(c['similarity'], 2):.2f}  {sid}{marker}")
+                print(f"       {round(c['similarity'], 2):.2f}  {sid}  ({auth}){marker}")
         else:
             gap_note = f"  ({known_gap})" if known_gap and not passed else ""
-            print(f"[{verdict}]{gap_note} {q}")
+            print(f"[{verdict}]{gap_note}{summary_tag} {q}")
             for c in chunks:
-                sid = c.get("source_id") or c.get("source", "?")
-                print(f"       {round(c['similarity'], 2):.2f}  {sid}")
+                sid  = c.get("source_id") or c.get("source", "?")
+                auth = c.get("authority") or "?"
+                print(f"       {round(c['similarity'], 2):.2f}  {sid}  ({auth})")
 
         if passed:
             passes.append(q)
@@ -173,6 +182,7 @@ def main() -> None:
                 "known_gap": known_gap,
                 "top_score": top_score,
                 "top_source_id": top_source,
+                "top_authority": top_authority,
             })
         else:
             failures.append({
@@ -181,6 +191,8 @@ def main() -> None:
                 "expected_source": expected_source,
                 "top_score": top_score,
                 "top_source_id": top_source,
+                "top_authority": top_authority,
+                "summary_only": summary_only,
             })
 
     # Summary
@@ -204,16 +216,19 @@ def main() -> None:
         print("\nFAILURES:")
         for f in failures:
             if f["expected"] == "covered":
+                summary_note = "  [summary-only — no official chunk]" if f.get("summary_only") else ""
                 print(
                     f"  - {f['question']!r}\n"
                     f"    expected source_id={f['expected_source']} score>={MIN_SIMILARITY}, "
-                    f"got source_id={f['top_source_id']} score={f['top_score']}"
+                    f"got source_id={f['top_source_id']} authority={f['top_authority']} "
+                    f"score={f['top_score']}{summary_note}"
                 )
             else:
                 print(
                     f"  - {f['question']!r}\n"
                     f"    expected score<{MIN_SIMILARITY} (not covered), "
-                    f"got source_id={f['top_source_id']} score={f['top_score']}"
+                    f"got source_id={f['top_source_id']} authority={f['top_authority']} "
+                    f"score={f['top_score']}"
                 )
         sys.exit(1)
 

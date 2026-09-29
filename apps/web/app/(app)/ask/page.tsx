@@ -21,6 +21,7 @@ type Message = {
   loading?: boolean;
   sources?: ChunkSource[];
   grounded?: boolean;
+  summary_only?: boolean;
 };
 
 const INITIAL: Message[] = [
@@ -67,7 +68,7 @@ function saveHistory(messages: Message[]) {
 
 async function fetchReply(
   message: string
-): Promise<{ reply: string; sources: ChunkSource[]; grounded: boolean }> {
+): Promise<{ reply: string; sources: ChunkSource[]; grounded: boolean; summary_only: boolean }> {
   const stage = localStorage.getItem("visaStage");
   const res = await fetch(`${API_URL}/ask`, {
     method: "POST",
@@ -84,6 +85,7 @@ async function fetchReply(
     reply: data.reply,
     sources: data.sources ?? [],
     grounded: data.grounded ?? false,
+    summary_only: data.summary_only ?? false,
   };
 }
 
@@ -212,7 +214,7 @@ function MessageRow({ msg }: { msg: Message }) {
 
         {!msg.loading && msg.sources !== undefined && (
           <div className="mt-1.5 ml-0.5">
-            {/* Grounded: show source pills + confirmation line */}
+            {/* Official source(s) matched */}
             {msg.grounded && msg.sources.length > 0 && (
               <>
                 <p className="text-[11px] text-muted-foreground leading-snug">
@@ -224,8 +226,20 @@ function MessageRow({ msg }: { msg: Message }) {
                 </p>
               </>
             )}
-            {/* Not grounded: amber note */}
-            {!msg.grounded && (
+            {/* Summary guide only — amber note, pills without links */}
+            {!msg.grounded && msg.summary_only && (
+              <>
+                <SourcePills sources={msg.sources ?? []} />
+                <div className="flex items-start gap-1.5 mt-1">
+                  <AlertCircle className="w-3 h-3 text-watch mt-0.5 shrink-0" />
+                  <p className="text-[11px] text-watch leading-snug">
+                    Based on a summary guide, not official text. Confirm on the official page or with your DSO.
+                  </p>
+                </div>
+              </>
+            )}
+            {/* No matching source at all */}
+            {!msg.grounded && !msg.summary_only && (
               <div className="flex items-start gap-1.5 mt-1">
                 <AlertCircle className="w-3 h-3 text-watch mt-0.5 shrink-0" />
                 <p className="text-[11px] text-watch leading-snug">
@@ -277,11 +291,11 @@ function AskPageContent() {
     setSending(true);
 
     try {
-      const { reply, sources, grounded } = await fetchReply(text);
+      const { reply, sources, grounded, summary_only } = await fetchReply(text);
       setMessages((prev) => {
         const next = prev.map((m) =>
           m.id === placeholderId
-            ? { ...m, text: reply, sources, grounded, loading: false }
+            ? { ...m, text: reply, sources, grounded, summary_only, loading: false }
             : m
         );
         saveHistory(next);
