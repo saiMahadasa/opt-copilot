@@ -1,0 +1,2038 @@
+[
+  {
+    "cip_code": "01.0308",
+    "field_of_study": "Agroecology and Sustainable Agriculture"
+  },
+  {
+    "cip_code": "01.0901",
+    "field_of_study": "Animal Sciences, General"
+  },
+  {
+    "cip_code": "01.0902",
+    "field_of_study": "Agricultural Animal Breeding"
+  },
+  {
+    "cip_code": "01.0903",
+    "field_of_study": "Animal Health"
+  },
+  {
+    "cip_code": "01.0904",
+    "field_of_study": "Animal Nutrition"
+  },
+  {
+    "cip_code": "01.0905",
+    "field_of_study": "Dairy Science"
+  },
+  {
+    "cip_code": "01.0906",
+    "field_of_study": "Livestock Management"
+  },
+  {
+    "cip_code": "01.0907",
+    "field_of_study": "Poultry Science"
+  },
+  {
+    "cip_code": "01.0999",
+    "field_of_study": "Animal Sciences, Other"
+  },
+  {
+    "cip_code": "01.1001",
+    "field_of_study": "Food Science"
+  },
+  {
+    "cip_code": "01.1002",
+    "field_of_study": "Food Technology and Processing"
+  },
+  {
+    "cip_code": "01.1099",
+    "field_of_study": "Food Science and Technology, Other"
+  },
+  {
+    "cip_code": "01.1101",
+    "field_of_study": "Plant Sciences, General"
+  },
+  {
+    "cip_code": "01.1102",
+    "field_of_study": "Agronomy and Crop Science"
+  },
+  {
+    "cip_code": "01.1103",
+    "field_of_study": "Horticultural Science"
+  },
+  {
+    "cip_code": "01.1104",
+    "field_of_study": "Agricultural and Horticultural Plant Breeding"
+  },
+  {
+    "cip_code": "01.1105",
+    "field_of_study": "Plant Protection and Integrated Pest Management"
+  },
+  {
+    "cip_code": "01.1106",
+    "field_of_study": "Range Science and Management"
+  },
+  {
+    "cip_code": "01.1199",
+    "field_of_study": "Plant Sciences, Other"
+  },
+  {
+    "cip_code": "01.1201",
+    "field_of_study": "Soil Science and Agronomy, General"
+  },
+  {
+    "cip_code": "01.1202",
+    "field_of_study": "Soil Chemistry and Physics"
+  },
+  {
+    "cip_code": "01.1203",
+    "field_of_study": "Soil Microbiology"
+  },
+  {
+    "cip_code": "01.1299",
+    "field_of_study": "Soil Sciences, Other"
+  },
+  {
+    "cip_code": "01.8105",
+    "field_of_study": "Veterinary Anatomy"
+  },
+  {
+    "cip_code": "01.8106",
+    "field_of_study": "Veterinary Infectious Diseases"
+  },
+  {
+    "cip_code": "01.8107",
+    "field_of_study": "Veterinary Microbiology and Immunobiology"
+  },
+  {
+    "cip_code": "01.8108",
+    "field_of_study": "Veterinary Pathology and Pathobiology"
+  },
+  {
+    "cip_code": "01.8109",
+    "field_of_study": "Veterinary Physiology"
+  },
+  {
+    "cip_code": "01.8110",
+    "field_of_study": "Veterinary Preventive Medicine, Epidemiology, and Public Health"
+  },
+  {
+    "cip_code": "01.8111",
+    "field_of_study": "Veterinary Toxicology and Pharmacology"
+  },
+  {
+    "cip_code": "03.0101",
+    "field_of_study": "Natural Resources/Conservation, General"
+  },
+  {
+    "cip_code": "03.0103",
+    "field_of_study": "Environmental Studies"
+  },
+  {
+    "cip_code": "03.0104",
+    "field_of_study": "Environmental Science"
+  },
+  {
+    "cip_code": "03.0199",
+    "field_of_study": "Natural Resources Conservation and Research, Other"
+  },
+  {
+    "cip_code": "03.0205",
+    "field_of_study": "Water, Wetlands, and Marine Resources Management"
+  },
+  {
+    "cip_code": "03.0502",
+    "field_of_study": "Forest Sciences and Biology"
+  },
+  {
+    "cip_code": "03.0508",
+    "field_of_study": "Urban Forestry"
+  },
+  {
+    "cip_code": "03.0509",
+    "field_of_study": "Wood Science and Wood Products/Pulp and Paper Technology/Technician"
+  },
+  {
+    "cip_code": "03.0601",
+    "field_of_study": "Wildlife, Fish and Wildlands Science and Management"
+  },
+  {
+    "cip_code": "04.0902",
+    "field_of_study": "Architectural and Building Sciences/Technology"
+  },
+  {
+    "cip_code": "09.0702",
+    "field_of_study": "Digital Communication and Media/Multimedia"
+  },
+  {
+    "cip_code": "10.0304",
+    "field_of_study": "Animation, Interactive Technology, Video Graphics, and Special Effects"
+  },
+  {
+    "cip_code": "11.0101",
+    "field_of_study": "Computer and Information Sciences, General"
+  },
+  {
+    "cip_code": "11.0102",
+    "field_of_study": "Artificial Intelligence"
+  },
+  {
+    "cip_code": "11.0103",
+    "field_of_study": "Information Technology"
+  },
+  {
+    "cip_code": "11.0104",
+    "field_of_study": "Informatics"
+  },
+  {
+    "cip_code": "11.0199",
+    "field_of_study": "Computer and Information Sciences, Other"
+  },
+  {
+    "cip_code": "11.0201",
+    "field_of_study": "Computer Programming/Programmer, General"
+  },
+  {
+    "cip_code": "11.0202",
+    "field_of_study": "Computer Programming, Specific Applications"
+  },
+  {
+    "cip_code": "11.0203",
+    "field_of_study": "Computer Programming, Vendor/Product Certification"
+  },
+  {
+    "cip_code": "11.0299",
+    "field_of_study": "Computer Programming, Other"
+  },
+  {
+    "cip_code": "11.0301",
+    "field_of_study": "Data Processing and Data Processing Technology/ Technician"
+  },
+  {
+    "cip_code": "11.0401",
+    "field_of_study": "Information Science/Studies"
+  },
+  {
+    "cip_code": "11.0501",
+    "field_of_study": "Computer Systems Analysis/Analyst"
+  },
+  {
+    "cip_code": "11.0701",
+    "field_of_study": "Computer Science"
+  },
+  {
+    "cip_code": "11.0801",
+    "field_of_study": "Web Page, Digital/Multimedia and Information Resources Design"
+  },
+  {
+    "cip_code": "11.0802",
+    "field_of_study": "Data Modeling/Warehousing and Database Administration"
+  },
+  {
+    "cip_code": "11.0803",
+    "field_of_study": "Computer Graphics"
+  },
+  {
+    "cip_code": "11.0804",
+    "field_of_study": "Modeling, Virtual Environments and Simulation"
+  },
+  {
+    "cip_code": "11.0899",
+    "field_of_study": "Computer Software and Media Applications, Other"
+  },
+  {
+    "cip_code": "11.0901",
+    "field_of_study": "Computer Systems Networking and Telecommunications"
+  },
+  {
+    "cip_code": "11.1001",
+    "field_of_study": "Network and System Administration/Administrator"
+  },
+  {
+    "cip_code": "11.1002",
+    "field_of_study": "System, Networking, and LAN/WAN Management/Manager"
+  },
+  {
+    "cip_code": "11.1003",
+    "field_of_study": "Computer and Information Systems Security/Auditing/Information Assurance"
+  },
+  {
+    "cip_code": "11.1004",
+    "field_of_study": "Web/Multimedia Management and Webmaster"
+  },
+  {
+    "cip_code": "11.1005",
+    "field_of_study": "Information Technology Project Management"
+  },
+  {
+    "cip_code": "11.1006",
+    "field_of_study": "Computer Support Specialist"
+  },
+  {
+    "cip_code": "11.1099",
+    "field_of_study": "Computer/Information Technology Services Administration and Management, Other"
+  },
+  {
+    "cip_code": "13.0501",
+    "field_of_study": "Educational/Instructional Technology"
+  },
+  {
+    "cip_code": "13.0601",
+    "field_of_study": "Educational Evaluation and Research"
+  },
+  {
+    "cip_code": "13.0603",
+    "field_of_study": "Educational Statistics and Research Methods"
+  },
+  {
+    "cip_code": "14.0000",
+    "field_of_study": "ENGINEERING"
+  },
+  {
+    "cip_code": "14.0100",
+    "field_of_study": "Engineering, General"
+  },
+  {
+    "cip_code": "14.0101",
+    "field_of_study": "Engineering, General"
+  },
+  {
+    "cip_code": "14.0102",
+    "field_of_study": "Pre-Engineering"
+  },
+  {
+    "cip_code": "14.0103",
+    "field_of_study": "Applied Engineering"
+  },
+  {
+    "cip_code": "14.0200",
+    "field_of_study": "Aerospace, Aeronautical, and Astronautical/Space Engineering"
+  },
+  {
+    "cip_code": "14.0201",
+    "field_of_study": "Aerospace, Aeronautical, and Astronautical/Space Engineering, General"
+  },
+  {
+    "cip_code": "14.0202",
+    "field_of_study": "Astronautical Engineering"
+  },
+  {
+    "cip_code": "14.0299",
+    "field_of_study": "Aerospace, Aeronautical, and Astronautical/Space Engineering, Other"
+  },
+  {
+    "cip_code": "14.0300",
+    "field_of_study": "Agricultural Engineering"
+  },
+  {
+    "cip_code": "14.0301",
+    "field_of_study": "Agricultural Engineering"
+  },
+  {
+    "cip_code": "14.0400",
+    "field_of_study": "Architectural Engineering"
+  },
+  {
+    "cip_code": "14.0401",
+    "field_of_study": "Architectural Engineering"
+  },
+  {
+    "cip_code": "14.0500",
+    "field_of_study": "Biomedical/Medical Engineering"
+  },
+  {
+    "cip_code": "14.0501",
+    "field_of_study": "Bioengineering and Biomedical Engineering"
+  },
+  {
+    "cip_code": "14.0600",
+    "field_of_study": "Ceramic Sciences and Engineering"
+  },
+  {
+    "cip_code": "14.0601",
+    "field_of_study": "Ceramic Sciences and Engineering"
+  },
+  {
+    "cip_code": "14.0700",
+    "field_of_study": "Chemical Engineering"
+  },
+  {
+    "cip_code": "14.0701",
+    "field_of_study": "Chemical Engineering"
+  },
+  {
+    "cip_code": "14.0702",
+    "field_of_study": "Chemical and Biomolecular Engineering"
+  },
+  {
+    "cip_code": "14.0799",
+    "field_of_study": "Chemical Engineering, Other"
+  },
+  {
+    "cip_code": "14.0800",
+    "field_of_study": "Civil Engineering"
+  },
+  {
+    "cip_code": "14.0801",
+    "field_of_study": "Civil Engineering, General"
+  },
+  {
+    "cip_code": "14.0802",
+    "field_of_study": "Geotechnical and Geoenvironmental Engineering"
+  },
+  {
+    "cip_code": "14.0803",
+    "field_of_study": "Structural Engineering"
+  },
+  {
+    "cip_code": "14.0804",
+    "field_of_study": "Transportation and Highway Engineering"
+  },
+  {
+    "cip_code": "14.0805",
+    "field_of_study": "Water Resources Engineering"
+  },
+  {
+    "cip_code": "14.0899",
+    "field_of_study": "Civil Engineering, Other"
+  },
+  {
+    "cip_code": "14.0900",
+    "field_of_study": "Computer Engineering"
+  },
+  {
+    "cip_code": "14.0901",
+    "field_of_study": "Computer Engineering, General"
+  },
+  {
+    "cip_code": "14.0902",
+    "field_of_study": "Computer Hardware Engineering"
+  },
+  {
+    "cip_code": "14.0903",
+    "field_of_study": "Computer Software Engineering"
+  },
+  {
+    "cip_code": "14.0999",
+    "field_of_study": "Computer Engineering, Other"
+  },
+  {
+    "cip_code": "14.1000",
+    "field_of_study": "Electrical, Electronics, and Communications Engineering"
+  },
+  {
+    "cip_code": "14.1001",
+    "field_of_study": "Electrical and Electronics Engineering"
+  },
+  {
+    "cip_code": "14.1003",
+    "field_of_study": "Laser and Optical Engineering"
+  },
+  {
+    "cip_code": "14.1004",
+    "field_of_study": "Telecommunications Engineering"
+  },
+  {
+    "cip_code": "14.1099",
+    "field_of_study": "Electrical, Electronics, and Communications Engineering, Other"
+  },
+  {
+    "cip_code": "14.1100",
+    "field_of_study": "Engineering Mechanics"
+  },
+  {
+    "cip_code": "14.1101",
+    "field_of_study": "Engineering Mechanics"
+  },
+  {
+    "cip_code": "14.1200",
+    "field_of_study": "Engineering Physics"
+  },
+  {
+    "cip_code": "14.1201",
+    "field_of_study": "Engineering Physics/Applied Physics"
+  },
+  {
+    "cip_code": "14.1300",
+    "field_of_study": "Engineering Science"
+  },
+  {
+    "cip_code": "14.1301",
+    "field_of_study": "Engineering Science"
+  },
+  {
+    "cip_code": "14.1400",
+    "field_of_study": "Environmental/Environmental Health Engineering"
+  },
+  {
+    "cip_code": "14.1401",
+    "field_of_study": "Environmental/Environmental Health Engineering"
+  },
+  {
+    "cip_code": "14.1800",
+    "field_of_study": "Materials Engineering"
+  },
+  {
+    "cip_code": "14.1801",
+    "field_of_study": "Materials Engineering"
+  },
+  {
+    "cip_code": "14.1900",
+    "field_of_study": "Mechanical Engineering"
+  },
+  {
+    "cip_code": "14.1901",
+    "field_of_study": "Mechanical Engineering"
+  },
+  {
+    "cip_code": "14.2000",
+    "field_of_study": "Metallurgical Engineering"
+  },
+  {
+    "cip_code": "14.2001",
+    "field_of_study": "Metallurgical Engineering"
+  },
+  {
+    "cip_code": "14.2100",
+    "field_of_study": "Mining and Mineral Engineering"
+  },
+  {
+    "cip_code": "14.2101",
+    "field_of_study": "Mining and Mineral Engineering"
+  },
+  {
+    "cip_code": "14.2200",
+    "field_of_study": "Naval Architecture and Marine Engineering"
+  },
+  {
+    "cip_code": "14.2201",
+    "field_of_study": "Naval Architecture and Marine Engineering"
+  },
+  {
+    "cip_code": "14.2300",
+    "field_of_study": "Nuclear Engineering"
+  },
+  {
+    "cip_code": "14.2301",
+    "field_of_study": "Nuclear Engineering"
+  },
+  {
+    "cip_code": "14.2400",
+    "field_of_study": "Ocean Engineering"
+  },
+  {
+    "cip_code": "14.2401",
+    "field_of_study": "Ocean Engineering"
+  },
+  {
+    "cip_code": "14.2500",
+    "field_of_study": "Petroleum Engineering"
+  },
+  {
+    "cip_code": "14.2501",
+    "field_of_study": "Petroleum Engineering"
+  },
+  {
+    "cip_code": "14.2700",
+    "field_of_study": "Systems Engineering"
+  },
+  {
+    "cip_code": "14.2701",
+    "field_of_study": "Systems Engineering"
+  },
+  {
+    "cip_code": "14.2800",
+    "field_of_study": "Textile Sciences and Engineering"
+  },
+  {
+    "cip_code": "14.2801",
+    "field_of_study": "Textile Sciences and Engineering"
+  },
+  {
+    "cip_code": "14.3200",
+    "field_of_study": "Polymer/Plastics Engineering"
+  },
+  {
+    "cip_code": "14.3201",
+    "field_of_study": "Polymer/Plastics Engineering"
+  },
+  {
+    "cip_code": "14.3300",
+    "field_of_study": "Construction Engineering"
+  },
+  {
+    "cip_code": "14.3301",
+    "field_of_study": "Construction Engineering"
+  },
+  {
+    "cip_code": "14.3400",
+    "field_of_study": "Forest Engineering"
+  },
+  {
+    "cip_code": "14.3401",
+    "field_of_study": "Forest Engineering"
+  },
+  {
+    "cip_code": "14.3500",
+    "field_of_study": "Industrial Engineering"
+  },
+  {
+    "cip_code": "14.3501",
+    "field_of_study": "Industrial Engineering"
+  },
+  {
+    "cip_code": "14.3600",
+    "field_of_study": "Manufacturing Engineering"
+  },
+  {
+    "cip_code": "14.3601",
+    "field_of_study": "Manufacturing Engineering"
+  },
+  {
+    "cip_code": "14.3700",
+    "field_of_study": "Operations Research"
+  },
+  {
+    "cip_code": "14.3701",
+    "field_of_study": "Operations Research"
+  },
+  {
+    "cip_code": "14.3800",
+    "field_of_study": "Surveying Engineering"
+  },
+  {
+    "cip_code": "14.3801",
+    "field_of_study": "Surveying Engineering"
+  },
+  {
+    "cip_code": "14.3900",
+    "field_of_study": "Geological/Geophysical Engineering"
+  },
+  {
+    "cip_code": "14.3901",
+    "field_of_study": "Geological/Geophysical Engineering"
+  },
+  {
+    "cip_code": "14.4000",
+    "field_of_study": "Paper Science and Engineering"
+  },
+  {
+    "cip_code": "14.4001",
+    "field_of_study": "Paper Science and Engineering"
+  },
+  {
+    "cip_code": "14.4100",
+    "field_of_study": "Electromechanical Engineering"
+  },
+  {
+    "cip_code": "14.4101",
+    "field_of_study": "Electromechanical Engineering"
+  },
+  {
+    "cip_code": "14.4200",
+    "field_of_study": "Mechatronics, Robotics, and Automation Engineering"
+  },
+  {
+    "cip_code": "14.4201",
+    "field_of_study": "Mechatronics, Robotics, and Automation Engineering"
+  },
+  {
+    "cip_code": "14.4300",
+    "field_of_study": "Biochemical Engineering"
+  },
+  {
+    "cip_code": "14.4301",
+    "field_of_study": "Biochemical Engineering"
+  },
+  {
+    "cip_code": "14.4400",
+    "field_of_study": "Engineering Chemistry"
+  },
+  {
+    "cip_code": "14.4401",
+    "field_of_study": "Engineering Chemistry"
+  },
+  {
+    "cip_code": "14.4500",
+    "field_of_study": "Biological/Biosystems Engineering"
+  },
+  {
+    "cip_code": "14.4501",
+    "field_of_study": "Biological/Biosystems Engineering"
+  },
+  {
+    "cip_code": "14.4700",
+    "field_of_study": "Electrical and Computer Engineering"
+  },
+  {
+    "cip_code": "14.4701",
+    "field_of_study": "Electrical and Computer Engineering"
+  },
+  {
+    "cip_code": "14.4800",
+    "field_of_study": "Energy Systems Engineering"
+  },
+  {
+    "cip_code": "14.4801",
+    "field_of_study": "Energy Systems Engineering, General"
+  },
+  {
+    "cip_code": "14.4802",
+    "field_of_study": "Power Plant Engineering"
+  },
+  {
+    "cip_code": "14.4899",
+    "field_of_study": "Energy Systems Engineering, Other"
+  },
+  {
+    "cip_code": "14.9900",
+    "field_of_study": "Engineering, Other"
+  },
+  {
+    "cip_code": "14.9999",
+    "field_of_study": "Engineering, Other"
+  },
+  {
+    "cip_code": "15.0000",
+    "field_of_study": "Engineering Technologies/Technicians, General"
+  },
+  {
+    "cip_code": "15.0101",
+    "field_of_study": "Architectural Engineering Technologies/Technicians"
+  },
+  {
+    "cip_code": "15.0201",
+    "field_of_study": "Civil Engineering Technologies/Technicians"
+  },
+  {
+    "cip_code": "15.0303",
+    "field_of_study": "Electrical, Electronic, and Communications Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0304",
+    "field_of_study": "Laser and Optical Technology/Technician"
+  },
+  {
+    "cip_code": "15.0305",
+    "field_of_study": "Telecommunications Technology/Technician"
+  },
+  {
+    "cip_code": "15.0306",
+    "field_of_study": "Integrated Circuit Design Technology/Technician"
+  },
+  {
+    "cip_code": "15.0399",
+    "field_of_study": "Electrical/Electronic Engineering Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.0401",
+    "field_of_study": "Biomedical Technology/Technician"
+  },
+  {
+    "cip_code": "15.0403",
+    "field_of_study": "Electromechanical/Electromechanical Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0404",
+    "field_of_study": "Instrumentation Technology/Technician"
+  },
+  {
+    "cip_code": "15.0405",
+    "field_of_study": "Robotics Technology/Technician"
+  },
+  {
+    "cip_code": "15.0406",
+    "field_of_study": "Automation Engineer Technology/Technician"
+  },
+  {
+    "cip_code": "15.0499",
+    "field_of_study": "Electromechanical Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.0501",
+    "field_of_study": "Heating, Ventilation, Air Conditioning and Refrigeration Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0506",
+    "field_of_study": "Water Quality and Wastewater Treatment Management and Recycling Technology/Technician"
+  },
+  {
+    "cip_code": "15.0507",
+    "field_of_study": "Environmental/Environmental Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0508",
+    "field_of_study": "Hazardous Materials Management and Waste Technology/Technician"
+  },
+  {
+    "cip_code": "15.0599",
+    "field_of_study": "Environmental Control Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.0607",
+    "field_of_study": "Plastics and Polymer Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0611",
+    "field_of_study": "Metallurgical Technology/Technician"
+  },
+  {
+    "cip_code": "15.0612",
+    "field_of_study": "Industrial Technology/Technician"
+  },
+  {
+    "cip_code": "15.0613",
+    "field_of_study": "Manufacturing Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0614",
+    "field_of_study": "Welding Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0615",
+    "field_of_study": "Chemical Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0616",
+    "field_of_study": "Semiconductor Manufacturing Technology/Technician"
+  },
+  {
+    "cip_code": "15.0699",
+    "field_of_study": "Industrial Production Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.0701",
+    "field_of_study": "Occupational Safety and Health Technology/Technician"
+  },
+  {
+    "cip_code": "15.0702",
+    "field_of_study": "Quality Control Technology/Technician"
+  },
+  {
+    "cip_code": "15.0703",
+    "field_of_study": "Industrial Safety Technology/Technician"
+  },
+  {
+    "cip_code": "15.0704",
+    "field_of_study": "Hazardous Materials Information Systems Technology/Technician"
+  },
+  {
+    "cip_code": "15.0799",
+    "field_of_study": "Quality Control and Safety Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.0801",
+    "field_of_study": "Aeronautical/Aerospace Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0803",
+    "field_of_study": "Automotive Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0805",
+    "field_of_study": "Mechanical/Mechanical Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.0899",
+    "field_of_study": "Mechanical Engineering Related Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.0901",
+    "field_of_study": "Mining Technology/Technician"
+  },
+  {
+    "cip_code": "15.0903",
+    "field_of_study": "Petroleum Technology/Technician"
+  },
+  {
+    "cip_code": "15.0999",
+    "field_of_study": "Mining and Petroleum Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.1001",
+    "field_of_study": "Construction Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.1102",
+    "field_of_study": "Surveying Technology/Surveying"
+  },
+  {
+    "cip_code": "15.1103",
+    "field_of_study": "Hydraulics and Fluid Power Technology/Technician"
+  },
+  {
+    "cip_code": "15.1199",
+    "field_of_study": "Engineering-Related Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.1201",
+    "field_of_study": "Computer Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.1202",
+    "field_of_study": "Computer/Computer Systems Technology/Technician"
+  },
+  {
+    "cip_code": "15.1203",
+    "field_of_study": "Computer Hardware Technology/Technician"
+  },
+  {
+    "cip_code": "15.1204",
+    "field_of_study": "Computer Software Technology/Technician"
+  },
+  {
+    "cip_code": "15.1299",
+    "field_of_study": "Computer Engineering Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.1301",
+    "field_of_study": "Drafting and Design Technology/Technician, General"
+  },
+  {
+    "cip_code": "15.1302",
+    "field_of_study": "CAD/CADD Drafting and/or Design Technology/Technician"
+  },
+  {
+    "cip_code": "15.1303",
+    "field_of_study": "Architectural Drafting and Architectural CAD/CADD"
+  },
+  {
+    "cip_code": "15.1304",
+    "field_of_study": "Civil Drafting and Civil Engineering CAD/CADD"
+  },
+  {
+    "cip_code": "15.1305",
+    "field_of_study": "Electrical/Electronics Drafting and Electrical/Electronics CAD/CADD"
+  },
+  {
+    "cip_code": "15.1306",
+    "field_of_study": "Mechanical Drafting and Mechanical Drafting CAD/CADD"
+  },
+  {
+    "cip_code": "15.1399",
+    "field_of_study": "Drafting/Design Engineering Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "15.1401",
+    "field_of_study": "Nuclear Engineering Technology/Technician"
+  },
+  {
+    "cip_code": "15.1501",
+    "field_of_study": "Engineering/Industrial Management"
+  },
+  {
+    "cip_code": "15.1502",
+    "field_of_study": "Engineering Design"
+  },
+  {
+    "cip_code": "15.1503",
+    "field_of_study": "Packaging Science"
+  },
+  {
+    "cip_code": "15.1599",
+    "field_of_study": "Engineering-Related Fields, Other"
+  },
+  {
+    "cip_code": "15.1601",
+    "field_of_study": "Nanotechnology"
+  },
+  {
+    "cip_code": "15.1701",
+    "field_of_study": "Energy Systems Technology/Technician"
+  },
+  {
+    "cip_code": "15.1703",
+    "field_of_study": "Solar Energy Technology/Technician"
+  },
+  {
+    "cip_code": "15.9999",
+    "field_of_study": "Engineering/Engineering-Related Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "26.0000",
+    "field_of_study": "BIOLOGICAL AND BIOMEDICAL SCIENCES"
+  },
+  {
+    "cip_code": "26.0100",
+    "field_of_study": "Biology, General"
+  },
+  {
+    "cip_code": "26.0101",
+    "field_of_study": "Biology/Biological Sciences, General"
+  },
+  {
+    "cip_code": "26.0102",
+    "field_of_study": "Biomedical Sciences, General"
+  },
+  {
+    "cip_code": "26.0200",
+    "field_of_study": "Biochemistry, Biophysics and Molecular Biology"
+  },
+  {
+    "cip_code": "26.0202",
+    "field_of_study": "Biochemistry"
+  },
+  {
+    "cip_code": "26.0203",
+    "field_of_study": "Biophysics"
+  },
+  {
+    "cip_code": "26.0204",
+    "field_of_study": "Molecular Biology"
+  },
+  {
+    "cip_code": "26.0205",
+    "field_of_study": "Molecular Biochemistry"
+  },
+  {
+    "cip_code": "26.0206",
+    "field_of_study": "Molecular Biophysics"
+  },
+  {
+    "cip_code": "26.0207",
+    "field_of_study": "Structural Biology"
+  },
+  {
+    "cip_code": "26.0208",
+    "field_of_study": "Photobiology"
+  },
+  {
+    "cip_code": "26.0209",
+    "field_of_study": "Radiation Biology/Radiobiology"
+  },
+  {
+    "cip_code": "26.0210",
+    "field_of_study": "Biochemistry and Molecular Biology"
+  },
+  {
+    "cip_code": "26.0299",
+    "field_of_study": "Biochemistry, Biophysics and Molecular Biology, Other"
+  },
+  {
+    "cip_code": "26.0300",
+    "field_of_study": "Botany/Plant Biology"
+  },
+  {
+    "cip_code": "26.0301",
+    "field_of_study": "Botany/Plant Biology"
+  },
+  {
+    "cip_code": "26.0305",
+    "field_of_study": "Plant Pathology/Phytopathology"
+  },
+  {
+    "cip_code": "26.0307",
+    "field_of_study": "Plant Physiology"
+  },
+  {
+    "cip_code": "26.0308",
+    "field_of_study": "Plant Molecular Biology"
+  },
+  {
+    "cip_code": "26.0399",
+    "field_of_study": "Botany/Plant Biology, Other"
+  },
+  {
+    "cip_code": "26.0400",
+    "field_of_study": "Cell/Cellular Biology and Anatomical Sciences"
+  },
+  {
+    "cip_code": "26.0401",
+    "field_of_study": "Cell/Cellular Biology and Histology"
+  },
+  {
+    "cip_code": "26.0403",
+    "field_of_study": "Anatomy"
+  },
+  {
+    "cip_code": "26.0404",
+    "field_of_study": "Developmental Biology and Embryology"
+  },
+  {
+    "cip_code": "26.0406",
+    "field_of_study": "Cell/Cellular and Molecular Biology"
+  },
+  {
+    "cip_code": "26.0407",
+    "field_of_study": "Cell Biology and Anatomy"
+  },
+  {
+    "cip_code": "26.0499",
+    "field_of_study": "Cell/Cellular Biology and Anatomical Sciences, Other"
+  },
+  {
+    "cip_code": "26.0500",
+    "field_of_study": "Microbiological Sciences and Immunology"
+  },
+  {
+    "cip_code": "26.0502",
+    "field_of_study": "Microbiology, General"
+  },
+  {
+    "cip_code": "26.0503",
+    "field_of_study": "Medical Microbiology and Bacteriology"
+  },
+  {
+    "cip_code": "26.0504",
+    "field_of_study": "Virology"
+  },
+  {
+    "cip_code": "26.0505",
+    "field_of_study": "Parasitology"
+  },
+  {
+    "cip_code": "26.0506",
+    "field_of_study": "Mycology"
+  },
+  {
+    "cip_code": "26.0507",
+    "field_of_study": "Immunology"
+  },
+  {
+    "cip_code": "26.0508",
+    "field_of_study": "Microbiology and Immunology"
+  },
+  {
+    "cip_code": "26.0509",
+    "field_of_study": "Infectious Disease and Global Health"
+  },
+  {
+    "cip_code": "26.0599",
+    "field_of_study": "Microbiological Sciences and Immunology, Other"
+  },
+  {
+    "cip_code": "26.0700",
+    "field_of_study": "Zoology/Animal Biology"
+  },
+  {
+    "cip_code": "26.0701",
+    "field_of_study": "Zoology/Animal Biology"
+  },
+  {
+    "cip_code": "26.0702",
+    "field_of_study": "Entomology"
+  },
+  {
+    "cip_code": "26.0707",
+    "field_of_study": "Animal Physiology"
+  },
+  {
+    "cip_code": "26.0708",
+    "field_of_study": "Animal Behavior and Ethology"
+  },
+  {
+    "cip_code": "26.0709",
+    "field_of_study": "Wildlife Biology"
+  },
+  {
+    "cip_code": "26.0799",
+    "field_of_study": "Zoology/Animal Biology, Other"
+  },
+  {
+    "cip_code": "26.0800",
+    "field_of_study": "Genetics"
+  },
+  {
+    "cip_code": "26.0801",
+    "field_of_study": "Genetics, General"
+  },
+  {
+    "cip_code": "26.0802",
+    "field_of_study": "Molecular Genetics"
+  },
+  {
+    "cip_code": "26.0803",
+    "field_of_study": "Microbial and Eukaryotic Genetics"
+  },
+  {
+    "cip_code": "26.0804",
+    "field_of_study": "Animal Genetics"
+  },
+  {
+    "cip_code": "26.0805",
+    "field_of_study": "Plant Genetics"
+  },
+  {
+    "cip_code": "26.0806",
+    "field_of_study": "Human/Medical Genetics"
+  },
+  {
+    "cip_code": "26.0807",
+    "field_of_study": "Genome Sciences/Genomics"
+  },
+  {
+    "cip_code": "26.0899",
+    "field_of_study": "Genetics, Other"
+  },
+  {
+    "cip_code": "26.0900",
+    "field_of_study": "Physiology, Pathology and Related Sciences"
+  },
+  {
+    "cip_code": "26.0901",
+    "field_of_study": "Physiology, General"
+  },
+  {
+    "cip_code": "26.0902",
+    "field_of_study": "Molecular Physiology"
+  },
+  {
+    "cip_code": "26.0903",
+    "field_of_study": "Cell Physiology"
+  },
+  {
+    "cip_code": "26.0904",
+    "field_of_study": "Endocrinology"
+  },
+  {
+    "cip_code": "26.0905",
+    "field_of_study": "Reproductive Biology"
+  },
+  {
+    "cip_code": "26.0907",
+    "field_of_study": "Cardiovascular Science"
+  },
+  {
+    "cip_code": "26.0908",
+    "field_of_study": "Exercise Physiology and Kinesiology"
+  },
+  {
+    "cip_code": "26.0909",
+    "field_of_study": "Vision Science/Physiological Optics"
+  },
+  {
+    "cip_code": "26.0910",
+    "field_of_study": "Pathology/Experimental Pathology"
+  },
+  {
+    "cip_code": "26.0911",
+    "field_of_study": "Oncology and Cancer Biology"
+  },
+  {
+    "cip_code": "26.0912",
+    "field_of_study": "Aerospace Physiology and Medicine"
+  },
+  {
+    "cip_code": "26.0913",
+    "field_of_study": "Biomechanics"
+  },
+  {
+    "cip_code": "26.0999",
+    "field_of_study": "Physiology, Pathology, and Related Sciences, Other"
+  },
+  {
+    "cip_code": "26.1000",
+    "field_of_study": "Pharmacology and Toxicology"
+  },
+  {
+    "cip_code": "26.1001",
+    "field_of_study": "Pharmacology"
+  },
+  {
+    "cip_code": "26.1002",
+    "field_of_study": "Molecular Pharmacology"
+  },
+  {
+    "cip_code": "26.1003",
+    "field_of_study": "Neuropharmacology"
+  },
+  {
+    "cip_code": "26.1004",
+    "field_of_study": "Toxicology"
+  },
+  {
+    "cip_code": "26.1005",
+    "field_of_study": "Molecular Toxicology"
+  },
+  {
+    "cip_code": "26.1006",
+    "field_of_study": "Environmental Toxicology"
+  },
+  {
+    "cip_code": "26.1007",
+    "field_of_study": "Pharmacology and Toxicology"
+  },
+  {
+    "cip_code": "26.1099",
+    "field_of_study": "Pharmacology and Toxicology, Other"
+  },
+  {
+    "cip_code": "26.1100",
+    "field_of_study": "Biomathematics, Bioinformatics, and Computational Biology"
+  },
+  {
+    "cip_code": "26.1101",
+    "field_of_study": "Biometry/Biometrics"
+  },
+  {
+    "cip_code": "26.1102",
+    "field_of_study": "Biostatistics"
+  },
+  {
+    "cip_code": "26.1103",
+    "field_of_study": "Bioinformatics"
+  },
+  {
+    "cip_code": "26.1104",
+    "field_of_study": "Computational Biology"
+  },
+  {
+    "cip_code": "26.1199",
+    "field_of_study": "Biomathematics, Bioinformatics, and Computational Biology, Other"
+  },
+  {
+    "cip_code": "26.1200",
+    "field_of_study": "Biotechnology"
+  },
+  {
+    "cip_code": "26.1201",
+    "field_of_study": "Biotechnology"
+  },
+  {
+    "cip_code": "26.1300",
+    "field_of_study": "Ecology, Evolution, Systematics, and Population Biology"
+  },
+  {
+    "cip_code": "26.1301",
+    "field_of_study": "Ecology"
+  },
+  {
+    "cip_code": "26.1302",
+    "field_of_study": "Marine Biology and Biological Oceanography"
+  },
+  {
+    "cip_code": "26.1303",
+    "field_of_study": "Evolutionary Biology"
+  },
+  {
+    "cip_code": "26.1304",
+    "field_of_study": "Aquatic Biology/Limnology"
+  },
+  {
+    "cip_code": "26.1305",
+    "field_of_study": "Environmental Biology"
+  },
+  {
+    "cip_code": "26.1306",
+    "field_of_study": "Population Biology"
+  },
+  {
+    "cip_code": "26.1307",
+    "field_of_study": "Conservation Biology"
+  },
+  {
+    "cip_code": "26.1308",
+    "field_of_study": "Systematic Biology/Biological Systematics"
+  },
+  {
+    "cip_code": "26.1309",
+    "field_of_study": "Epidemiology"
+  },
+  {
+    "cip_code": "26.1310",
+    "field_of_study": "Ecology and Evolutionary Biology"
+  },
+  {
+    "cip_code": "26.1311",
+    "field_of_study": "Epidemiology and Biostatistics"
+  },
+  {
+    "cip_code": "26.1399",
+    "field_of_study": "Ecology, Evolution, Systematics and Population Biology, Other"
+  },
+  {
+    "cip_code": "26.1400",
+    "field_of_study": "Molecular Medicine"
+  },
+  {
+    "cip_code": "26.1401",
+    "field_of_study": "Molecular Medicine"
+  },
+  {
+    "cip_code": "26.1500",
+    "field_of_study": "Neurobiology and Neurosciences"
+  },
+  {
+    "cip_code": "26.1501",
+    "field_of_study": "Neuroscience"
+  },
+  {
+    "cip_code": "26.1502",
+    "field_of_study": "Neuroanatomy"
+  },
+  {
+    "cip_code": "26.1503",
+    "field_of_study": "Neurobiology and Anatomy"
+  },
+  {
+    "cip_code": "26.1504",
+    "field_of_study": "Neurobiology and Behavior"
+  },
+  {
+    "cip_code": "26.1599",
+    "field_of_study": "Neurobiology and Neurosciences, Other"
+  },
+  {
+    "cip_code": "26.9900",
+    "field_of_study": "Biological and Biomedical Sciences, Other"
+  },
+  {
+    "cip_code": "26.9999",
+    "field_of_study": "Biological and Biomedical Sciences, Other"
+  },
+  {
+    "cip_code": "27.0000",
+    "field_of_study": "MATHEMATICS AND STATISTICS"
+  },
+  {
+    "cip_code": "27.0100",
+    "field_of_study": "Mathematics"
+  },
+  {
+    "cip_code": "27.0101",
+    "field_of_study": "Mathematics, General"
+  },
+  {
+    "cip_code": "27.0102",
+    "field_of_study": "Algebra and Number Theory"
+  },
+  {
+    "cip_code": "27.0103",
+    "field_of_study": "Analysis and Functional Analysis"
+  },
+  {
+    "cip_code": "27.0104",
+    "field_of_study": "Geometry/Geometric Analysis"
+  },
+  {
+    "cip_code": "27.0105",
+    "field_of_study": "Topology and Foundations"
+  },
+  {
+    "cip_code": "27.0199",
+    "field_of_study": "Mathematics, Other"
+  },
+  {
+    "cip_code": "27.0300",
+    "field_of_study": "Applied Mathematics"
+  },
+  {
+    "cip_code": "27.0301",
+    "field_of_study": "Applied Mathematics, General"
+  },
+  {
+    "cip_code": "27.0303",
+    "field_of_study": "Computational Mathematics"
+  },
+  {
+    "cip_code": "27.0304",
+    "field_of_study": "Computational and Applied Mathematics"
+  },
+  {
+    "cip_code": "27.0305",
+    "field_of_study": "Financial Mathematics"
+  },
+  {
+    "cip_code": "27.0306",
+    "field_of_study": "Mathematical Biology"
+  },
+  {
+    "cip_code": "27.0399",
+    "field_of_study": "Applied Mathematics, Other"
+  },
+  {
+    "cip_code": "27.0500",
+    "field_of_study": "Statistics"
+  },
+  {
+    "cip_code": "27.0501",
+    "field_of_study": "Statistics, General"
+  },
+  {
+    "cip_code": "27.0502",
+    "field_of_study": "Mathematical Statistics and Probability"
+  },
+  {
+    "cip_code": "27.0503",
+    "field_of_study": "Mathematics and Statistics"
+  },
+  {
+    "cip_code": "27.0599",
+    "field_of_study": "Statistics, Other"
+  },
+  {
+    "cip_code": "27.0600",
+    "field_of_study": "Applied Statistics"
+  },
+  {
+    "cip_code": "27.0601",
+    "field_of_study": "Applied Statistics, General"
+  },
+  {
+    "cip_code": "27.9900",
+    "field_of_study": "Mathematics and Statistics, Other"
+  },
+  {
+    "cip_code": "27.9999",
+    "field_of_study": "Mathematics and Statistics, Other"
+  },
+  {
+    "cip_code": "28.0501",
+    "field_of_study": "Air Science/Airpower Studies"
+  },
+  {
+    "cip_code": "28.0502",
+    "field_of_study": "Air and Space Operational Art and Science"
+  },
+  {
+    "cip_code": "28.0505",
+    "field_of_study": "Naval Science and Operational Studies"
+  },
+  {
+    "cip_code": "29.0201",
+    "field_of_study": "Intelligence, General"
+  },
+  {
+    "cip_code": "29.0202",
+    "field_of_study": "Strategic Intelligence"
+  },
+  {
+    "cip_code": "29.0203",
+    "field_of_study": "Signal/Geospatial Intelligence"
+  },
+  {
+    "cip_code": "29.0204",
+    "field_of_study": "Command & Control (C3, C4I) Systems and Operations"
+  },
+  {
+    "cip_code": "29.0205",
+    "field_of_study": "Information Operations/Joint Information Operations"
+  },
+  {
+    "cip_code": "29.0206",
+    "field_of_study": "Information/Psychological Warfare and Military Media Relations"
+  },
+  {
+    "cip_code": "29.0207",
+    "field_of_study": "Cyber/Electronic Operations and Warfare"
+  },
+  {
+    "cip_code": "29.0299",
+    "field_of_study": "Intelligence, Command Control and Information Operations, Other"
+  },
+  {
+    "cip_code": "29.0301",
+    "field_of_study": "Combat Systems Engineering"
+  },
+  {
+    "cip_code": "29.0302",
+    "field_of_study": "Directed Energy Systems"
+  },
+  {
+    "cip_code": "29.0303",
+    "field_of_study": "Engineering Acoustics"
+  },
+  {
+    "cip_code": "29.0304",
+    "field_of_study": "Low-Observables and Stealth Technology"
+  },
+  {
+    "cip_code": "29.0305",
+    "field_of_study": "Space Systems Operations"
+  },
+  {
+    "cip_code": "29.0306",
+    "field_of_study": "Operational Oceanography"
+  },
+  {
+    "cip_code": "29.0307",
+    "field_of_study": "Undersea Warfare"
+  },
+  {
+    "cip_code": "29.0399",
+    "field_of_study": "Military Applied Sciences, Other"
+  },
+  {
+    "cip_code": "29.0401",
+    "field_of_study": "Aerospace Ground Equipment Technology"
+  },
+  {
+    "cip_code": "29.0402",
+    "field_of_study": "Air and Space Operations Technology"
+  },
+  {
+    "cip_code": "29.0403",
+    "field_of_study": "Aircraft Armament Systems Technology"
+  },
+  {
+    "cip_code": "29.0404",
+    "field_of_study": "Explosive Ordinance/Bomb Disposal"
+  },
+  {
+    "cip_code": "29.0405",
+    "field_of_study": "Joint Command/Task Force (C3, C4I) Systems"
+  },
+  {
+    "cip_code": "29.0406",
+    "field_of_study": "Military Information Systems Technology"
+  },
+  {
+    "cip_code": "29.0407",
+    "field_of_study": "Missile and Space Systems Technology"
+  },
+  {
+    "cip_code": "29.0408",
+    "field_of_study": "Munitions Systems/Ordinance Technology"
+  },
+  {
+    "cip_code": "29.0409",
+    "field_of_study": "Radar Communications and Systems Technology"
+  },
+  {
+    "cip_code": "29.0499",
+    "field_of_study": "Military Systems and Maintenance Technology, Other"
+  },
+  {
+    "cip_code": "29.9999",
+    "field_of_study": "Military Technologies and Applied Sciences, Other"
+  },
+  {
+    "cip_code": "30.0101",
+    "field_of_study": "Biological and Physical Sciences"
+  },
+  {
+    "cip_code": "30.0601",
+    "field_of_study": "Systems Science and Theory"
+  },
+  {
+    "cip_code": "30.0801",
+    "field_of_study": "Mathematics and Computer Science"
+  },
+  {
+    "cip_code": "30.1001",
+    "field_of_study": "Biopsychology"
+  },
+  {
+    "cip_code": "30.1701",
+    "field_of_study": "Behavioral Sciences"
+  },
+  {
+    "cip_code": "30.1801",
+    "field_of_study": "Natural Sciences"
+  },
+  {
+    "cip_code": "30.1901",
+    "field_of_study": "Nutrition Sciences"
+  },
+  {
+    "cip_code": "30.2501",
+    "field_of_study": "Cognitive Science, General"
+  },
+  {
+    "cip_code": "30.2701",
+    "field_of_study": "Human Biology"
+  },
+  {
+    "cip_code": "30.3001",
+    "field_of_study": "Computational Science"
+  },
+  {
+    "cip_code": "30.3101",
+    "field_of_study": "Human Computer Interaction"
+  },
+  {
+    "cip_code": "30.3201",
+    "field_of_study": "Marine Sciences"
+  },
+  {
+    "cip_code": "30.3301",
+    "field_of_study": "Sustainability Studies"
+  },
+  {
+    "cip_code": "40.0000",
+    "field_of_study": "PHYSICAL SCIENCES"
+  },
+  {
+    "cip_code": "40.0100",
+    "field_of_study": "Physical Sciences, General"
+  },
+  {
+    "cip_code": "40.0101",
+    "field_of_study": "Physical Sciences, General"
+  },
+  {
+    "cip_code": "40.0200",
+    "field_of_study": "Astronomy and Astrophysics"
+  },
+  {
+    "cip_code": "40.0201",
+    "field_of_study": "Astronomy"
+  },
+  {
+    "cip_code": "40.0202",
+    "field_of_study": "Astrophysics"
+  },
+  {
+    "cip_code": "40.0203",
+    "field_of_study": "Planetary Astronomy and Science"
+  },
+  {
+    "cip_code": "40.0299",
+    "field_of_study": "Astronomy and Astrophysics, Other"
+  },
+  {
+    "cip_code": "40.0400",
+    "field_of_study": "Atmospheric Sciences and Meteorology"
+  },
+  {
+    "cip_code": "40.0401",
+    "field_of_study": "Atmospheric Sciences and Meteorology, General"
+  },
+  {
+    "cip_code": "40.0402",
+    "field_of_study": "Atmospheric Chemistry and Climatology"
+  },
+  {
+    "cip_code": "40.0403",
+    "field_of_study": "Atmospheric Physics and Dynamics"
+  },
+  {
+    "cip_code": "40.0404",
+    "field_of_study": "Meteorology"
+  },
+  {
+    "cip_code": "40.0499",
+    "field_of_study": "Atmospheric Sciences and Meteorology, Other"
+  },
+  {
+    "cip_code": "40.0500",
+    "field_of_study": "Chemistry"
+  },
+  {
+    "cip_code": "40.0501",
+    "field_of_study": "Chemistry, General"
+  },
+  {
+    "cip_code": "40.0502",
+    "field_of_study": "Analytical Chemistry"
+  },
+  {
+    "cip_code": "40.0503",
+    "field_of_study": "Inorganic Chemistry"
+  },
+  {
+    "cip_code": "40.0504",
+    "field_of_study": "Organic Chemistry"
+  },
+  {
+    "cip_code": "40.0506",
+    "field_of_study": "Physical Chemistry"
+  },
+  {
+    "cip_code": "40.0507",
+    "field_of_study": "Polymer Chemistry"
+  },
+  {
+    "cip_code": "40.0508",
+    "field_of_study": "Chemical Physics"
+  },
+  {
+    "cip_code": "40.0509",
+    "field_of_study": "Environmental Chemistry"
+  },
+  {
+    "cip_code": "40.0510",
+    "field_of_study": "Forensic Chemistry"
+  },
+  {
+    "cip_code": "40.0511",
+    "field_of_study": "Theoretical Chemistry"
+  },
+  {
+    "cip_code": "40.0512",
+    "field_of_study": "Cheminformatics/Chemistry Informatics"
+  },
+  {
+    "cip_code": "40.0599",
+    "field_of_study": "Chemistry, Other"
+  },
+  {
+    "cip_code": "40.0600",
+    "field_of_study": "Geological and Earth Sciences/Geosciences"
+  },
+  {
+    "cip_code": "40.0601",
+    "field_of_study": "Geology/Earth Science, General"
+  },
+  {
+    "cip_code": "40.0602",
+    "field_of_study": "Geochemistry"
+  },
+  {
+    "cip_code": "40.0603",
+    "field_of_study": "Geophysics and Seismology"
+  },
+  {
+    "cip_code": "40.0604",
+    "field_of_study": "Paleontology"
+  },
+  {
+    "cip_code": "40.0605",
+    "field_of_study": "Hydrology and Water Resources Science"
+  },
+  {
+    "cip_code": "40.0606",
+    "field_of_study": "Geochemistry and Petrology"
+  },
+  {
+    "cip_code": "40.0607",
+    "field_of_study": "Oceanography, Chemical and Physical"
+  },
+  {
+    "cip_code": "40.0699",
+    "field_of_study": "Geological and Earth Sciences/Geosciences, Other"
+  },
+  {
+    "cip_code": "40.0800",
+    "field_of_study": "Physics"
+  },
+  {
+    "cip_code": "40.0801",
+    "field_of_study": "Physics, General"
+  },
+  {
+    "cip_code": "40.0802",
+    "field_of_study": "Atomic/Molecular Physics"
+  },
+  {
+    "cip_code": "40.0804",
+    "field_of_study": "Elementary Particle Physics"
+  },
+  {
+    "cip_code": "40.0805",
+    "field_of_study": "Plasma and High-Temperature Physics"
+  },
+  {
+    "cip_code": "40.0806",
+    "field_of_study": "Nuclear Physics"
+  },
+  {
+    "cip_code": "40.0807",
+    "field_of_study": "Optics/Optical Sciences"
+  },
+  {
+    "cip_code": "40.0808",
+    "field_of_study": "Condensed Matter and Materials Physics"
+  },
+  {
+    "cip_code": "40.0809",
+    "field_of_study": "Acoustics"
+  },
+  {
+    "cip_code": "40.0810",
+    "field_of_study": "Theoretical and Mathematical Physics"
+  },
+  {
+    "cip_code": "40.0899",
+    "field_of_study": "Physics, Other"
+  },
+  {
+    "cip_code": "40.1000",
+    "field_of_study": "Materials Sciences"
+  },
+  {
+    "cip_code": "40.1001",
+    "field_of_study": "Materials Science"
+  },
+  {
+    "cip_code": "40.1002",
+    "field_of_study": "Materials Chemistry"
+  },
+  {
+    "cip_code": "40.1099",
+    "field_of_study": "Materials Sciences, Other"
+  },
+  {
+    "cip_code": "40.1100",
+    "field_of_study": "Physics and Astronomy"
+  },
+  {
+    "cip_code": "40.1101",
+    "field_of_study": "Physics and Astronomy"
+  },
+  {
+    "cip_code": "40.9900",
+    "field_of_study": "Physical Sciences, Other"
+  },
+  {
+    "cip_code": "40.9999",
+    "field_of_study": "Physical Sciences, Other"
+  },
+  {
+    "cip_code": "41.0000",
+    "field_of_study": "Science Technologies/Technicians, General"
+  },
+  {
+    "cip_code": "41.0101",
+    "field_of_study": "Biology/Biotechnology Technology/Technician"
+  },
+  {
+    "cip_code": "41.0204",
+    "field_of_study": "Industrial Radiologic Technology/Technician"
+  },
+  {
+    "cip_code": "41.0205",
+    "field_of_study": "Nuclear/Nuclear Power Technology/Technician"
+  },
+  {
+    "cip_code": "41.0299",
+    "field_of_study": "Nuclear and Industrial Radiologic Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "41.0301",
+    "field_of_study": "Chemical Technology/Technician"
+  },
+  {
+    "cip_code": "41.0303",
+    "field_of_study": "Chemical Process Technology"
+  },
+  {
+    "cip_code": "41.0399",
+    "field_of_study": "Physical Science Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "41.9999",
+    "field_of_study": "Science Technologies/Technicians, Other"
+  },
+  {
+    "cip_code": "42.2701",
+    "field_of_study": "Cognitive Psychology and Psycholinguistics"
+  },
+  {
+    "cip_code": "42.2702",
+    "field_of_study": "Comparative Psychology"
+  },
+  {
+    "cip_code": "42.2703",
+    "field_of_study": "Developmental and Child Psychology"
+  },
+  {
+    "cip_code": "42.2704",
+    "field_of_study": "Experimental Psychology"
+  },
+  {
+    "cip_code": "42.2705",
+    "field_of_study": "Personality Psychology"
+  },
+  {
+    "cip_code": "42.2706",
+    "field_of_study": "Behavioral Neuroscience"
+  },
+  {
+    "cip_code": "42.2707",
+    "field_of_study": "Social Psychology"
+  },
+  {
+    "cip_code": "42.2708",
+    "field_of_study": "Psychometrics and Quantitative Psychology"
+  },
+  {
+    "cip_code": "42.2709",
+    "field_of_study": "Psychopharmacology"
+  },
+  {
+    "cip_code": "42.2799",
+    "field_of_study": "Research and Experimental Psychology, Other"
+  },
+  {
+    "cip_code": "43.0403",
+    "field_of_study": "Cyber/Computer Forensics and Counterterrorism"
+  },
+  {
+    "cip_code": "43.0406",
+    "field_of_study": "Forensic Science and Technology"
+  },
+  {
+    "cip_code": "45.0301",
+    "field_of_study": "Archeology"
+  },
+  {
+    "cip_code": "45.0603",
+    "field_of_study": "Econometrics and Quantitative Economics"
+  },
+  {
+    "cip_code": "45.0702",
+    "field_of_study": "Geographic Information Science and Cartography"
+  },
+  {
+    "cip_code": "49.0101",
+    "field_of_study": "Aeronautics/Aviation/Aerospace Science and Technology, General"
+  },
+  {
+    "cip_code": "51.1002",
+    "field_of_study": "Cytotechnology/Cytotechnologist"
+  },
+  {
+    "cip_code": "51.1005",
+    "field_of_study": "Clinical Laboratory Science/Medical Technology/Technologist"
+  },
+  {
+    "cip_code": "51.1401",
+    "field_of_study": "Medical Science/Scientist"
+  },
+  {
+    "cip_code": "51.2003",
+    "field_of_study": "Pharmaceutics and Drug Design"
+  },
+  {
+    "cip_code": "51.2004",
+    "field_of_study": "Medicinal and Pharmaceutical Chemistry"
+  },
+  {
+    "cip_code": "51.2005",
+    "field_of_study": "Natural Products Chemistry and Pharmacognosy"
+  },
+  {
+    "cip_code": "51.2006",
+    "field_of_study": "Clinical and Industrial Drug Development"
+  },
+  {
+    "cip_code": "51.2007",
+    "field_of_study": "Pharmacoeconomics/Pharmaceutical Economics"
+  },
+  {
+    "cip_code": "51.2009",
+    "field_of_study": "Industrial and Physical Pharmacy and Cosmetic Sciences"
+  },
+  {
+    "cip_code": "51.2010",
+    "field_of_study": "Pharmaceutical Sciences"
+  },
+  {
+    "cip_code": "51.2202",
+    "field_of_study": "Environmental Health"
+  },
+  {
+    "cip_code": "51.2205",
+    "field_of_study": "Health/Medical Physics"
+  },
+  {
+    "cip_code": "51.2706",
+    "field_of_study": "Medical Informatics"
+  },
+  {
+    "cip_code": "52.1301",
+    "field_of_study": "Management Science"
+  },
+  {
+    "cip_code": "52.1302",
+    "field_of_study": "Business Statistics"
+  },
+  {
+    "cip_code": "52.1304",
+    "field_of_study": "Actuarial Science"
+  },
+  {
+    "cip_code": "52.1399",
+    "field_of_study": "Management Sciences and Quantitative Methods, Other"
+  }
+]

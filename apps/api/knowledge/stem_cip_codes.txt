@@ -1,0 +1,1716 @@
+DHS STEM Designated Degree Program  List 
+
+The  U.S. Department  of Homeland  Security  (DHS)  STEM  Designated  Degree  Program  List  is  a complete  list  of 
+fields  of study  that  DHS considers  to be science,  technology,  engineering  or mathematics  (STEM)  fields  of 
+study  for purposes  of  the 24-month  STEM  optional  practical  training  extension  described  at 8 CFR 214.2(f). 
+Under  8 CFR 214.2(f)(10)(ii)(C)(2),  a STEM field  of study  is one  “included  in  the  Department  of  Education’s 
+Classification  of Instructional  Programs  taxonomy  within  the two-digit  series  containing  engineering,  biological 
+sciences,  mathematics,  and physical  sciences,  or a related  field.  In  general,  related  fields  will  include  fields 
+involving  research,  innovation,  or development  of  new technologies  using  engineering,  mathematics,  computer 
+science,  or natural  sciences  (including  physical,  biological,  and  agricultural  sciences).”   
+
+Accordingly,  this  list  designates  the  following  four  primary  CIP series  at the  2-digit  CIP code level: 
+Engineering  (14), Biological  and Biomedical  Sciences  (26), Mathematics  and Statistics  (27) and  Physical 
+Sciences  (40). Any  new  additions  to those  areas will  automatically  be included  on this  STEM  Designated 
+Degree  Program  List.   
+
+This  list  also  includes  CIPs from  the  following  18 related  CIP series  at the 6-digit  CIP code level:  Agriculture, 
+Agriculture  Operations  and Related  Sciences  (01); Natural  Resources  Conservation  (03); Architecture  and 
+Related  Services  (04); Communication,  Journalism  and Related  Programs  (09); Communications 
+Technologies/Technicians  and Support  Services  (10); Computer  and Information  Sciences  and Support  Services 
+(11); Education  (13); Engineering  Technologies  and Engineering-Related  Fields  (15); Military  Science, 
+Leadership  and Operational  Art (28); Military  Technologies  and Applied  Sciences  (29); Multi/Interdisciplinary 
+Studies  (30); Science  Technologies/Technicians  (41); Psychology  (42); Homeland  Security,  Law Enforcement, 
+Firefighting  and  Related  Protective  Services  (43); Social  Sciences  (45); Transportation  and Materials  Moving 
+(49); Health  Professions  and Related  Programs  (51); and Business,  Management,  Marketing  and  Related 
+Support  Services  (52). 
+
+CIP  Code 
+Two-Digit 
+Series 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+
+2020 CIP 
+Code 
+
+01.0308 
+01.0901 
+01.0902 
+01.0903 
+01.0904 
+01.0905 
+01.0906 
+01.0907 
+01.0999 
+01.1001 
+01.1002 
+01.1099 
+01.1101 
+01.1102 
+
+CIP  Code Title 
+
+Agroecology  and Sustainable  Agriculture. 
+Animal  Sciences,  General. 
+Agricultural  Animal  Breeding. 
+Animal  Health. 
+Animal  Nutrition. 
+Dairy  Science. 
+Livestock  Management. 
+Poultry  Science. 
+Animal  Sciences,  Other. 
+Food Science. 
+Food Technology  and Processing. 
+Food Science  and Technology,  Other. 
+Plant  Sciences,  General. 
+Agronomy  and Crop Science. 
+
+1 
+
+ 
+ 
+ 
+01 
+01 
+
+01 
+
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+01 
+
+01 
+03 
+03 
+03 
+03 
+03 
+03 
+03 
+03 
+03 
+04 
+
+09 
+
+10 
+11 
+
+11 
+11 
+11 
+11 
+11 
+
+11 
+11 
+11 
+11 
+11 
+11 
+11 
+11 
+
+01.1103 
+01.1104 
+
+01.1105 
+
+01.1106 
+01.1199 
+01.1201 
+01.1202 
+01.1203 
+01.1299 
+01.8105 
+01.8106 
+01.8107 
+01.8108 
+01.8109 
+01.8110 
+
+01.8111 
+03.0101 
+03.0103 
+03.0104 
+03.0199 
+03.0205 
+03.0502 
+03.0508 
+03.0509 
+03.0601 
+04.0902 
+
+09.0702 
+
+10.0304 
+11.0101 
+
+11.0102 
+11.0103 
+11.0104 
+11.0199 
+11.0201 
+
+11.0202 
+11.0203 
+11.0299 
+11.0301 
+11.0401 
+11.0501 
+11.0701 
+11.0801 
+
+Horticultural  Science. 
+Agricultural  and Horticultural  Plant  Breeding. 
+
+Plant  Protection  and Integrated  Pest Management. 
+
+Range  Science  and Management. 
+Plant  Sciences,  Other. 
+Soil  Science  and Agronomy,  General. 
+Soil  Chemistry  and Physics. 
+Soil  Microbiology. 
+Soil  Sciences,  Other. 
+Veterinary  Anatomy.  Moved from 51.2502. 
+Veterinary  Infectious  Diseases.  Moved from 51.2511. 
+Veterinary  Microbiology  and  Immunobiology.  Moved from 51.2504. 
+Veterinary  Pathology  and Pathobiology.  Moved from 51.2505. 
+Veterinary  Physiology.  Moved from 51.2503. 
+Veterinary  Preventive  Medicine,  Epidemiology,  and Public  Health.  Moved 
+from 51.2510. 
+Veterinary  Toxicology  and Pharmacology.  Moved from 51.2506. 
+Natural  Resources/Conservation,  General. 
+Environmental  Studies. 
+Environmental  Science. 
+Natural  Resources  Conservation  and Research,  Other. 
+Water, Wetlands,  and Marine  Resources  Management. 
+Forest Sciences  and Biology. 
+Urban  Forestry. 
+Wood Science  and Wood Products/Pulp  and Paper Technology/Technician. 
+Wildlife,  Fish  and Wildlands  Science  and Management. 
+Architectural  and  Building  Sciences/Technology. 
+
+Digital  Communication  and Media/Multimedia. 
+
+Animation,  Interactive  Technology,  Video  Graphics,  and Special  Effects. 
+Computer  and Information  Sciences,  General. 
+
+Artificial  Intelligence. 
+Information  Technology. 
+Informatics. 
+Computer  and Information  Sciences,  Other. 
+Computer  Programming/Programmer,  General. 
+
+Computer  Programming,  Specific  Applications. 
+Computer  Programming,  Vendor/Product  Certification. 
+Computer  Programming,  Other. 
+Data Processing  and Data Processing  Technology/  Technician. 
+Information  Science/Studies. 
+Computer  Systems  Analysis/Analyst. 
+Computer  Science. 
+Web Page, Digital/Multimedia  and Information  Resources  Design. 
+
+2 
+
+ 
+11 
+
+11 
+11 
+11 
+
+11 
+
+11 
+
+11 
+
+11 
+
+11 
+11 
+11 
+11 
+
+13 
+13 
+13 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+
+11.0802 
+
+11.0803 
+11.0804 
+11.0899 
+
+11.0901 
+
+11.1001 
+
+11.1002 
+
+11.1003 
+
+11.1004 
+11.1005 
+11.1006 
+11.1099 
+
+13.0501 
+13.0601 
+13.0603 
+14.0000 
+14.0100 
+14.0101 
+14.0102 
+14.0103 
+14.0200 
+14.0201 
+
+14.0202 
+14.0299 
+14.0300 
+14.0301 
+14.0400 
+14.0401 
+14.0500 
+14.0501 
+14.0600 
+14.0601 
+14.0700 
+14.0701 
+14.0702 
+14.0799 
+14.0800 
+14.0801 
+14.0802 
+14.0803 
+14.0804 
+14.0805 
+
+Data Modeling/Warehousing  and Database  Administration. 
+
+Computer  Graphics. 
+Modeling,  Virtual  Environments  and  Simulation. 
+Computer  Software  and Media  Applications,  Other. 
+
+Computer  Systems  Networking  and Telecommunications. 
+
+Network and System  Administration/Administrator. 
+
+System,  Networking,  and LAN/WAN Management/Manager. 
+
+Computer  and Information  Systems  Security/Auditing/Information  Assurance. 
+
+Web/Multimedia  Management  and Webmaster. 
+Information  Technology  Project Management. 
+Computer  Support  Specialist. 
+Computer/Information  Technology  Services  Administration  and Management, 
+Other. 
+Educational/Instructional  Technology. 
+Educational  Evaluation  and Research. 
+Educational  Statistics  and Research  Methods. 
+ENGINEERING. 
+Engineering,  General. 
+Engineering,  General. 
+Pre-Engineering. 
+Applied  Engineering.  New 
+Aerospace,  Aeronautical,  and Astronautical/Space  Engineering. 
+Aerospace,  Aeronautical,  and Astronautical/Space  Engineering,  General. 
+
+Astronautical  Engineering.  New 
+Aerospace,  Aeronautical,  and Astronautical/Space  Engineering,  Other.  New 
+Agricultural  Engineering. 
+Agricultural  Engineering. 
+Architectural  Engineering. 
+Architectural  Engineering. 
+Biomedical/Medical  Engineering. 
+Bioengineering  and Biomedical  Engineering. 
+Ceramic  Sciences  and Engineering. 
+Ceramic  Sciences  and Engineering. 
+Chemical  Engineering. 
+Chemical  Engineering. 
+Chemical  and Biomolecular  Engineering. 
+Chemical  Engineering,  Other. 
+Civil  Engineering. 
+Civil  Engineering,  General. 
+Geotechnical  and  Geoenvironmental  Engineering. 
+Structural  Engineering. 
+Transportation  and Highway  Engineering. 
+Water Resources  Engineering. 
+
+3 
+
+ 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+
+14.0899 
+14.0900 
+14.0901 
+14.0902 
+14.0903 
+14.0999 
+14.1000 
+14.1001 
+14.1003 
+14.1004 
+14.1099 
+14.1100 
+14.1101 
+14.1200 
+14.1201 
+14.1300 
+14.1301 
+14.1400 
+14.1401 
+14.1800 
+14.1801 
+14.1900 
+14.1901 
+14.2000 
+14.2001 
+14.2100 
+14.2101 
+14.2200 
+14.2201 
+14.2300 
+14.2301 
+14.2400 
+14.2401 
+14.2500 
+14.2501 
+14.2700 
+14.2701 
+14.2800 
+14.2801 
+14.3200 
+14.3201 
+14.3300 
+14.3301 
+14.3400 
+
+Civil  Engineering,  Other. 
+Computer  Engineering. 
+Computer  Engineering,  General. 
+Computer  Hardware  Engineering. 
+Computer  Software  Engineering. 
+Computer  Engineering,  Other. 
+Electrical,  Electronics,  and Communications  Engineering. 
+Electrical  and Electronics  Engineering. 
+Laser  and Optical  Engineering. 
+Telecommunications  Engineering. 
+Electrical,  Electronics,  and Communications  Engineering,  Other. 
+Engineering  Mechanics. 
+Engineering  Mechanics. 
+Engineering  Physics. 
+Engineering  Physics/Applied  Physics. 
+Engineering  Science. 
+Engineering  Science. 
+Environmental/Environmental  Health  Engineering. 
+Environmental/Environmental  Health  Engineering. 
+Materials  Engineering. 
+Materials  Engineering. 
+Mechanical  Engineering. 
+Mechanical  Engineering. 
+Metallurgical  Engineering. 
+Metallurgical  Engineering. 
+Mining  and Mineral  Engineering. 
+Mining  and Mineral  Engineering. 
+Naval  Architecture  and Marine  Engineering. 
+Naval  Architecture  and Marine  Engineering. 
+Nuclear  Engineering. 
+Nuclear  Engineering. 
+Ocean Engineering. 
+Ocean Engineering. 
+Petroleum  Engineering. 
+Petroleum  Engineering. 
+Systems  Engineering. 
+Systems  Engineering. 
+Textile  Sciences  and Engineering. 
+Textile  Sciences  and Engineering. 
+Polymer/Plastics  Engineering. 
+Polymer/Plastics  Engineering. 
+Construction  Engineering. 
+Construction  Engineering. 
+Forest Engineering. 
+
+4 
+
+ 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+14 
+15 
+15 
+15 
+15 
+
+15 
+15 
+15 
+
+15 
+15 
+15 
+15 
+15 
+
+14.3401 
+14.3500 
+14.3501 
+14.3600 
+14.3601 
+14.3700 
+14.3701 
+14.3800 
+14.3801 
+14.3900 
+14.3901 
+14.4000 
+14.4001 
+14.4100 
+14.4101 
+14.4200 
+14.4201 
+14.4300 
+14.4301 
+14.4400 
+14.4401 
+14.4500 
+14.4501 
+14.4700 
+14.4701 
+14.4800 
+14.4801 
+14.4802 
+14.4899 
+14.9900 
+14.9999 
+15.0000 
+15.0101 
+15.0201 
+15.0303 
+
+15.0304 
+15.0305 
+15.0306 
+
+15.0399 
+15.0401 
+15.0403 
+15.0404 
+15.0405 
+
+Forest Engineering. 
+Industrial  Engineering. 
+Industrial  Engineering. 
+Manufacturing  Engineering. 
+Manufacturing  Engineering. 
+Operations  Research. 
+Operations  Research. 
+Surveying  Engineering. 
+Surveying  Engineering. 
+Geological/Geophysical  Engineering. 
+Geological/Geophysical  Engineering. 
+Paper Science  and Engineering. 
+Paper Science  and Engineering. 
+Electromechanical  Engineering. 
+Electromechanical  Engineering. 
+Mechatronics,  Robotics,  and Automation  Engineering. 
+Mechatronics,  Robotics,  and Automation  Engineering. 
+Biochemical  Engineering. 
+Biochemical  Engineering. 
+Engineering  Chemistry. 
+Engineering  Chemistry. 
+Biological/Biosystems  Engineering. 
+Biological/Biosystems  Engineering. 
+Electrical  and Computer  Engineering.  New 
+Electrical  and Computer  Engineering.  New 
+Energy  Systems  Engineering.  New 
+Energy  Systems  Engineering,  General.  New 
+Power Plant  Engineering.  New 
+Energy  Systems  Engineering,  Other. New 
+Engineering,  Other. 
+Engineering,  Other. 
+Engineering  Technologies/Technicians,  General. 
+Architectural  Engineering  Technologies/Technicians. 
+Civil  Engineering  Technologies/Technicians. 
+Electrical,  Electronic,  and Communications  Engineering 
+Technology/Technician. 
+Laser  and Optical  Technology/Technician. 
+Telecommunications  Technology/Technician. 
+Integrated  Circuit  Design  Technology/Technician. 
+
+Electrical/Electronic  Engineering  Technologies/Technicians,  Other. 
+Biomedical  Technology/Technician. 
+Electromechanical/Electromechanical  Engineering  Technology/Technician. 
+Instrumentation  Technology/Technician. 
+Robotics  Technology/Technician. 
+
+5 
+
+ 
+15 
+15 
+15 
+
+15 
+
+15 
+15 
+
+15 
+
+15 
+
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+
+15.0406 
+15.0499 
+15.0501 
+
+15.0506 
+
+15.0507 
+15.0508 
+
+15.0599 
+
+15.0607 
+
+15.0611 
+15.0612 
+15.0613 
+15.0614 
+15.0615 
+15.0616 
+15.0699 
+15.0701 
+15.0702 
+15.0703 
+15.0704 
+15.0799 
+15.0801 
+15.0803 
+15.0805 
+
+15.0899 
+15.0901 
+15.0903 
+15.0999 
+15.1001 
+15.1102 
+15.1103 
+15.1199 
+15.1201 
+15.1202 
+15.1203 
+15.1204 
+15.1299 
+15.1301 
+15.1302 
+15.1303 
+15.1304 
+15.1305 
+
+Automation  Engineer  Technology/Technician. 
+Electromechanical  Technologies/Technicians,  Other. 
+Heating,  Ventilation,  Air  Conditioning  and Refrigeration  Engineering 
+Technology/Technician. 
+Water Quality  and Wastewater  Treatment  Management  and Recycling 
+Technology/Technician. 
+Environmental/Environmental  Engineering  Technology/Technician. 
+Hazardous  Materials  Management  and  Waste Technology/Technician. 
+
+Environmental  Control  Technologies/Technicians,  Other. 
+
+Plastics  and Polymer  Engineering  Technology/Technician. 
+
+Metallurgical  Technology/Technician. 
+Industrial  Technology/Technician. 
+Manufacturing  Engineering  Technology/Technician. 
+Welding  Engineering  Technology/Technician. 
+Chemical  Engineering  Technology/Technician. 
+Semiconductor  Manufacturing  Technology/Technician. 
+Industrial  Production  Technologies/Technicians,  Other. 
+Occupational  Safety  and Health  Technology/Technician. 
+Quality  Control  Technology/Technician. 
+Industrial  Safety  Technology/Technician. 
+Hazardous  Materials  Information  Systems  Technology/Technician. 
+Quality  Control  and Safety  Technologies/Technicians,  Other. 
+Aeronautical/Aerospace  Engineering  Technology/Technician. 
+Automotive  Engineering  Technology/Technician. 
+Mechanical/Mechanical  Engineering  Technology/Technician. 
+
+Mechanical  Engineering  Related  Technologies/Technicians,  Other. 
+Mining  Technology/Technician. 
+Petroleum  Technology/Technician. 
+Mining  and Petroleum  Technologies/Technicians,  Other. 
+Construction  Engineering  Technology/Technician. 
+Surveying  Technology/Surveying. 
+Hydraulics  and Fluid  Power Technology/Technician. 
+Engineering-Related  Technologies/Technicians,  Other. 
+Computer  Engineering  Technology/Technician. 
+Computer/Computer  Systems  Technology/Technician. 
+Computer  Hardware  Technology/Technician. 
+Computer  Software  Technology/Technician. 
+Computer  Engineering  Technologies/Technicians,  Other. 
+Drafting  and Design  Technology/Technician,  General. 
+CAD/CADD  Drafting  and/or  Design  Technology/Technician. 
+Architectural  Drafting  and Architectural  CAD/CADD. 
+Civil  Drafting  and Civil  Engineering  CAD/CADD. 
+Electrical/Electronics  Drafting  and Electrical/Electronics  CAD/CADD. 
+
+6 
+
+ 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+15 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+
+15.1306 
+15.1399 
+15.1401 
+15.1501 
+15.1502 
+15.1503 
+15.1599 
+15.1601 
+15.1701 
+15.1703 
+15.9999 
+26.0000 
+26.0100 
+26.0101 
+26.0102 
+26.0200 
+26.0202 
+26.0203 
+26.0204 
+26.0205 
+26.0206 
+26.0207 
+26.0208 
+26.0209 
+26.0210 
+26.0299 
+26.0300 
+26.0301 
+26.0305 
+26.0307 
+26.0308 
+26.0399 
+26.0400 
+26.0401 
+26.0403 
+26.0404 
+26.0406 
+26.0407 
+26.0499 
+26.0500 
+26.0502 
+26.0503 
+26.0504 
+26.0505 
+
+Mechanical  Drafting  and Mechanical  Drafting  CAD/CADD. 
+Drafting/Design  Engineering  Technologies/Technicians,  Other. 
+Nuclear  Engineering  Technology/Technician. 
+Engineering/Industrial  Management. 
+Engineering  Design. 
+Packaging  Science. 
+Engineering-Related  Fields,  Other. 
+Nanotechnology. 
+Energy  Systems  Technology/Technician.  Moved from 15.0503. 
+Solar  Energy  Technology/Technician.  Moved from 15.0505. 
+Engineering/Engineering-Related  Technologies/Technicians,  Other. 
+BIOLOGICAL  AND BIOMEDICAL  SCIENCES. 
+Biology,  General. 
+Biology/Biological  Sciences,  General. 
+Biomedical  Sciences,  General. 
+Biochemistry,  Biophysics  and  Molecular  Biology. 
+Biochemistry. 
+Biophysics. 
+Molecular  Biology. 
+Molecular  Biochemistry. 
+Molecular  Biophysics. 
+Structural  Biology. 
+Photobiology. 
+Radiation  Biology/Radiobiology. 
+Biochemistry  and Molecular  Biology. 
+Biochemistry,  Biophysics  and  Molecular  Biology,  Other. 
+Botany/Plant  Biology. 
+Botany/Plant  Biology. 
+Plant  Pathology/Phytopathology. 
+Plant  Physiology. 
+Plant  Molecular  Biology. 
+Botany/Plant  Biology,  Other. 
+Cell/Cellular  Biology  and Anatomical  Sciences. 
+Cell/Cellular  Biology  and Histology. 
+Anatomy. 
+Developmental  Biology  and Embryology. 
+Cell/Cellular  and Molecular  Biology. 
+Cell  Biology  and Anatomy. 
+Cell/Cellular  Biology  and Anatomical  Sciences,  Other. 
+Microbiological  Sciences  and Immunology. 
+Microbiology,  General. 
+Medical  Microbiology  and  Bacteriology. 
+Virology. 
+Parasitology. 
+
+7 
+
+ 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+
+26.0506 
+26.0507 
+26.0508 
+26.0509 
+26.0599 
+26.0700 
+26.0701 
+26.0702 
+26.0707 
+26.0708 
+26.0709 
+26.0799 
+26.0800 
+26.0801 
+26.0802 
+26.0803 
+26.0804 
+26.0805 
+26.0806 
+26.0807 
+26.0899 
+26.0900 
+26.0901 
+26.0902 
+26.0903 
+26.0904 
+26.0905 
+26.0907 
+26.0908 
+26.0909 
+26.0910 
+26.0911 
+26.0912 
+26.0913 
+26.0999 
+26.1000 
+26.1001 
+26.1002 
+26.1003 
+26.1004 
+26.1005 
+26.1006 
+26.1007 
+26.1099 
+
+Mycology. 
+Immunology. 
+Microbiology  and Immunology. 
+Infectious  Disease  and Global  Health.  New 
+Microbiological  Sciences  and Immunology,  Other. 
+Zoology/Animal  Biology. 
+Zoology/Animal  Biology. 
+Entomology. 
+Animal  Physiology. 
+Animal  Behavior  and Ethology. 
+Wildlife  Biology. 
+Zoology/Animal  Biology,  Other. 
+Genetics. 
+Genetics,  General. 
+Molecular  Genetics. 
+Microbial  and Eukaryotic  Genetics. 
+Animal  Genetics. 
+Plant  Genetics. 
+Human/Medical  Genetics. 
+Genome  Sciences/Genomics. 
+Genetics,  Other. 
+Physiology,  Pathology  and Related  Sciences. 
+Physiology,  General. 
+Molecular  Physiology. 
+Cell  Physiology. 
+Endocrinology. 
+Reproductive  Biology. 
+Cardiovascular  Science. 
+Exercise  Physiology  and Kinesiology. 
+Vision  Science/Physiological  Optics. 
+Pathology/Experimental  Pathology. 
+Oncology  and Cancer  Biology. 
+Aerospace  Physiology  and Medicine. 
+Biomechanics.  New 
+Physiology,  Pathology,  and Related  Sciences,  Other. 
+Pharmacology  and  Toxicology. 
+Pharmacology. 
+Molecular  Pharmacology. 
+Neuropharmacology. 
+Toxicology. 
+Molecular  Toxicology. 
+Environmental  Toxicology. 
+Pharmacology  and  Toxicology. 
+Pharmacology  and  Toxicology,  Other. 
+
+8 
+
+ 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+26 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+
+26.1100 
+26.1101 
+26.1102 
+26.1103 
+26.1104 
+26.1199 
+26.1200 
+26.1201 
+26.1300 
+26.1301 
+26.1302 
+26.1303 
+26.1304 
+26.1305 
+26.1306 
+26.1307 
+26.1308 
+26.1309 
+26.1310 
+26.1311 
+26.1399 
+
+26.1400 
+26.1401 
+26.1500 
+26.1501 
+26.1502 
+26.1503 
+26.1504 
+26.1599 
+26.9900 
+26.9999 
+27.0000 
+27.0100 
+27.0101 
+27.0102 
+27.0103 
+27.0104 
+27.0105 
+27.0199 
+27.0300 
+27.0301 
+27.0303 
+27.0304 
+27.0305 
+
+Biomathematics,  Bioinformatics,  and Computational  Biology. 
+Biometry/Biometrics. 
+Biostatistics. 
+Bioinformatics. 
+Computational  Biology. 
+Biomathematics,  Bioinformatics,  and Computational  Biology,  Other. 
+Biotechnology. 
+Biotechnology. 
+Ecology,  Evolution,  Systematics,  and Population  Biology. 
+Ecology. 
+Marine  Biology  and Biological  Oceanography. 
+Evolutionary  Biology. 
+Aquatic  Biology/Limnology. 
+Environmental  Biology. 
+Population  Biology. 
+Conservation  Biology. 
+Systematic  Biology/Biological  Systematics. 
+Epidemiology. 
+Ecology  and Evolutionary  Biology. 
+Epidemiology  and Biostatistics.  New 
+Ecology,  Evolution,  Systematics  and Population  Biology,  Other. 
+
+Molecular  Medicine. 
+Molecular  Medicine. 
+Neurobiology  and Neurosciences. 
+Neuroscience. 
+Neuroanatomy. 
+Neurobiology  and Anatomy. 
+Neurobiology  and Behavior. 
+Neurobiology  and Neurosciences,  Other. 
+Biological  and Biomedical  Sciences,  Other. 
+Biological  and Biomedical  Sciences,  Other. 
+MATHEMATICS  AND STATISTICS. 
+Mathematics. 
+Mathematics,  General. 
+Algebra  and Number  Theory. 
+Analysis  and Functional  Analysis. 
+Geometry/Geometric  Analysis. 
+Topology  and Foundations. 
+Mathematics,  Other. 
+Applied  Mathematics. 
+Applied  Mathematics,  General. 
+Computational  Mathematics. 
+Computational  and Applied  Mathematics. 
+Financial  Mathematics. 
+
+9 
+
+ 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+27 
+28 
+28 
+28 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+29 
+30 
+30 
+30 
+
+27.0306 
+27.0399 
+27.0500 
+27.0501 
+27.0502 
+27.0503 
+27.0599 
+27.0600 
+27.0601 
+27.9900 
+27.9999 
+28.0501 
+28.0502 
+28.0505 
+29.0201 
+29.0202 
+29.0203 
+29.0204 
+29.0205 
+29.0206 
+29.0207 
+29.0299 
+29.0301 
+29.0302 
+29.0303 
+29.0304 
+29.0305 
+29.0306 
+29.0307 
+29.0399 
+29.0401 
+29.0402 
+29.0403 
+29.0404 
+29.0405 
+29.0406 
+29.0407 
+29.0408 
+29.0409 
+29.0499 
+29.9999 
+30.0101 
+30.0601 
+30.0801 
+
+Mathematical  Biology. 
+Applied  Mathematics,  Other. 
+Statistics. 
+Statistics,  General. 
+Mathematical  Statistics  and Probability. 
+Mathematics  and Statistics.  New 
+Statistics,  Other. 
+Applied  Statistics.  New 
+Applied  Statistics,  General.  New 
+Mathematics  and Statistics,  Other. 
+Mathematics  and Statistics,  Other. 
+Air  Science/Airpower  Studies. 
+Air  and Space Operational  Art  and Science. 
+Naval  Science  and Operational  Studies. 
+Intelligence,  General. 
+Strategic  Intelligence. 
+Signal/Geospatial  Intelligence. 
+Command  & Control  (C3, C4I) Systems  and Operations. 
+Information  Operations/Joint  Information  Operations. 
+Information/Psychological  Warfare  and Military  Media  Relations. 
+Cyber/Electronic  Operations  and Warfare. 
+Intelligence,  Command  Control  and Information  Operations,  Other. 
+Combat  Systems  Engineering. 
+Directed  Energy  Systems. 
+Engineering  Acoustics. 
+Low-Observables  and Stealth  Technology. 
+Space Systems  Operations. 
+Operational  Oceanography. 
+Undersea  Warfare. 
+Military  Applied  Sciences,  Other. 
+Aerospace  Ground  Equipment  Technology. 
+Air  and Space Operations  Technology. 
+Aircraft  Armament  Systems  Technology. 
+Explosive  Ordinance/Bomb  Disposal. 
+Joint  Command/Task  Force (C3, C4I) Systems. 
+Military  Information  Systems  Technology. 
+Missile  and Space Systems  Technology. 
+Munitions  Systems/Ordinance  Technology. 
+Radar Communications  and Systems  Technology. 
+Military  Systems  and Maintenance  Technology,  Other. 
+Military  Technologies  and Applied  Sciences,  Other. 
+Biological  and Physical  Sciences. 
+Systems  Science  and Theory. 
+Mathematics  and Computer  Science. 
+
+10 
+
+ 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+30 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+
+30.1001 
+30.1701 
+30.1801 
+30.1901 
+30.2501 
+30.2701 
+30.3001 
+30.3101 
+30.3201 
+30.3301 
+40.0000 
+40.0100 
+40.0101 
+40.0200 
+40.0201 
+40.0202 
+40.0203 
+40.0299 
+40.0400 
+40.0401 
+40.0402 
+40.0403 
+40.0404 
+40.0499 
+40.0500 
+40.0501 
+40.0502 
+40.0503 
+40.0504 
+40.0506 
+40.0507 
+40.0508 
+40.0509 
+40.0510 
+40.0511 
+40.0512 
+40.0599 
+40.0600 
+40.0601 
+40.0602 
+40.0603 
+40.0604 
+40.0605 
+40.0606 
+
+Biopsychology. 
+Behavioral  Sciences. 
+Natural  Sciences. 
+Nutrition  Sciences. 
+Cognitive  Science,  General. 
+Human  Biology. 
+Computational  Science. 
+Human  Computer  Interaction. 
+Marine  Sciences. 
+Sustainability  Studies. 
+PHYSICAL  SCIENCES. 
+Physical  Sciences,  General. 
+Physical  Sciences,  General. 
+Astronomy  and Astrophysics. 
+Astronomy. 
+Astrophysics. 
+Planetary  Astronomy  and  Science. 
+Astronomy  and Astrophysics,  Other. 
+Atmospheric  Sciences  and Meteorology. 
+Atmospheric  Sciences  and Meteorology,  General. 
+Atmospheric  Chemistry  and  Climatology. 
+Atmospheric  Physics  and Dynamics. 
+Meteorology. 
+Atmospheric  Sciences  and Meteorology,  Other. 
+Chemistry. 
+Chemistry,  General. 
+Analytical  Chemistry. 
+Inorganic  Chemistry. 
+Organic  Chemistry. 
+Physical  Chemistry. 
+Polymer  Chemistry. 
+Chemical  Physics. 
+Environmental  Chemistry. 
+Forensic  Chemistry. 
+Theoretical  Chemistry. 
+Cheminformatics/Chemistry  Informatics.  New 
+Chemistry,  Other. 
+Geological  and Earth  Sciences/Geosciences. 
+Geology/Earth  Science,  General. 
+Geochemistry. 
+Geophysics  and Seismology. 
+Paleontology. 
+Hydrology  and Water  Resources  Science. 
+Geochemistry  and Petrology. 
+
+11 
+
+ 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+40 
+41 
+41 
+41 
+41 
+41 
+41 
+41 
+41 
+41 
+42 
+42 
+42 
+42 
+42 
+42 
+42 
+42 
+42 
+42 
+43 
+43 
+45 
+45 
+
+40.0607 
+40.0699 
+40.0800 
+40.0801 
+40.0802 
+40.0804 
+40.0805 
+40.0806 
+40.0807 
+40.0808 
+40.0809 
+40.0810 
+40.0899 
+40.1000 
+40.1001 
+40.1002 
+40.1099 
+40.1100 
+40.1101 
+40.9900 
+40.9999 
+41.0000 
+41.0101 
+41.0204 
+41.0205 
+41.0299 
+41.0301 
+41.0303 
+41.0399 
+41.9999 
+42.2701 
+42.2702 
+42.2703 
+42.2704 
+42.2705 
+42.2706 
+42.2707 
+42.2708 
+42.2709 
+42.2799 
+43.0403 
+43.0406 
+45.0301 
+45.0603 
+
+Oceanography,  Chemical  and Physical. 
+Geological  and Earth  Sciences/Geosciences,  Other. 
+Physics. 
+Physics,  General. 
+Atomic/Molecular  Physics. 
+Elementary  Particle  Physics. 
+Plasma  and High-Temperature  Physics. 
+Nuclear  Physics. 
+Optics/Optical  Sciences. 
+Condensed  Matter  and Materials  Physics. 
+Acoustics. 
+Theoretical  and Mathematical  Physics. 
+Physics,  Other. 
+Materials  Sciences. 
+Materials  Science. 
+Materials  Chemistry. 
+Materials  Sciences,  Other. 
+Physics  and Astronomy.  New 
+Physics  and Astronomy.  New 
+Physical  Sciences,  Other. 
+Physical  Sciences,  Other. 
+Science  Technologies/Technicians,  General. 
+Biology/Biotechnology  Technology/Technician. 
+Industrial  Radiologic  Technology/Technician. 
+Nuclear/Nuclear  Power Technology/Technician. 
+Nuclear  and Industrial  Radiologic  Technologies/Technicians,  Other. 
+Chemical  Technology/Technician. 
+Chemical  Process Technology. 
+Physical  Science  Technologies/Technicians,  Other. 
+Science  Technologies/Technicians,  Other. 
+Cognitive  Psychology  and Psycholinguistics. 
+Comparative  Psychology. 
+Developmental  and Child  Psychology. 
+Experimental  Psychology. 
+Personality  Psychology. 
+Behavioral  Neuroscience. 
+Social  Psychology. 
+Psychometrics  and Quantitative  Psychology. 
+Psychopharmacology. 
+Research  and Experimental  Psychology,  Other. 
+Cyber/Computer  Forensics  and Counterterrorism.  Moved from 43.0116 
+Forensic  Science  and Technology.  Moved from 43.0106 
+Archeology. 
+Econometrics  and Quantitative  Economics. 
+
+12 
+
+ 
+45 
+49 
+51 
+51 
+51 
+51 
+51 
+51 
+51 
+51 
+51 
+51 
+51 
+51 
+51 
+52 
+52 
+52 
+52 
+
+45.0702 
+49.0101 
+51.1002 
+51.1005 
+51.1401 
+51.2003 
+51.2004 
+51.2005 
+51.2006 
+51.2007 
+51.2009 
+51.2010 
+51.2202 
+51.2205 
+51.2706 
+52.1301 
+52.1302 
+52.1304 
+52.1399 
+
+Geographic  Information  Science  and Cartography. 
+Aeronautics/Aviation/Aerospace  Science  and Technology,  General. 
+Cytotechnology/Cytotechnologist. 
+Clinical  Laboratory  Science/Medical  Technology/Technologist. 
+Medical  Science/Scientist. 
+Pharmaceutics  and Drug  Design. 
+Medicinal  and Pharmaceutical  Chemistry. 
+Natural  Products  Chemistry  and Pharmacognosy. 
+Clinical  and Industrial  Drug  Development. 
+Pharmacoeconomics/Pharmaceutical  Economics. 
+Industrial  and Physical  Pharmacy  and Cosmetic  Sciences. 
+Pharmaceutical  Sciences. 
+Environmental  Health. 
+Health/Medical  Physics. 
+Medical  Informatics. 
+Management  Science. 
+Business  Statistics. 
+Actuarial  Science. 
+Management  Sciences  and Quantitative  Methods,  Other. 
+
+13 
+
+ 
+ 
+
