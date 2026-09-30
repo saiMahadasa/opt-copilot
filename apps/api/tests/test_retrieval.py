@@ -33,7 +33,7 @@ CHUNK_SUMMARY = {
 def client_base():
     import main
     from fastapi.testclient import TestClient
-    with patch.object(main, "_call_gemini", return_value="mocked reply"):
+    with patch.object(main, "_call_gemini_with_tools", return_value=("mocked reply", False)):
         yield TestClient(main.app)
 
 

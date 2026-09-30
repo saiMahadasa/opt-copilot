@@ -16,11 +16,11 @@ def test_cache_hit_skips_gemini(client_patched):
     import main
     call_count = {"n": 0}
 
-    def counting_gemini(prompt):
+    def counting_gemini(system_instruction, user_content):
         call_count["n"] += 1
-        return "reply"
+        return ("reply", False)
 
-    with patch.object(main, "_call_gemini", side_effect=counting_gemini):
+    with patch.object(main, "_call_gemini_with_tools", side_effect=counting_gemini):
         client_patched.post("/ask", json={"message": "cache test"})
         client_patched.post("/ask", json={"message": "cache test"})
 
@@ -31,11 +31,11 @@ def test_different_messages_both_call_gemini(client_patched):
     import main
     call_count = {"n": 0}
 
-    def counting_gemini(prompt):
+    def counting_gemini(system_instruction, user_content):
         call_count["n"] += 1
-        return "reply"
+        return ("reply", False)
 
-    with patch.object(main, "_call_gemini", side_effect=counting_gemini):
+    with patch.object(main, "_call_gemini_with_tools", side_effect=counting_gemini):
         client_patched.post("/ask", json={"message": "question one"})
         client_patched.post("/ask", json={"message": "question two"})
 
@@ -46,11 +46,11 @@ def test_cache_key_is_case_insensitive(client_patched):
     import main
     call_count = {"n": 0}
 
-    def counting_gemini(prompt):
+    def counting_gemini(system_instruction, user_content):
         call_count["n"] += 1
-        return "reply"
+        return ("reply", False)
 
-    with patch.object(main, "_call_gemini", side_effect=counting_gemini):
+    with patch.object(main, "_call_gemini_with_tools", side_effect=counting_gemini):
         client_patched.post("/ask", json={"message": "OPT rules"})
         client_patched.post("/ask", json={"message": "opt rules"})
 
@@ -89,11 +89,11 @@ def test_stage_differentiates_cache(client_patched):
     import main
     call_count = {"n": 0}
 
-    def counting_gemini(prompt):
+    def counting_gemini(system_instruction, user_content):
         call_count["n"] += 1
-        return "reply"
+        return ("reply", False)
 
-    with patch.object(main, "_call_gemini", side_effect=counting_gemini):
+    with patch.object(main, "_call_gemini_with_tools", side_effect=counting_gemini):
         client_patched.post("/ask", json={"message": "hello", "stage": "on-opt"})
         client_patched.post("/ask", json={"message": "hello", "stage": "on-stem-opt"})
         client_patched.post("/ask", json={"message": "hello", "stage": "on-opt"})

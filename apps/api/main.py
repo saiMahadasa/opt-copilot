@@ -27,6 +27,7 @@ app.add_middleware(
 # ── Config ────────────────────────────────────────────────────────────────────
 
 MIN_SIMILARITY = float(os.environ.get("MIN_SIMILARITY", "0.5"))
+GEMINI_MODEL   = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
 
 VALID_STAGES = frozenset({"f1-studying", "applied-opt", "on-opt", "on-stem-opt"})
 
@@ -67,6 +68,16 @@ UNGROUNDED_INSTRUCTION = (
     "the student to confirm with their DSO."
 )
 
+TOOL_INSTRUCTION = (
+    "If the student asks whether their major or degree qualifies for STEM OPT, "
+    "use the CIP lookup tools rather than answering from general knowledge. "
+    "A CIP code lookup is exact. A keyword search over a major name is not, "
+    "since DHS eligibility depends on the specific CIP code on the student's "
+    "I-20, not the major's plain-English name, so always tell the student to "
+    "confirm their exact CIP code with their DSO when you used a keyword match "
+    "rather than an exact code."
+)
+
 OFFICIAL_AUTHORITIES = frozenset({"regulation", "policy", "guidance"})
 
 # ── Models ────────────────────────────────────────────────────────────────────
@@ -105,6 +116,15 @@ class AskResponse(BaseModel):
     grounded: bool
     summary_only: bool = False
 
+
+# Source attributed when a CIP tool call was made
+_STEM_SOURCE = ChunkSource(
+    title="DHS STEM Designated Degree Program List",
+    url="https://www.ice.gov/sites/default/files/documents/stem-list.pdf",
+    section="",
+    retrieved_at="2024-07-22",
+    score=1.0,
+)
 
 # ── Rate limiting ─────────────────────────────────────────────────────────────
 
@@ -199,7 +219,7 @@ def retrieve_context(message: str) -> list[dict[str, Any]]:
                            -c["similarity"])
         )
         logger.info(
-            "retrieval: %d chunk(s) above %.2f — %s",
+            "retrieval: %d chunk(s) above %.2f -- %s",
             len(chunks),
             MIN_SIMILARITY,
             ", ".join(
@@ -214,21 +234,126 @@ def retrieve_context(message: str) -> list[dict[str, Any]]:
         return []
 
 
-# ── Gemini call with retry ────────────────────────────────────────────────────
+# ── Gemini call with tools ────────────────────────────────────────────────────
 
 
-def _call_gemini(prompt: str) -> str:
-    from llm_providers import get_completion
+def _do_call_with_tools(system_instruction: str, user_content: str) -> tuple[str, bool]:
+    """Single attempt: call Gemini with STEM CIP tools. Returns (reply, tool_was_called)."""
+    from google import genai
+    from google.genai import types
+    from tools import check_stem_eligibility, search_stem_by_keyword
 
+    if not os.environ.get("GEMINI_API_KEY"):
+        raise EnvironmentError("GEMINI_API_KEY is not set")
+
+    client = genai.Client()
+
+    stem_tool = types.Tool(function_declarations=[
+        types.FunctionDeclaration(
+            name="check_stem_eligibility",
+            description=(
+                "Check whether a specific CIP code is on the DHS STEM Designated "
+                "Degree Program list. Use this when the student provides their exact CIP code."
+            ),
+            parameters=types.Schema(
+                type=types.Type.OBJECT,
+                properties={
+                    "cip_code": types.Schema(
+                        type=types.Type.STRING,
+                        description="Six-digit CIP code in XX.XXXX format, e.g. '14.0901'"
+                    )
+                },
+                required=["cip_code"]
+            )
+        ),
+        types.FunctionDeclaration(
+            name="search_stem_by_keyword",
+            description=(
+                "Search the DHS STEM Designated Degree Program list by major name or keyword. "
+                "Use when the student mentions their major name but not their CIP code. "
+                "Results are not definitive -- DHS eligibility depends on the exact CIP code "
+                "on the student's I-20."
+            ),
+            parameters=types.Schema(
+                type=types.Type.OBJECT,
+                properties={
+                    "keyword": types.Schema(
+                        type=types.Type.STRING,
+                        description="Major or degree program name to search for"
+                    )
+                },
+                required=["keyword"]
+            )
+        ),
+    ])
+
+    config = types.GenerateContentConfig(
+        system_instruction=system_instruction,
+        tools=[stem_tool],
+    )
+    contents = [types.Content(role="user", parts=[types.Part(text=user_content)])]
+
+    response = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=contents,
+        config=config,
+    )
+
+    # Collect any function calls from the response
+    fn_calls = [
+        part.function_call
+        for part in (response.candidates[0].content.parts if response.candidates else [])
+        if part.function_call
+    ]
+
+    if not fn_calls:
+        return response.text, False
+
+    # Append model turn with function call(s) to conversation
+    contents.append(response.candidates[0].content)
+
+    tool_map = {
+        "check_stem_eligibility": check_stem_eligibility,
+        "search_stem_by_keyword": search_stem_by_keyword,
+    }
+
+    for fn_call in fn_calls:
+        fn = tool_map.get(fn_call.name)
+        if fn is None:
+            continue
+        fn_result = fn(**dict(fn_call.args))
+        if not isinstance(fn_result, dict):
+            fn_result = {"result": fn_result}
+
+        contents.append(types.Content(
+            role="user",
+            parts=[types.Part(
+                function_response=types.FunctionResponse(
+                    name=fn_call.name,
+                    response=fn_result,
+                )
+            )],
+        ))
+
+    final = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=contents,
+        config=config,
+    )
+    return final.text, True
+
+
+def _call_gemini_with_tools(system_instruction: str, user_content: str) -> tuple[str, bool]:
+    """Call Gemini with CIP tools. Returns (reply, tool_was_called). Retries once on 429."""
     try:
-        return get_completion(prompt, provider="gemini")
+        return _do_call_with_tools(system_instruction, user_content)
     except Exception as exc:
         err = str(exc)
         if "429" in err or "RESOURCE_EXHAUSTED" in err or "quota" in err.lower():
             logger.warning("Gemini rate limit, retrying after 3s")
             time.sleep(3)
             try:
-                return get_completion(prompt, provider="gemini")
+                return _do_call_with_tools(system_instruction, user_content)
             except Exception:
                 raise HTTPException(
                     status_code=503,
@@ -285,20 +410,23 @@ def ask(request: Request, body: AskRequest):
         context_section = ""
         grounding_line  = f"\n{UNGROUNDED_INSTRUCTION}"
 
-    prompt = (
-        f"{SYSTEM_PROMPT}{stage_line}{grounding_line}"
-        f"{context_section}"
-        f"\n\nStudent question: {body.message}"
+    system_instruction = (
+        f"{SYSTEM_PROMPT}{stage_line}{grounding_line}\n{TOOL_INSTRUCTION}"
+    )
+    user_content = (
+        f"{context_section}\n\nStudent question: {body.message}"
+        if context_section
+        else f"Student question: {body.message}"
     )
 
     try:
-        reply = _call_gemini(prompt)
+        reply, tool_was_called = _call_gemini_with_tools(system_instruction, user_content)
     except HTTPException:
         raise
     except EnvironmentError as exc:
         raise HTTPException(status_code=500, detail=str(exc))
     except Exception as exc:
-        logger.error("get_completion failed: %s", exc, exc_info=True)
+        logger.error("_call_gemini_with_tools failed: %s", exc, exc_info=True)
         raise HTTPException(
             status_code=500,
             detail="Couldn't reach the AI service, try again in a moment.",
@@ -314,6 +442,10 @@ def ask(request: Request, body: AskRequest):
         )
         for c in chunks
     ]
+    if tool_was_called:
+        sources.append(_STEM_SOURCE)
+        grounded = True  # official DHS source was consulted
+
     result = AskResponse(reply=reply, sources=sources, grounded=grounded, summary_only=summary_only)
     _cache_set(key, result)
     return result

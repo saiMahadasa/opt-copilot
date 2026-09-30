@@ -9,7 +9,7 @@ def client_patched():
     from fastapi.testclient import TestClient
 
     with patch.object(main, "retrieve_context", return_value=[]), \
-         patch.object(main, "_call_gemini", return_value="ok"):
+         patch.object(main, "_call_gemini_with_tools", return_value=("ok", False)):
         yield TestClient(main.app)
 
 
