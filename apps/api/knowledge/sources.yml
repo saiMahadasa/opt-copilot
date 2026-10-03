@@ -180,12 +180,110 @@ sources:
     notes: "HTTP 403. robots.txt Disallow: / for all bots. Requires manual snapshot."
     status: approved
 
+  # Additional eCFR sections — same renderer API works, status: approved
+
+  - id: ecfr_8cfr274a_12
+    title: "8 CFR 274a.12 — Classes of aliens authorized to accept employment"
+    url: "https://www.ecfr.gov/current/title-8/chapter-I/subchapter-B/part-274a/section-274a.12"
+    fetch_url: "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-8?chapter=I&subchapter=B&part=274a&section=274a.12"
+    agency: "DHS / USCIS"
+    type: ecfr
+    authority: regulation
+    topics:
+      - employment-authorization
+      - opt
+      - stem-opt
+      - cap-gap
+      - off-campus-employment
+    notes: >
+      Paragraph (b)(6) covers F-1 post-completion OPT employment authorization
+      directly. Paragraph (c)(3)(C) covers cap-gap employment authorization.
+      The renderer API returns the same section-as-HTML format as 214.2(f).
+    status: approved
+
+  - id: ecfr_8cfr248_1
+    title: "8 CFR 248.1 — Eligibility for change of nonimmigrant classification"
+    url: "https://www.ecfr.gov/current/title-8/chapter-I/subchapter-B/part-248/section-248.1"
+    fetch_url: "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-8?chapter=I&subchapter=B&part=248&section=248.1"
+    agency: "DHS / USCIS"
+    type: ecfr
+    authority: regulation
+    topics:
+      - f1-status
+      - change-of-status
+      - grace-period
+      - opt
+    notes: >
+      Covers general eligibility and restrictions for change of nonimmigrant
+      classification. Relevant when students ask about changing from F-1 to
+      another status (e.g., H-1B, O-1, B-2) or during the grace period.
+    status: approved
+
   # ── Proposed ──────────────────────────────────────────────────────────────
   # These are candidates for approval. fetch_sources.py ignores them.
   # All uscis.gov, studyinthestates.dhs.gov, and ice.gov URLs return 403
   # and have robots.txt Disallow: / — they require manual snapshots.
   # federalregister.gov allows bots but HTML pages redirect to
   # https://unblock.federalregister.gov/ (Cloudflare JS challenge).
+
+  - id: irs_f1_fica_exemption
+    title: "IRS — FICA and FUTA Tax Exemption for F-1 Students"
+    url: "https://www.irs.gov/individuals/international-taxpayers/foreign-student-liability-for-fica-and-futa-taxes"
+    agency: "IRS"
+    type: html
+    authority: guidance
+    topics:
+      - f1-status
+      - opt
+      - stem-opt
+      - taxes
+      - fica
+    notes: >
+      F-1 students are typically exempt from FICA (Social Security and Medicare)
+      taxes during their first 5 calendar years in the US as nonresident aliens.
+      Highly asked: 'Do I have to pay Social Security tax on OPT?'
+      IRS.gov accessibility needs verification — try fetch_sources.py first.
+    status: proposed
+
+  - id: irs_f1_tax_residency
+    title: "IRS — Substantial Presence Test for F-1 Nonresidents"
+    url: "https://www.irs.gov/individuals/international-taxpayers/substantial-presence-test"
+    agency: "IRS"
+    type: html
+    authority: guidance
+    topics:
+      - f1-status
+      - taxes
+      - nonresident-alien
+    notes: >
+      F-1 students are exempt from the Substantial Presence Test during their
+      first 5 calendar years. Critical for students filing taxes during OPT.
+      IRS.gov accessibility needs verification.
+    status: proposed
+
+  - id: fr_stem_2016_final_rule
+    title: "Federal Register — STEM OPT Final Rule (81 FR 13040, March 2016)"
+    url: "https://www.federalregister.gov/documents/2016/03/11/2016-04828/improving-and-expanding-training-opportunities-for-f-1-nonimmigrant-students-with-stem-degrees-and"
+    # govinfo.gov plain-text alternative (no Cloudflare):
+    # https://api.govinfo.gov/packages/FR-2016-03-11/granules/2016-04828/htm
+    agency: "DHS"
+    type: html
+    authority: regulation
+    topics:
+      - stem-opt
+      - employment-authorization
+      - i-983
+      - e-verify
+      - unemployment-limit
+    notes: >
+      The authoritative 2016 rulemaking that established current STEM OPT rules:
+      24-month extension, E-Verify requirement, I-983 training plan, 150-day
+      unemployment limit, reporting requirements. federalregister.gov returns 200
+      but the final URL is https://unblock.federalregister.gov/ (Cloudflare JS
+      challenge). govinfo.gov granule API may be accessible — try:
+      https://api.govinfo.gov/packages/FR-2016-03-11/granules/2016-04828/htm
+      with a GOVINFO_API_KEY. Requires manual snapshot until accessible.
+    status: proposed
 
   - id: uscis_cpt
     title: "USCIS — Curricular Practical Training (CPT)"
