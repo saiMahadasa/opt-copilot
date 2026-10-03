@@ -16,7 +16,7 @@ def test_cache_hit_skips_gemini(client_patched):
     import main
     call_count = {"n": 0}
 
-    def counting_gemini(system_instruction, user_content, history=None):
+    def counting_gemini(system_instruction, user_content, **kwargs):
         call_count["n"] += 1
         return ("reply", False)
 
@@ -31,7 +31,7 @@ def test_different_messages_both_call_gemini(client_patched):
     import main
     call_count = {"n": 0}
 
-    def counting_gemini(system_instruction, user_content, history=None):
+    def counting_gemini(system_instruction, user_content, **kwargs):
         call_count["n"] += 1
         return ("reply", False)
 
@@ -46,7 +46,7 @@ def test_cache_key_is_case_insensitive(client_patched):
     import main
     call_count = {"n": 0}
 
-    def counting_gemini(system_instruction, user_content, history=None):
+    def counting_gemini(system_instruction, user_content, **kwargs):
         call_count["n"] += 1
         return ("reply", False)
 
@@ -89,7 +89,7 @@ def test_stage_differentiates_cache(client_patched):
     import main
     call_count = {"n": 0}
 
-    def counting_gemini(system_instruction, user_content, history=None):
+    def counting_gemini(system_instruction, user_content, **kwargs):
         call_count["n"] += 1
         return ("reply", False)
 

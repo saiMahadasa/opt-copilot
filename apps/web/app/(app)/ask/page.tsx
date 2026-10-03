@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback, Suspense } from "react";
-import { Send, Trash2, BookOpen, AlertCircle } from "lucide-react";
+import { Send, Trash2, BookOpen, AlertCircle, Globe } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -71,6 +71,7 @@ type HistoryTurn = { role: "user" | "assistant"; content: string };
 async function fetchReply(
   message: string,
   history: HistoryTurn[],
+  useSearch: boolean,
 ): Promise<{ reply: string; sources: ChunkSource[]; grounded: boolean; summary_only: boolean }> {
   const stage = localStorage.getItem("visaStage");
   const res = await fetch(`${API_URL}/ask`, {
@@ -79,6 +80,7 @@ async function fetchReply(
     body: JSON.stringify({
       message,
       history,
+      use_search: useSearch,
       ...(stage && { stage }),
     }),
   });
@@ -268,6 +270,7 @@ function AskPageContent() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
+  const [useSearch, setUseSearch] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const prefillSentRef = useRef(false);
   // Track messages in a ref so sendMessage can read the current list without
@@ -314,7 +317,7 @@ function AskPageContent() {
       .map((m) => ({ role: m.role, content: m.text }));
 
     try {
-      const { reply, sources, grounded, summary_only } = await fetchReply(text, history);
+      const { reply, sources, grounded, summary_only } = await fetchReply(text, history, useSearch);
       setMessages((prev) => {
         const next = prev.map((m) =>
           m.id === placeholderId
@@ -379,37 +382,58 @@ function AskPageContent() {
     <div className="flex flex-col h-[calc(100dvh-4rem)]">
 
       {/* ── Toolbar ── */}
-      <div className="flex items-center justify-end px-4 pt-3 pb-1 gap-2">
-        {confirmClear ? (
-          <>
-            <span className="text-caption text-muted-foreground">Clear all messages?</span>
+      <div className="flex items-center justify-between px-4 pt-3 pb-1">
+        {/* Web search toggle */}
+        <button
+          onClick={() => setUseSearch((v) => !v)}
+          aria-pressed={useSearch}
+          title={useSearch
+            ? "Live web search on — Gemini can look up recent policy changes"
+            : "Live web search off — answers from knowledge base only"}
+          className={cn(
+            "flex items-center gap-1.5 text-caption px-2 py-1 rounded-lg transition-colors",
+            useSearch
+              ? "text-teal bg-teal/10 border border-teal/30"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+          )}
+        >
+          <Globe className="w-3.5 h-3.5" />
+          {useSearch ? "Live search on" : "Live search"}
+        </button>
+
+        {/* Clear chat */}
+        <div className="flex items-center gap-2">
+          {confirmClear ? (
+            <>
+              <span className="text-caption text-muted-foreground">Clear all messages?</span>
+              <button
+                onClick={() => {
+                  localStorage.removeItem(HISTORY_KEY);
+                  setMessages(INITIAL);
+                  setConfirmClear(false);
+                }}
+                className="text-caption font-semibold text-over hover:text-over/80 px-2 py-1"
+              >
+                Yes, clear
+              </button>
+              <button
+                onClick={() => setConfirmClear(false)}
+                className="text-caption text-muted-foreground hover:text-foreground px-2 py-1"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
             <button
-              onClick={() => {
-                localStorage.removeItem(HISTORY_KEY);
-                setMessages(INITIAL);
-                setConfirmClear(false);
-              }}
-              className="text-caption font-semibold text-over hover:text-over/80 px-2 py-1"
+              onClick={() => setConfirmClear(true)}
+              aria-label="Clear chat"
+              className="flex items-center gap-1.5 text-caption text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-lg hover:bg-muted"
             >
-              Yes, clear
+              <Trash2 className="w-3.5 h-3.5" />
+              Clear chat
             </button>
-            <button
-              onClick={() => setConfirmClear(false)}
-              className="text-caption text-muted-foreground hover:text-foreground px-2 py-1"
-            >
-              Cancel
-            </button>
-          </>
-        ) : (
-          <button
-            onClick={() => setConfirmClear(true)}
-            aria-label="Clear chat"
-            className="flex items-center gap-1.5 text-caption text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-lg hover:bg-muted"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-            Clear chat
-          </button>
-        )}
+          )}
+        </div>
       </div>
 
       {/* ── Message list ── */}

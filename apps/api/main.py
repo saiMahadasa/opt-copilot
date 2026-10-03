@@ -104,6 +104,7 @@ class AskRequest(BaseModel):
     message: str
     stage: str | None = None
     history: list[ConversationTurn] = []
+    use_search: bool = False
 
     @field_validator("message")
     @classmethod
@@ -259,6 +260,7 @@ def _do_call_with_tools(
     system_instruction: str,
     user_content: str,
     history: list | None = None,
+    use_search: bool = False,
 ) -> tuple[str, bool]:
     """Single attempt: call Gemini with advisory tools. Returns (reply, tool_was_called)."""
     from google import genai
@@ -383,9 +385,20 @@ def _do_call_with_tools(
         contents.append(types.Content(role=role, parts=[types.Part(text=turn.content)]))
     contents.append(types.Content(role="user", parts=[types.Part(text=user_content)]))
 
+    # Optionally include Gemini's native Google Search tool for live policy info.
+    # Search is handled internally by Gemini (no function_call round-trip needed);
+    # it adds grounding metadata to the response text automatically.
+    tools_list = [advisory_tool]
+    if use_search:
+        try:
+            search_tool = types.Tool(google_search=types.GoogleSearch())
+            tools_list.append(search_tool)
+        except (AttributeError, TypeError) as exc:
+            logger.warning("Google Search tool unavailable for this model/SDK: %s", exc)
+
     config = types.GenerateContentConfig(
         system_instruction=system_instruction,
-        tools=[advisory_tool],
+        tools=tools_list,
     )
 
     response = client.models.generate_content(
@@ -445,17 +458,22 @@ def _call_gemini_with_tools(
     system_instruction: str,
     user_content: str,
     history: list | None = None,
+    use_search: bool = False,
 ) -> tuple[str, bool]:
     """Call Gemini with advisory tools. Returns (reply, tool_was_called). Retries once on 429."""
     try:
-        return _do_call_with_tools(system_instruction, user_content, history=history)
+        return _do_call_with_tools(
+            system_instruction, user_content, history=history, use_search=use_search
+        )
     except Exception as exc:
         err = str(exc)
         if "429" in err or "RESOURCE_EXHAUSTED" in err or "quota" in err.lower():
             logger.warning("Gemini rate limit, retrying after 3s")
             time.sleep(3)
             try:
-                return _do_call_with_tools(system_instruction, user_content, history=history)
+                return _do_call_with_tools(
+                    system_instruction, user_content, history=history, use_search=use_search
+                )
             except Exception:
                 raise HTTPException(
                     status_code=503,
@@ -696,7 +714,9 @@ def ask(request: Request, body: AskRequest):
 
     try:
         reply, tool_was_called = _call_gemini_with_tools(
-            system_instruction, user_content, history=body.history or None
+            system_instruction, user_content,
+            history=body.history or None,
+            use_search=body.use_search,
         )
     except HTTPException:
         raise
