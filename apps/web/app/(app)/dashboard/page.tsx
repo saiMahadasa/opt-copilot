@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   CheckCircle2, AlertTriangle, XCircle, Clock, Check,
-  ChevronRight, Square, CheckSquare, FileText, Info,
+  ChevronRight, Square, CheckSquare, FileText, Info, CalendarDays,
 } from "lucide-react";
 import { Stamp } from "@/components/stamp";
 import {
@@ -143,6 +143,16 @@ export default function DashboardPage() {
 
   const today = todayUTC();
   const hasDates = !!(profile.programEndDate || profile.optEadEndDate || profile.stemEadEndDate);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
+  function calendarHref(): string {
+    const params = new URLSearchParams();
+    if (profile.programEndDate)  params.set("program_end", profile.programEndDate);
+    if (profile.optEadEndDate)   params.set("opt_end",     profile.optEadEndDate);
+    if (profile.stemStartDate)   params.set("stem_start",  profile.stemStartDate);
+    return `${API_URL}/calendar.ics?${params.toString()}`;
+  }
   const stageLabel = STAGE_LABELS[profile.stage] ?? profile.stage;
 
   function toggleCheck(title: string) {
@@ -207,14 +217,27 @@ export default function DashboardPage() {
       <div className="space-y-5">
 
         {/* Stage label */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <h1 className="font-heading text-h1 font-semibold text-foreground">{stageLabel}</h1>
-          <Link
-            href="/onboarding"
-            className="text-caption text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
-          >
-            Edit my dates
-          </Link>
+          <div className="flex items-center gap-3 shrink-0">
+            {hasDates && (
+              <a
+                href={calendarHref()}
+                download="opt-deadlines.ics"
+                className="flex items-center gap-1.5 text-caption text-muted-foreground hover:text-foreground transition-colors"
+                title="Download deadlines as calendar file (.ics)"
+              >
+                <CalendarDays className="w-3.5 h-3.5" />
+                Export
+              </a>
+            )}
+            <Link
+              href="/onboarding"
+              className="text-caption text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+            >
+              Edit my dates
+            </Link>
+          </div>
         </div>
 
         {/* Hero stamp */}

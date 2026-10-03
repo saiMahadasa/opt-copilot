@@ -6,8 +6,11 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from typing import Any, Literal
 
+from datetime import date as _date
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from pydantic import BaseModel, field_validator
 from dotenv import load_dotenv
 
@@ -467,6 +470,176 @@ def _call_gemini_with_tools(
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+# ── Calendar export ───────────────────────────────────────────────────────────
+
+def _ical_event(uid: str, summary: str, description: str,
+                dtstart: _date, dtend: _date | None = None,
+                alarm_days: int | None = None) -> str:
+    end = dtend or (dtstart + timedelta(days=1))
+    alarm_block = ""
+    if alarm_days:
+        alarm_block = (
+            "\r\nBEGIN:VALARM"
+            f"\r\nTRIGGER:-P{alarm_days}D"
+            "\r\nACTION:DISPLAY"
+            f"\r\nDESCRIPTION:{summary}"
+            "\r\nEND:VALARM"
+        )
+    # Escape commas and newlines in description per RFC 5545
+    desc = description.replace("\\", "\\\\").replace(",", "\\,").replace("\n", "\\n")
+    return (
+        "BEGIN:VEVENT\r\n"
+        f"UID:{uid}@pathwise\r\n"
+        f"DTSTAMP:{_date.today().strftime('%Y%m%d')}T000000Z\r\n"
+        f"DTSTART;VALUE=DATE:{dtstart.strftime('%Y%m%d')}\r\n"
+        f"DTEND;VALUE=DATE:{end.strftime('%Y%m%d')}\r\n"
+        f"SUMMARY:{summary}\r\n"
+        f"DESCRIPTION:{desc}\r\n"
+        f"{alarm_block}\r\n"
+        "END:VEVENT"
+    )
+
+
+def _ical_add_months(d: _date, months: int) -> _date:
+    m = d.month - 1 + months
+    year = d.year + m // 12
+    month = m % 12 + 1
+    is_leap = year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
+    days_in_month = [31, 29 if is_leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1]
+    return _date(year, month, min(d.day, days_in_month))
+
+
+@app.get("/calendar.ics", summary="Download OPT/STEM OPT deadlines as iCal")
+def export_calendar(
+    program_end: str | None = None,
+    opt_start: str | None = None,
+    opt_end: str | None = None,
+    stem_start: str | None = None,
+):
+    """
+    Generate an iCalendar (.ics) file with all relevant OPT and STEM OPT
+    deadlines. Supply whichever date parameters you have — at least one is
+    required. All dates in YYYY-MM-DD format.
+    """
+    events: list[str] = []
+
+    try:
+        if program_end:
+            end = _date.fromisoformat(program_end)
+            window_open = end - timedelta(days=90)
+            window_close = end + timedelta(days=60)
+            events.append(_ical_event(
+                "opt-window-open", "OPT Filing Window Opens",
+                "You may now submit Form I-765 for OPT. File as early as possible — "
+                "USCIS processing takes 3-5 months.",
+                window_open, alarm_days=7,
+            ))
+            events.append(_ical_event(
+                "program-end", "Program End Date",
+                "Your F-1 program ends. 60-day grace period begins. "
+                "OPT must be approved and active or you must change status.",
+                end, alarm_days=30,
+            ))
+            events.append(_ical_event(
+                "opt-window-close", "OPT Filing Deadline",
+                "Last day to file Form I-765 for OPT (60 days after program end). "
+                "Missing this means waiting until a new program begins.",
+                window_close, alarm_days=14,
+            ))
+            grace_end = end + timedelta(days=60)
+            events.append(_ical_event(
+                "grace-period-end", "60-Day Grace Period Ends",
+                "Grace period ends. Depart the US, change to another status, "
+                "or ensure your OPT EAD is active by this date.",
+                grace_end, alarm_days=14,
+            ))
+
+        if opt_start:
+            start = _date.fromisoformat(opt_start)
+            events.append(_ical_event(
+                "opt-start", "OPT Start Date",
+                "OPT employment authorization begins. Track unemployment days — "
+                "you are allowed 90 cumulative days total.",
+                start,
+            ))
+            # Warn at 60 days used (30 days left on the 90-day limit)
+            warn60 = start + timedelta(days=60)
+            events.append(_ical_event(
+                "unemployment-warning", "Unemployment 60-Day Mark",
+                "If you have been unemployed since OPT start, only 30 days remain "
+                "before the 90-day limit. Start or intensify your job search.",
+                warn60,
+            ))
+
+        if opt_end:
+            end = _date.fromisoformat(opt_end)
+            events.append(_ical_event(
+                "opt-end", "OPT EAD Expires",
+                "Your OPT employment authorization ends today.",
+                end, alarm_days=30,
+            ))
+
+        if stem_start:
+            start = _date.fromisoformat(stem_start)
+            events.append(_ical_event(
+                "stem-start", "STEM OPT Extension Begins",
+                "STEM OPT starts. File your first self-evaluation report at the 6-month mark. "
+                "Keep your I-983 training plan current with your employer.",
+                start,
+            ))
+            ordinals = ("First", "Second", "Third", "Fourth")
+            for i, months_offset in enumerate((6, 12, 18, 24)):
+                center = _ical_add_months(start, months_offset)
+                due_start = center - timedelta(days=5)
+                due_end = center + timedelta(days=5)
+                label = ordinals[i]
+                events.append(_ical_event(
+                    f"stem-report-{months_offset}",
+                    f"STEM OPT {label} Self-Evaluation Due",
+                    f"Submit your {label.lower()} self-evaluation (I-983 section) to your DSO. "
+                    f"Window: {due_start.isoformat()} to {due_end.isoformat()}. "
+                    "Missing this report can result in SEVIS termination.",
+                    due_start, due_end,
+                    alarm_days=7,
+                ))
+            stem_end = _ical_add_months(start, 24)
+            events.append(_ical_event(
+                "stem-end", "STEM OPT Extension Ends",
+                "STEM OPT employment authorization expires. "
+                "Ensure a new status (H-1B, change of status, etc.) is in place.",
+                stem_end, alarm_days=30,
+            ))
+
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=f"Invalid date: {exc}")
+
+    if not events:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "No dates provided. Provide at least one of: "
+                "program_end, opt_start, opt_end, stem_start"
+            ),
+        )
+
+    cal = "\r\n".join([
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Pathwise//OPT Deadline Tracker//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "X-WR-CALNAME:OPT Deadlines (Pathwise)",
+        *events,
+        "END:VCALENDAR",
+    ]) + "\r\n"
+
+    return Response(
+        content=cal,
+        media_type="text/calendar",
+        headers={"Content-Disposition": 'attachment; filename="opt-deadlines.ics"'},
+    )
 
 
 @app.post("/ask", response_model=AskResponse)
