@@ -75,7 +75,15 @@ TOOL_INSTRUCTION = (
     "since DHS eligibility depends on the specific CIP code on the student's "
     "I-20, not the major's plain-English name, so always tell the student to "
     "confirm their exact CIP code with their DSO when you used a keyword match "
-    "rather than an exact code."
+    "rather than an exact code.\n"
+    "If the student provides a program end date, use compute_opt_window to give "
+    "them the exact I-765 filing window — never describe it only in general terms "
+    "when you have a date to work with. "
+    "If they provide a STEM OPT start date, use compute_stem_reporting_schedule "
+    "to show all four reporting deadlines with real dates. "
+    "If they ask about unemployment days, use compute_unemployment_status with "
+    "their specific number of days used rather than describing the 90-day rule "
+    "abstractly. Dates in YYYY-MM-DD format work best with these tools."
 )
 
 OFFICIAL_AUTHORITIES = frozenset({"regulation", "policy", "guidance"})
@@ -237,18 +245,28 @@ def retrieve_context(message: str) -> list[dict[str, Any]]:
 # ── Gemini call with tools ────────────────────────────────────────────────────
 
 
-def _do_call_with_tools(system_instruction: str, user_content: str) -> tuple[str, bool]:
-    """Single attempt: call Gemini with STEM CIP tools. Returns (reply, tool_was_called)."""
+def _do_call_with_tools(
+    system_instruction: str,
+    user_content: str,
+    history: list | None = None,
+) -> tuple[str, bool]:
+    """Single attempt: call Gemini with advisory tools. Returns (reply, tool_was_called)."""
     from google import genai
     from google.genai import types
-    from tools import check_stem_eligibility, search_stem_by_keyword
+    from tools import (
+        check_stem_eligibility,
+        search_stem_by_keyword,
+        compute_opt_window,
+        compute_stem_reporting_schedule,
+        compute_unemployment_status,
+    )
 
     if not os.environ.get("GEMINI_API_KEY"):
         raise EnvironmentError("GEMINI_API_KEY is not set")
 
     client = genai.Client()
 
-    stem_tool = types.Tool(function_declarations=[
+    advisory_tool = types.Tool(function_declarations=[
         types.FunctionDeclaration(
             name="check_stem_eligibility",
             description=(
@@ -285,13 +303,80 @@ def _do_call_with_tools(system_instruction: str, user_content: str) -> tuple[str
                 required=["keyword"]
             )
         ),
+        types.FunctionDeclaration(
+            name="compute_opt_window",
+            description=(
+                "Compute the exact OPT I-765 filing window dates from the student's program "
+                "end date. Returns window_open (90 days before), window_close (60 days after), "
+                "recommended_file_by, and whether the window is currently open. Use whenever "
+                "the student provides their program end date and asks about OPT timing."
+            ),
+            parameters=types.Schema(
+                type=types.Type.OBJECT,
+                properties={
+                    "program_end_date": types.Schema(
+                        type=types.Type.STRING,
+                        description="Program end date in YYYY-MM-DD format from the student's I-20"
+                    )
+                },
+                required=["program_end_date"]
+            )
+        ),
+        types.FunctionDeclaration(
+            name="compute_stem_reporting_schedule",
+            description=(
+                "Compute all four STEM OPT self-evaluation reporting windows (at 6, 12, 18, and "
+                "24 months) from the student's STEM OPT start date. Each report is due within a "
+                "10-day window. Use when the student asks about reporting deadlines or their "
+                "STEM OPT reporting schedule."
+            ),
+            parameters=types.Schema(
+                type=types.Type.OBJECT,
+                properties={
+                    "stem_start_date": types.Schema(
+                        type=types.Type.STRING,
+                        description="STEM OPT start date in YYYY-MM-DD format from the student's EAD"
+                    )
+                },
+                required=["stem_start_date"]
+            )
+        ),
+        types.FunctionDeclaration(
+            name="compute_unemployment_status",
+            description=(
+                "Compute OPT/STEM OPT unemployment days remaining given the days already used. "
+                "OPT allows 90 cumulative days; STEM OPT adds 60 more (150 total). "
+                "Use when the student asks how many unemployment days they have left or "
+                "whether they are close to the limit."
+            ),
+            parameters=types.Schema(
+                type=types.Type.OBJECT,
+                properties={
+                    "days_used": types.Schema(
+                        type=types.Type.INTEGER,
+                        description="Number of unemployment days already accumulated"
+                    ),
+                    "on_stem_opt": types.Schema(
+                        type=types.Type.BOOLEAN,
+                        description="True if the student is currently on STEM OPT, False for regular OPT"
+                    )
+                },
+                required=["days_used"]
+            )
+        ),
     ])
+
+    # Build conversation contents: prior history + current user message
+    contents = []
+    for turn in (history or [])[-10:]:
+        role = "user" if turn.role == "user" else "model"
+        contents.append(types.Content(role=role, parts=[types.Part(text=turn.content)]))
+    contents.append(types.Content(role="user", parts=[types.Part(text=user_content)]))
 
     config = types.GenerateContentConfig(
         system_instruction=system_instruction,
-        tools=[stem_tool],
+        tools=[advisory_tool],
     )
-    contents = [types.Content(role="user", parts=[types.Part(text=user_content)])]
 
     response = client.models.generate_content(
         model=GEMINI_MODEL,
@@ -315,6 +400,9 @@ def _do_call_with_tools(system_instruction: str, user_content: str) -> tuple[str
     tool_map = {
         "check_stem_eligibility": check_stem_eligibility,
         "search_stem_by_keyword": search_stem_by_keyword,
+        "compute_opt_window": compute_opt_window,
+        "compute_stem_reporting_schedule": compute_stem_reporting_schedule,
+        "compute_unemployment_status": compute_unemployment_status,
     }
 
     for fn_call in fn_calls:
@@ -343,17 +431,21 @@ def _do_call_with_tools(system_instruction: str, user_content: str) -> tuple[str
     return final.text, True
 
 
-def _call_gemini_with_tools(system_instruction: str, user_content: str) -> tuple[str, bool]:
-    """Call Gemini with CIP tools. Returns (reply, tool_was_called). Retries once on 429."""
+def _call_gemini_with_tools(
+    system_instruction: str,
+    user_content: str,
+    history: list | None = None,
+) -> tuple[str, bool]:
+    """Call Gemini with advisory tools. Returns (reply, tool_was_called). Retries once on 429."""
     try:
-        return _do_call_with_tools(system_instruction, user_content)
+        return _do_call_with_tools(system_instruction, user_content, history=history)
     except Exception as exc:
         err = str(exc)
         if "429" in err or "RESOURCE_EXHAUSTED" in err or "quota" in err.lower():
             logger.warning("Gemini rate limit, retrying after 3s")
             time.sleep(3)
             try:
-                return _do_call_with_tools(system_instruction, user_content)
+                return _do_call_with_tools(system_instruction, user_content, history=history)
             except Exception:
                 raise HTTPException(
                     status_code=503,
