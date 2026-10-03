@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Check, GraduationCap, FileText, Briefcase, Star } from "lucide-react";
+import {
+  Check, GraduationCap, FileText, Briefcase, Star,
+  Upload, CheckCircle2, Loader2,
+} from "lucide-react";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -40,26 +43,22 @@ const STAGES = [
 
 type StageId = (typeof STAGES)[number]["id"];
 
-// ── Date form ─────────────────────────────────────────────────────────────
+// ── Date form (simplified) ────────────────────────────────────────────────
 
 interface DateForm {
   programEndDate: string;
   optEadEndDate: string;
   stemEadEndDate: string;
-  stemStartDate: string;
   unemploymentDaysUsed: string;
   i765FiledDate: string;
-  eadReceived: boolean;
 }
 
 const EMPTY: DateForm = {
   programEndDate: "",
   optEadEndDate: "",
   stemEadEndDate: "",
-  stemStartDate: "",
   unemploymentDaysUsed: "0",
   i765FiledDate: "",
-  eadReceived: false,
 };
 
 function isValidDate(s: string): boolean {
@@ -81,12 +80,6 @@ function validateDates(stage: StageId, form: DateForm): string | null {
     if (!isValidDate(form.stemEadEndDate))
       return "STEM EAD end date is not a valid date. Check the date printed on your EAD card.";
   }
-  if (stage === "on-stem-opt" && form.stemStartDate) {
-    if (!isValidDate(form.stemStartDate))
-      return "STEM OPT start date is not a valid date. Check the 'Card valid from' field on your STEM EAD.";
-    if (form.stemEadEndDate && isValidDate(form.stemEadEndDate) && form.stemStartDate >= form.stemEadEndDate)
-      return "STEM OPT start date must be before the end date. Check the dates on your STEM EAD card.";
-  }
   if (form.i765FiledDate && !isValidDate(form.i765FiledDate))
     return "I-765 filing date is not a valid date. Check your filing receipt notice.";
   const days = Number(form.unemploymentDaysUsed);
@@ -103,15 +96,56 @@ export default function OnboardingPage() {
   const [selected, setSelected] = useState<StageId | null>(null);
   const [form, setForm] = useState<DateForm>(EMPTY);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [i20Note, setI20Note] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
   function pickStage(id: StageId) {
     setSelected(id);
     setStep(2);
+    setI20Note(null);
+    setError(null);
   }
 
-  function setField(field: keyof DateForm, value: string | boolean) {
+  function setField(field: keyof DateForm, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
     setError(null);
+  }
+
+  async function handleI20Upload(file: File) {
+    setUploading(true);
+    setI20Note(null);
+    setError(null);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch(`${API_URL}/extract-i20`, { method: "POST", body: fd });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        setError(body.detail ?? "Could not read the document. Enter your dates manually.");
+        return;
+      }
+      const data = await res.json();
+      let filled = 0;
+      if (data.programEndDate && isValidDate(data.programEndDate)) {
+        setField("programEndDate", data.programEndDate);
+        filled++;
+      }
+      const meta: string[] = [];
+      if (data.school) meta.push(data.school);
+      if (data.major) meta.push(data.major);
+      setI20Note(
+        filled > 0
+          ? `Auto-filled from your I-20${meta.length ? ` · ${meta.join(", ")}` : ""}. Review and correct if needed.`
+          : "No dates found — enter your dates below.",
+      );
+    } catch {
+      setError("Upload failed. Check your connection and try again.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   function handleSave() {
@@ -119,23 +153,20 @@ export default function OnboardingPage() {
     const err = validateDates(selected, form);
     if (err) { setError(err); return; }
 
-    // Derive STEM start date if not entered but end date is known.
-    let stemStartDate = form.stemStartDate;
-    let stemStartDateDerived = false;
-    if (selected === "on-stem-opt" && !stemStartDate && form.stemEadEndDate) {
-      stemStartDate = deriveStemStartDate(form.stemEadEndDate);
-      stemStartDateDerived = true;
-    }
+    const stemStartDate =
+      selected === "on-stem-opt" && form.stemEadEndDate
+        ? deriveStemStartDate(form.stemEadEndDate)
+        : undefined;
 
     const profile = {
       stage: selected,
-      ...(form.programEndDate  && { programEndDate:  form.programEndDate }),
-      ...(form.optEadEndDate   && { optEadEndDate:   form.optEadEndDate }),
-      ...(form.stemEadEndDate  && { stemEadEndDate:  form.stemEadEndDate }),
-      ...(stemStartDate        && { stemStartDate, stemStartDateDerived }),
+      ...(form.programEndDate && { programEndDate: form.programEndDate }),
+      ...(form.optEadEndDate  && { optEadEndDate:  form.optEadEndDate }),
+      ...(form.stemEadEndDate && { stemEadEndDate: form.stemEadEndDate }),
+      ...(stemStartDate       && { stemStartDate, stemStartDateDerived: true }),
       unemploymentDaysUsed: form.unemploymentDaysUsed !== "" ? Number(form.unemploymentDaysUsed) : 0,
-      ...(form.i765FiledDate   && { i765FiledDate:   form.i765FiledDate }),
-      eadReceived: form.eadReceived,
+      ...(form.i765FiledDate  && { i765FiledDate:  form.i765FiledDate }),
+      eadReceived: selected !== "applied-opt",
     };
     localStorage.setItem("visaProfile", JSON.stringify(profile));
     localStorage.setItem("visaStage", selected);
@@ -144,17 +175,22 @@ export default function OnboardingPage() {
 
   function handleSkip() {
     if (!selected) return;
-    localStorage.setItem("visaProfile", JSON.stringify({ stage: selected, unemploymentDaysUsed: 0, eadReceived: false }));
+    localStorage.setItem("visaProfile", JSON.stringify({
+      stage: selected,
+      unemploymentDaysUsed: 0,
+      eadReceived: selected !== "applied-opt",
+    }));
     localStorage.setItem("visaStage", selected);
     router.push("/dashboard");
   }
 
   const inputClass =
     "w-full rounded-md border border-border bg-card px-3 py-2.5 text-small focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground";
-
   const labelClass = "flex flex-col gap-1.5 text-small font-medium text-foreground";
-
   const helperClass = "text-caption text-muted-foreground";
+
+  // I-20 upload is only useful when the program end date matters
+  const showI20Upload = selected === "f1-studying" || selected === "applied-opt";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -250,6 +286,62 @@ export default function OnboardingPage() {
 
               <div className="flex flex-col gap-5">
 
+                {/* I-20 upload — auto-fills program end date */}
+                {showI20Upload && (
+                  <div className="rounded-lg border border-dashed border-border bg-muted/20 p-4 flex flex-col gap-3">
+                    <div className="flex items-center gap-2">
+                      <Upload className="w-4 h-4 text-muted-foreground shrink-0" />
+                      <p className="text-small font-medium text-foreground">
+                        Upload your I-20 to auto-fill dates
+                      </p>
+                    </div>
+                    <p className="text-caption text-muted-foreground leading-snug">
+                      Gemini reads your program end date directly from the PDF.
+                      The file is deleted immediately after — nothing is stored.
+                    </p>
+                    <input
+                      ref={fileRef}
+                      type="file"
+                      accept=".pdf,image/jpeg,image/png"
+                      className="hidden"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) handleI20Upload(f);
+                        e.target.value = "";
+                      }}
+                    />
+                    <button
+                      type="button"
+                      disabled={uploading}
+                      onClick={() => fileRef.current?.click()}
+                      className={cn(
+                        "inline-flex items-center gap-2 self-start rounded-md border border-border",
+                        "px-3 py-2 text-small font-medium transition-colors",
+                        uploading
+                          ? "opacity-60 cursor-not-allowed bg-muted text-muted-foreground"
+                          : "bg-card text-foreground hover:bg-muted"
+                      )}
+                    >
+                      {uploading ? (
+                        <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Reading…</>
+                      ) : (
+                        <><Upload className="w-3.5 h-3.5" /> Choose PDF or photo</>
+                      )}
+                    </button>
+                    {i20Note && (
+                      <p className={cn(
+                        "flex items-start gap-1.5 text-caption leading-snug",
+                        i20Note.startsWith("Auto-filled") ? "text-teal" : "text-muted-foreground"
+                      )}>
+                        {i20Note.startsWith("Auto-filled") && (
+                          <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                        )}
+                        {i20Note}
+                      </p>
+                    )}
+                  </div>
+                )}
+
                 {/* Program end date */}
                 {(selected === "f1-studying" || selected === "applied-opt") && (
                   <label className={labelClass}>
@@ -296,24 +388,7 @@ export default function OnboardingPage() {
                   </label>
                 )}
 
-                {/* STEM OPT start date */}
-                {selected === "on-stem-opt" && (
-                  <label className={labelClass}>
-                    STEM OPT start date
-                    <span className="text-caption font-normal text-muted-foreground -mt-1">
-                      Optional — we estimate it from your end date if you leave this blank
-                    </span>
-                    <input
-                      type="date"
-                      value={form.stemStartDate}
-                      onChange={(e) => setField("stemStartDate", e.target.value)}
-                      className={inputClass}
-                    />
-                    <span className={helperClass}>"Card valid from" on your STEM EAD card</span>
-                  </label>
-                )}
-
-                {/* Unemployment days */}
+                {/* Unemployment days — only when actively on OPT/STEM OPT */}
                 {(selected === "on-opt" || selected === "on-stem-opt") && (
                   <label className={labelClass}>
                     Unemployment days used so far
@@ -326,17 +401,17 @@ export default function OnboardingPage() {
                       placeholder="0"
                     />
                     <span className={helperClass}>
-                      Count days you were not employed. The limit is 90 days on OPT or 150 total on STEM OPT.
+                      Count days you were not employed. Limit is 90 days on OPT or 150 total on STEM OPT.
                     </span>
                   </label>
                 )}
 
-                {/* I-765 filed date */}
-                {(selected === "applied-opt" || selected === "on-opt" || selected === "on-stem-opt") && (
+                {/* I-765 filing date — only for applied-opt (tracking pending EAD) */}
+                {selected === "applied-opt" && (
                   <label className={labelClass}>
                     Date you filed Form I-765
                     <span className="text-caption font-normal text-muted-foreground -mt-1">
-                      Only fill this in if you are still waiting for your EAD
+                      Optional — helps track how long your EAD has been pending
                     </span>
                     <input
                       type="date"
@@ -344,22 +419,7 @@ export default function OnboardingPage() {
                       onChange={(e) => setField("i765FiledDate", e.target.value)}
                       className={inputClass}
                     />
-                    <span className={helperClass}>
-                      Listed on your I-765 receipt notice from USCIS
-                    </span>
-                  </label>
-                )}
-
-                {/* EAD received */}
-                {(selected === "applied-opt" || selected === "on-opt" || selected === "on-stem-opt") && (
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={form.eadReceived}
-                      onChange={(e) => setField("eadReceived", e.target.checked)}
-                      className="w-4 h-4 rounded border-border accent-teal"
-                    />
-                    <span className="text-small">I have received my EAD card</span>
+                    <span className={helperClass}>Listed on your I-765 receipt notice from USCIS</span>
                   </label>
                 )}
 

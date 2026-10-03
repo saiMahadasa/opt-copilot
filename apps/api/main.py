@@ -1,3 +1,5 @@
+import io
+import json
 import logging
 import os
 import threading
@@ -8,7 +10,7 @@ from typing import Any, Literal
 
 from datetime import date as _date
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel, field_validator
@@ -658,6 +660,95 @@ def export_calendar(
         media_type="text/calendar",
         headers={"Content-Disposition": 'attachment; filename="opt-deadlines.ics"'},
     )
+
+
+@app.post("/extract-i20")
+async def extract_i20(file: UploadFile = File(...)):
+    """
+    Accept an I-20 PDF (or photo), extract key fields with Gemini vision,
+    and return structured JSON. The uploaded file is deleted immediately after reading.
+    """
+    ALLOWED_TYPES = {"application/pdf", "image/jpeg", "image/jpg", "image/png"}
+    ct = (file.content_type or "application/octet-stream").split(";")[0].strip()
+    if ct not in ALLOWED_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail="Upload a PDF or image (JPEG/PNG) of your I-20",
+        )
+
+    content = await file.read()
+    if len(content) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File too large — max 10 MB")
+
+    if not os.environ.get("GEMINI_API_KEY"):
+        raise HTTPException(status_code=500, detail="GEMINI_API_KEY is not set")
+
+    try:
+        from google import genai
+        from google.genai import types
+
+        client = genai.Client()
+
+        uploaded = client.files.upload(
+            file=io.BytesIO(content),
+            config={"mime_type": ct, "display_name": "i20-upload.pdf"},
+        )
+
+        prompt = (
+            "This is a US Department of Homeland Security Form I-20 "
+            "(Certificate of Eligibility for Nonimmigrant Student Status). "
+            "Extract the following fields and return ONLY valid JSON — no explanation, "
+            "no markdown fences, just the raw JSON object:\n"
+            '{"programEndDate":"YYYY-MM-DD or null",'
+            '"sevisId":"N followed by digits e.g. N0012345678 or null",'
+            '"school":"full school name or null",'
+            '"major":"field of study or major name or null",'
+            '"cipCode":"XX.XXXX format if printed on the form or null"}\n'
+            "If a field is not clearly legible, use null. "
+            "Do not guess. "
+            "The program end date is labeled 'Program end date' in the program of study section."
+        )
+
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=[
+                    types.Content(parts=[
+                        types.Part(
+                            file_data=types.FileData(file_uri=uploaded.uri, mime_type=ct)
+                        ),
+                        types.Part(text=prompt),
+                    ])
+                ],
+            )
+        finally:
+            try:
+                client.files.delete(name=uploaded.name)
+            except Exception:
+                pass
+
+        raw = (response.text or "").strip()
+        if raw.startswith("```"):
+            segments = raw.split("```")
+            raw = segments[1].lstrip("json").strip() if len(segments) > 1 else raw
+
+        data = json.loads(raw)
+
+    except json.JSONDecodeError:
+        raise HTTPException(
+            status_code=422,
+            detail="Could not read fields from this document. Try a clearer scan or higher-quality PDF.",
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error("extract-i20 failed: %s", exc, exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail="Could not process the document. Try again in a moment.",
+        )
+
+    return data
 
 
 @app.post("/ask", response_model=AskResponse)
