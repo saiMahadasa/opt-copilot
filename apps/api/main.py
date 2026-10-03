@@ -4,7 +4,7 @@ import threading
 import time
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -91,9 +91,16 @@ OFFICIAL_AUTHORITIES = frozenset({"regulation", "policy", "guidance"})
 # ── Models ────────────────────────────────────────────────────────────────────
 
 
+class ConversationTurn(BaseModel):
+    """A single prior turn sent by the frontend to provide conversation context."""
+    role: Literal["user", "assistant"]
+    content: str
+
+
 class AskRequest(BaseModel):
     message: str
     stage: str | None = None
+    history: list[ConversationTurn] = []
 
     @field_validator("message")
     @classmethod
@@ -467,8 +474,11 @@ def ask(request: Request, body: AskRequest):
     ip = request.headers.get("X-Forwarded-For", request.client.host or "unknown").split(",")[0].strip()
     _check_rate_limit(ip)
 
+    # Skip cache for conversations with history — personalized context means
+    # the same question can have different correct answers depending on what
+    # the student has shared in prior turns.
     key = _cache_key(body.message, body.stage)
-    cached = _cache_get(key)
+    cached = None if body.history else _cache_get(key)
     if cached:
         logger.info("cache hit for ip=%s", ip)
         return cached
@@ -512,7 +522,9 @@ def ask(request: Request, body: AskRequest):
     )
 
     try:
-        reply, tool_was_called = _call_gemini_with_tools(system_instruction, user_content)
+        reply, tool_was_called = _call_gemini_with_tools(
+            system_instruction, user_content, history=body.history or None
+        )
     except HTTPException:
         raise
     except EnvironmentError as exc:
@@ -539,5 +551,6 @@ def ask(request: Request, body: AskRequest):
         grounded = True  # official DHS source was consulted
 
     result = AskResponse(reply=reply, sources=sources, grounded=grounded, summary_only=summary_only)
-    _cache_set(key, result)
+    if not body.history:
+        _cache_set(key, result)
     return result

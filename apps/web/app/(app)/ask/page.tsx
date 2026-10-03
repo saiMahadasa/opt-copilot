@@ -66,14 +66,21 @@ function saveHistory(messages: Message[]) {
 
 // ── Network ───────────────────────────────────────────────────────────────
 
+type HistoryTurn = { role: "user" | "assistant"; content: string };
+
 async function fetchReply(
-  message: string
+  message: string,
+  history: HistoryTurn[],
 ): Promise<{ reply: string; sources: ChunkSource[]; grounded: boolean; summary_only: boolean }> {
   const stage = localStorage.getItem("visaStage");
   const res = await fetch(`${API_URL}/ask`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, ...(stage && { stage }) }),
+    body: JSON.stringify({
+      message,
+      history,
+      ...(stage && { stage }),
+    }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -263,18 +270,27 @@ function AskPageContent() {
   const [confirmClear, setConfirmClear] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const prefillSentRef = useRef(false);
+  // Track messages in a ref so sendMessage can read the current list without
+  // being re-created on every render (avoids stale closure).
+  const messagesRef = useRef<Message[]>([]);
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const history = loadHistory();
-    setMessages(history.length > 0 ? history : INITIAL);
+    const initial = history.length > 0 ? history : INITIAL;
+    setMessages(initial);
+    messagesRef.current = initial;
   }, []);
 
   useEffect(() => {
+    messagesRef.current = messages;
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const sendMessage = useCallback(async (text: string) => {
+    // Capture current messages before state update so we can build history
+    const priorMessages = messagesRef.current;
+
     const userMsg: Message = { id: `u-${Date.now()}`, role: "user", text };
     const placeholderId = `a-${Date.now() + 1}`;
     const placeholder: Message = {
@@ -290,8 +306,15 @@ function AskPageContent() {
     });
     setSending(true);
 
+    // Build history for the API: real turns only, no loading placeholders,
+    // no initial greeting, capped at 10 turns.
+    const history: HistoryTurn[] = priorMessages
+      .filter((m) => !m.loading && m.id !== "init")
+      .slice(-10)
+      .map((m) => ({ role: m.role, content: m.text }));
+
     try {
-      const { reply, sources, grounded, summary_only } = await fetchReply(text);
+      const { reply, sources, grounded, summary_only } = await fetchReply(text, history);
       setMessages((prev) => {
         const next = prev.map((m) =>
           m.id === placeholderId
